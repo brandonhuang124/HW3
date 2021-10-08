@@ -66,11 +66,14 @@ public class TestState extends BasicGameState {
         for(int y = 0; y < 10; y++) {
           if(path[x][y].getDistance() < 1000) {
             g.drawString("" + path[x][y].getDistance(), (x * 75) + 10, (y * 75) + 40);
+            g.drawString("" + path[x][y].getDirection(), (x * 75) + 10, (y * 75) + 20);
           }
         }
       }
     }
+    // Render Entities
     player.render(g);
+    for(Enemy enemy : enemyList) enemy.render(g);
   }
 
   @Override
@@ -80,6 +83,8 @@ public class TestState extends BasicGameState {
     Coordinate playerLoc = player.getLocation();
     path = RoboGame.getDijkstras(playerLoc.x,playerLoc.y,tileMap);
 
+    // Update entity locations
+    for(Enemy enemy : enemyList) enemy.update(delta);
     player.update(delta);
     // Check if controls are ready.
     if (inputReady) {
@@ -112,10 +117,11 @@ public class TestState extends BasicGameState {
       }
       enemyTurn = false;
       enemyMoveWait = true;
+      waitInput();
     }
     else {
       inputWaitTimer -= delta;
-      System.out.println(inputWaitTimer);
+      System.out.println(enemyList.get(0).getLocation().x + " " + enemyList.get(0).getLocation().y);
       // Offset position back into the grid when done moving
       if(inputWaitTimer <= 0) {
         // If the enemies need to be reset
@@ -132,7 +138,6 @@ public class TestState extends BasicGameState {
           player.update(inputWaitTimer);
           enemyTurn = true;
           player.stop();
-          waitInput();
         }
       }
     }
@@ -146,6 +151,6 @@ public class TestState extends BasicGameState {
 
   private void initEnemyList() {
     enemyList = new LinkedList<Enemy>();
-    enemyList.add(new Enemy(350,75,5,1,1));
+    enemyList.add(new Enemy(375,75,5,1,1));
   }
 }

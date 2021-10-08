@@ -16,7 +16,7 @@ public class RoboGame extends StateBasedGame {
   public static final String TILE_OPENGRIDIMG_RSC = "RoboRampage/Assets/gridOpen.png";
   public static final String TILE_CLOSEDGRIDIMG_RSC = "RoboRampage/Assets/gridClosed.png";
 
-  public static final String ENEMY_MELEEIMG_RSC = "RoboRampage/Assets/enemy.png";
+  public static final String ENEMY_MELEEIMG_RSC = "RoboRampage/Assets/meleeEnemy.png";
 
   public static final String PLAYER_PLAYERIMG_RSC = "RoboRampage/Assets/player.png";
   // Parameters
