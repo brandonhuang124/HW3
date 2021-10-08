@@ -9,7 +9,7 @@
 
 ## Open Issues ##
 
--- **[7]** Add collision detection for enemy and player
+-- **[7]** Add system for enemy actions when in range of player
 -- **[8]** Allow player to enter attack mode and aim
 -- **[9]** Add projectile fire to attack mode
 -- **[10]** Add enemy defeat after firing
@@ -21,6 +21,7 @@
 -- **[16]** Add Ranged enemies
 -- **[17]** Dijkstras for Ranged enemies
 -- **[18]** Add game progression/levels
+-- **[19]** Add Enemy attacks
 
 ## High Bar Items ##
 -- **[19]** Add pick up items: Medkits/Armor
