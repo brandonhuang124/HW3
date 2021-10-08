@@ -15,6 +15,9 @@ public class RoboGame extends StateBasedGame {
   // Resources
   public static final String TILE_OPENGRIDIMG_RSC = "RoboRampage/Assets/gridOpen.png";
   public static final String TILE_CLOSEDGRIDIMG_RSC = "RoboRampage/Assets/gridClosed.png";
+
+  public static final String ENEMY_MELEEIMG_RSC = "RoboRampage/Assets/enemy.png";
+
   public static final String PLAYER_PLAYERIMG_RSC = "RoboRampage/Assets/player.png";
   // Parameters
   public final int ScreenWidth;
@@ -42,6 +45,7 @@ public class RoboGame extends StateBasedGame {
     ResourceManager.loadImage(TILE_OPENGRIDIMG_RSC);
     ResourceManager.loadImage(TILE_CLOSEDGRIDIMG_RSC);
     ResourceManager.loadImage(PLAYER_PLAYERIMG_RSC);
+    ResourceManager.loadImage(ENEMY_MELEEIMG_RSC);
 
     player = new Player(75,75,1,1);
   }

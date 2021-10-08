@@ -4,20 +4,32 @@ import jig.Entity;
 import jig.ResourceManager;
 import jig.Vector;
 
-class Player extends Entity {
+public class Enemy extends Entity {
   private Vector velocity;
-  private float speed;
   private Coordinate location;
+  private float speed;
+  private int id; // 1 for melee, 2 for ranged
 
-  public Player(final float x, final float y, int xcoord, int ycoord) {
-    super(x + 37,y + 37);
-    addImageWithBoundingBox(ResourceManager.getImage(RoboGame.PLAYER_PLAYERIMG_RSC));
+  public Enemy(final float x, final float y, int xcoord, int ycoord, int newid) {
+    super( x + 37, y + 37);
     location = new Coordinate(xcoord, ycoord);
-    velocity = new Vector(0f,0f);
     speed = 1f;
+    velocity = new Vector(0f, 0f);
+    id = newid;
+    addImageWithBoundingBox(ResourceManager.getImage(RoboGame.ENEMY_MELEEIMG_RSC));
   }
 
   public Coordinate getLocation() { return location;}
+
+  public void makeMove(Vertex[][] pathMap) {
+    int direction = pathMap[location.x][location.y].getDirection();
+    // Choose which direction based on the dijkstras map
+    if(direction == 2) moveDown();
+    if(direction == 4) moveLeft();
+    if(direction == 6) moveRight();
+    if(direction == 8) moveUp();
+
+  }
 
   public void moveUp() {
     velocity = new Vector(0f, -speed);
@@ -25,8 +37,8 @@ class Player extends Entity {
   }
 
   public void moveLeft() {
-   velocity = new Vector(-speed, 0f);
-   location.x = location.x - 1;
+    velocity = new Vector(-speed, 0f);
+    location.x = location.x - 1;
   }
 
   public void moveDown() {
