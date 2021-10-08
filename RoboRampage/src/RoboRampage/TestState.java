@@ -110,10 +110,14 @@ public class TestState extends BasicGameState {
         player.moveRight();
         waitInput();
       }
+      // Wait
+      else if (input.isKeyPressed(Input.KEY_Q)) {
+        waitInput();
+      }
     }
     else if (enemyTurn) {
       for (Enemy enemy : enemyList) {
-        enemy.makeMove(path);
+        enemy.makeMove(path, player.getLocation());
       }
       enemyTurn = false;
       enemyMoveWait = true;
