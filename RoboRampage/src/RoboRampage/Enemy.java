@@ -21,16 +21,35 @@ public class Enemy extends Entity {
 
   public Coordinate getLocation() { return location;}
 
-  public void makeMove(Vertex[][] pathMap) {
-    int direction = pathMap[location.x][location.y].getDirection();
-    // Choose which direction based on the dijkstras map
-    if(direction == 2) moveDown();
-    if(direction == 4) moveLeft();
-    if(direction == 6) moveRight();
-    if(direction == 8) moveUp();
-
+  public void makeMove(Vertex[][] pathMap, Coordinate playerLoc) {
+    // Melee Enemy behavior
+    if(id == 1) {
+      // Check if the player is next to them
+      int xdiff = playerLoc.x - location.x;
+      int ydiff = playerLoc.y - location.y;
+      // Square above
+      if(xdiff == 0 && ydiff == 1) attack(8);
+      // Square below
+      else if(xdiff == 0 && ydiff == -1) attack(2);
+      // Square left
+      else if(xdiff == 1 && ydiff == 0) attack(4);
+      // Square right
+      else if(xdiff == -1 && ydiff == 0) attack(6);
+      // Otherwise move
+      else {
+        // Choose which direction based on the dijkstras map
+        int direction = pathMap[location.x][location.y].getDirection();
+        if(direction == 2) moveDown();
+        if(direction == 4) moveLeft();
+        if(direction == 6) moveRight();
+        if(direction == 8) moveUp();
+      }
+    }
   }
 
+  public void attack(int direction) {
+    System.out.println("Attacked: Hyah!" + direction);
+  }
   public void moveUp() {
     velocity = new Vector(0f, -speed);
     location.y = location.y - 1;
@@ -58,6 +77,8 @@ public class Enemy extends Entity {
   public void update(final int delta) {
     translate(velocity.scale(delta));
   }
+
+  public int getID() { return id;}
 
   public Vector getVelocity() { return velocity;}
 }
