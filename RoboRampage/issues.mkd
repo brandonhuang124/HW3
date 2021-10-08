@@ -5,10 +5,10 @@
 -- **[3]** Dijkstras algorithm on tile map added.
 -- **[4]** Player object can move in discrete animated jumps via wasd across tile map.
 -- **[5]** Player cannot move into walls.
+-- **[6]** Add enemy that follows player after movement jumps
 
 ## Open Issues ##
 
--- **[6]** Add enemy that follows player after movement jumps
 -- **[7]** Add collision detection for enemy and player
 -- **[8]** Allow player to enter attack mode and aim
 -- **[9]** Add projectile fire to attack mode

@@ -1,5 +1,7 @@
 package RoboRampage;
 
+import java.util.*;
+
 import jig.ResourceManager;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -12,7 +14,9 @@ public class TestState extends BasicGameState {
 
   Tile tileMap[][];
   Vertex [][] path;
+  LinkedList<Enemy> enemyList;
   boolean inputReady;
+  boolean enemyTurn, enemyMoveWait;
   int inputWaitTimer;
   Player player;
 
@@ -30,10 +34,12 @@ public class TestState extends BasicGameState {
   public void enter(GameContainer container, StateBasedGame game) {
     path = null;
     inputReady = true;
+    enemyTurn = enemyMoveWait = false;
     inputWaitTimer = 0;
     RoboGame rg = (RoboGame)game;
     player = rg.player;
     container.setSoundOn(true);
+    initEnemyList();
     tileMap = RoboGame.getTileMap
         ("1111111111100000000110111111011000000001100011000110001100011010000101101000010110100001011111111111");
   }
@@ -60,11 +66,14 @@ public class TestState extends BasicGameState {
         for(int y = 0; y < 10; y++) {
           if(path[x][y].getDistance() < 1000) {
             g.drawString("" + path[x][y].getDistance(), (x * 75) + 10, (y * 75) + 40);
+            g.drawString("" + path[x][y].getDirection(), (x * 75) + 10, (y * 75) + 20);
           }
         }
       }
     }
+    // Render Entities
     player.render(g);
+    for(Enemy enemy : enemyList) enemy.render(g);
   }
 
   @Override
@@ -74,6 +83,8 @@ public class TestState extends BasicGameState {
     Coordinate playerLoc = player.getLocation();
     path = RoboGame.getDijkstras(playerLoc.x,playerLoc.y,tileMap);
 
+    // Update entity locations
+    for(Enemy enemy : enemyList) enemy.update(delta);
     player.update(delta);
     // Check if controls are ready.
     if (inputReady) {
@@ -100,14 +111,34 @@ public class TestState extends BasicGameState {
         waitInput();
       }
     }
+    else if (enemyTurn) {
+      for (Enemy enemy : enemyList) {
+        enemy.makeMove(path);
+      }
+      enemyTurn = false;
+      enemyMoveWait = true;
+      waitInput();
+    }
     else {
       inputWaitTimer -= delta;
-      System.out.println(inputWaitTimer);
-      // Offset player position back on the grid
+      System.out.println(enemyList.get(0).getLocation().x + " " + enemyList.get(0).getLocation().y);
+      // Offset position back into the grid when done moving
       if(inputWaitTimer <= 0) {
-        player.offset(inputWaitTimer);
-        inputReady = true;
-        player.stop();
+        // If the enemies need to be reset
+        if(enemyMoveWait) {
+          for (Enemy enemy : enemyList) {
+            enemy.update(inputWaitTimer);
+            enemy.stop();
+          }
+          inputReady = true;
+          enemyMoveWait = false;
+        }
+        // If the player needs to be reset
+        else {
+          player.update(inputWaitTimer);
+          enemyTurn = true;
+          player.stop();
+        }
       }
     }
 
@@ -116,5 +147,10 @@ public class TestState extends BasicGameState {
   public void waitInput() {
     inputReady = false;
     inputWaitTimer = 75;
+  }
+
+  private void initEnemyList() {
+    enemyList = new LinkedList<Enemy>();
+    enemyList.add(new Enemy(375,75,5,1,1));
   }
 }
