@@ -7,10 +7,10 @@
 -- **[5]** Player cannot move into walls.
 -- **[6]** Add enemy that follows player after movement jumps
 -- **[7]** Add system for enemy actions when in range of player
+-- **[8]** Allow player to enter attack mode and aim
 
 ## Open Issues ##
 
--- **[8]** Allow player to enter attack mode and aim
 -- **[9]** Add projectile fire to attack mode
 -- **[10]** Add enemy defeat after firing
 -- **[11]** Add ammo/reload mechanic

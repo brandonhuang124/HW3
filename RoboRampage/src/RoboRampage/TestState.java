@@ -16,9 +16,10 @@ public class TestState extends BasicGameState {
   Vertex [][] path;
   LinkedList<Enemy> enemyList;
   boolean inputReady;
-  boolean enemyTurn, enemyMoveWait;
+  boolean enemyTurn, enemyMoveWait, attackReady;
   int inputWaitTimer;
   Player player;
+  Crosshair crosshair;
 
   @Override
   public int getID() {
@@ -34,11 +35,12 @@ public class TestState extends BasicGameState {
   public void enter(GameContainer container, StateBasedGame game) {
     path = null;
     inputReady = true;
-    enemyTurn = enemyMoveWait = false;
+    enemyTurn = enemyMoveWait = attackReady = false;
     inputWaitTimer = 0;
     RoboGame rg = (RoboGame)game;
     player = rg.player;
     container.setSoundOn(true);
+    crosshair = new Crosshair(0,0);
     initEnemyList();
     tileMap = RoboGame.getTileMap
         ("1111111111100000000110111111011000000001100011000110001100011010000101101000010110100001011111111111");
@@ -71,6 +73,10 @@ public class TestState extends BasicGameState {
         }
       }
     }
+    // Render HUD stuff
+    if(attackReady) {
+      crosshair.render(g);
+    }
     // Render Entities
     player.render(g);
     for(Enemy enemy : enemyList) enemy.render(g);
@@ -86,8 +92,38 @@ public class TestState extends BasicGameState {
     // Update entity locations
     for(Enemy enemy : enemyList) enemy.update(delta);
     player.update(delta);
+    // Check if were in attack mode
+    if(attackReady) {
+      // Move Crosshair up
+      if (input.isKeyPressed(Input.KEY_W)) {
+        crosshair.moveUp(playerLoc);
+      }
+      // Move Crosshair left
+      else if (input.isKeyPressed(Input.KEY_A)) {
+        crosshair.moveLeft(playerLoc);
+      }
+      // Move Crosshair down
+      else if (input.isKeyPressed(Input.KEY_S)) {
+        crosshair.moveDown(playerLoc);
+      }
+      // Move Crosshair right
+      else if (input.isKeyPressed(Input.KEY_D)) {
+        crosshair.moveRight(playerLoc);
+      }
+      // Cancel attack
+      else if (input.isKeyPressed(Input.KEY_Q)) {
+        attackReady = false;
+        inputReady = true;
+      }
+      // Make attack
+      else if (input.isKeyPressed(Input.KEY_SPACE)) {
+        attackReady = false;
+        waitInput();
+        System.out.println("Pew Pew");
+      }
+    }
     // Check if controls are ready.
-    if (inputReady) {
+    else if (inputReady) {
       // Up
       if (input.isKeyPressed(Input.KEY_W) && tileMap[playerLoc.x][playerLoc.y-1].getID() != 1) {
         // Check if tile above is a wall
@@ -114,6 +150,14 @@ public class TestState extends BasicGameState {
       else if (input.isKeyPressed(Input.KEY_Q)) {
         waitInput();
       }
+      // Attack
+
+      else if (input.isKeyPressed(Input.KEY_SPACE)) {
+        System.out.println("Space pressed");
+        attackReady = true;
+        inputReady = false;
+        crosshair.moveLeft(playerLoc);
+      }
     }
     else if (enemyTurn) {
       for (Enemy enemy : enemyList) {
@@ -125,7 +169,7 @@ public class TestState extends BasicGameState {
     }
     else {
       inputWaitTimer -= delta;
-      System.out.println(enemyList.get(0).getLocation().x + " " + enemyList.get(0).getLocation().y);
+      System.out.println(inputWaitTimer);
       // Offset position back into the grid when done moving
       if(inputWaitTimer <= 0) {
         // If the enemies need to be reset
