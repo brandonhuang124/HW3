@@ -100,12 +100,14 @@ public class TestState extends BasicGameState {
     for(Projectile projectile : projectileList) {
       // Wall collision
       if (projectile.wallCollision(tileMap)) {
-
+        System.out.println("Projectile hit wall");
+        projectileList.remove(projectile);
       }
-      // Enemy collsion
+      // Enemy collision
       Coordinate collisionLocation = projectile.enemyCollision(enemyList);
       if(collisionLocation.x != -1) {
-
+        System.out.println("Projectile hit enemy at: " + collisionLocation.x + ", " + collisionLocation.y);
+        projectileList.remove(projectile);
       }
     }
     // Check if were in attack mode
