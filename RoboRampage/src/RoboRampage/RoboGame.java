@@ -20,6 +20,10 @@ public class RoboGame extends StateBasedGame {
   public static final String ENEMY_MELEEIMG_RSC = "RoboRampage/Assets/meleeEnemy.png";
 
   public static final String PLAYER_PLAYERIMG_RSC = "RoboRampage/Assets/player.png";
+  public static final String PLAYER_PROJECTILEDOWN_RSC = "RoboRampage/Assets/projectile_down.png";
+  public static final String PLAYER_PROJECTILELEFT_RSC = "RoboRampage/Assets/projectile_left.png";
+  public static final String PLAYER_PROJECTILERIGHT_RSC = "RoboRampage/Assets/projectile_right.png";
+  public static final String PLAYER_PROJECTILEUP_RSC = "RoboRampage/Assets/projectile_up.png";
   // Parameters
   public final int ScreenWidth;
   public final int ScreenHeight;
@@ -48,6 +52,10 @@ public class RoboGame extends StateBasedGame {
     ResourceManager.loadImage(PLAYER_PLAYERIMG_RSC);
     ResourceManager.loadImage(ENEMY_MELEEIMG_RSC);
     ResourceManager.loadImage(UTIL_CROSSHAIRIMG_RSC);
+    ResourceManager.loadImage(PLAYER_PROJECTILEDOWN_RSC);
+    ResourceManager.loadImage(PLAYER_PROJECTILELEFT_RSC);
+    ResourceManager.loadImage(PLAYER_PROJECTILERIGHT_RSC);
+    ResourceManager.loadImage(PLAYER_PROJECTILEUP_RSC);
 
     player = new Player(75,75,1,1);
   }

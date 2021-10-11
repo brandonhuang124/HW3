@@ -15,9 +15,10 @@ public class TestState extends BasicGameState {
   Tile tileMap[][];
   Vertex [][] path;
   LinkedList<Enemy> enemyList;
+  LinkedList<Projectile> projectileList;
   boolean inputReady;
   boolean enemyTurn, enemyMoveWait, attackReady;
-  int inputWaitTimer;
+  int inputWaitTimer, aimDirection;
   Player player;
   Crosshair crosshair;
 
@@ -41,7 +42,7 @@ public class TestState extends BasicGameState {
     player = rg.player;
     container.setSoundOn(true);
     crosshair = new Crosshair(0,0);
-    initEnemyList();
+    initLists();
     tileMap = RoboGame.getTileMap
         ("1111111111100000000110111111011000000001100011000110001100011010000101101000010110100001011111111111");
   }
@@ -80,6 +81,7 @@ public class TestState extends BasicGameState {
     // Render Entities
     player.render(g);
     for(Enemy enemy : enemyList) enemy.render(g);
+    for(Projectile projectile : projectileList) projectile.render(g);
   }
 
   @Override
@@ -92,23 +94,41 @@ public class TestState extends BasicGameState {
     // Update entity locations
     for(Enemy enemy : enemyList) enemy.update(delta);
     player.update(delta);
+    for(Projectile projectile : projectileList) projectile.update(delta);
+
+    // Check for projectile collisions
+    for(Projectile projectile : projectileList) {
+      // Wall collision
+      if (projectile.wallCollision(tileMap)) {
+
+      }
+      // Enemy collsion
+      Coordinate collisionLocation = projectile.enemyCollision(enemyList);
+      if(collisionLocation.x != -1) {
+
+      }
+    }
     // Check if were in attack mode
     if(attackReady) {
       // Move Crosshair up
       if (input.isKeyPressed(Input.KEY_W)) {
         crosshair.moveUp(playerLoc);
+        aimDirection = 8;
       }
       // Move Crosshair left
       else if (input.isKeyPressed(Input.KEY_A)) {
         crosshair.moveLeft(playerLoc);
+        aimDirection = 4;
       }
       // Move Crosshair down
       else if (input.isKeyPressed(Input.KEY_S)) {
         crosshair.moveDown(playerLoc);
+        aimDirection = 2;
       }
       // Move Crosshair right
       else if (input.isKeyPressed(Input.KEY_D)) {
         crosshair.moveRight(playerLoc);
+        aimDirection = 6;
       }
       // Cancel attack
       else if (input.isKeyPressed(Input.KEY_Q)) {
@@ -118,6 +138,7 @@ public class TestState extends BasicGameState {
       // Make attack
       else if (input.isKeyPressed(Input.KEY_SPACE)) {
         attackReady = false;
+        projectileList.add(new Projectile(playerLoc, aimDirection));
         waitInput();
         System.out.println("Pew Pew");
       }
@@ -157,6 +178,7 @@ public class TestState extends BasicGameState {
         attackReady = true;
         inputReady = false;
         crosshair.moveLeft(playerLoc);
+        aimDirection = 4;
       }
     }
     else if (enemyTurn) {
@@ -197,8 +219,9 @@ public class TestState extends BasicGameState {
     inputWaitTimer = 75;
   }
 
-  private void initEnemyList() {
+  private void initLists() {
     enemyList = new LinkedList<Enemy>();
     enemyList.add(new Enemy(375,75,5,1,1));
+    projectileList = new LinkedList<Projectile>();
   }
 }
