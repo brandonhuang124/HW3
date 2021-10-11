@@ -8,10 +8,10 @@
 -- **[6]** Add enemy that follows player after movement jumps
 -- **[7]** Add system for enemy actions when in range of player
 -- **[8]** Allow player to enter attack mode and aim
+-- **[9]** Add projectile fire to attack mode
 
 ## Open Issues ##
 
--- **[9]** Add projectile fire to attack mode
 -- **[10]** Add enemy defeat after firing
 -- **[11]** Add ammo/reload mechanic
 -- **[12]** Add Health/Lives system
@@ -22,6 +22,7 @@
 -- **[17]** Dijkstras for Ranged enemies
 -- **[18]** Add game progression/levels
 -- **[19]** Add Enemy attacks
+-- **[20]** Fix bug where projectile collision doesn't hit enemy from 2 spaces away (by projectile pause)
 
 ## High Bar Items ##
 -- **[19]** Add pick up items: Medkits/Armor
