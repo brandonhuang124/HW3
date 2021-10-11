@@ -43,10 +43,6 @@ class Player extends Entity {
     velocity = new Vector(0f, 0f);
   }
 
-  public void offset(final int delta) {
-    translate(velocity.scale(delta));
-  }
-
   public void update(final int delta) {
     translate(velocity.scale(delta));
   }

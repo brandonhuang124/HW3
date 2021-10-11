@@ -1,0 +1,36 @@
+## Resolved Issues ##
+
+-- **[1]** Basic assets implemented.
+-- **[2]** Basic Tile map implemented
+-- **[3]** Dijkstras algorithm on tile map added.
+-- **[4]** Player object can move in discrete animated jumps via wasd across tile map.
+-- **[5]** Player cannot move into walls.
+-- **[6]** Add enemy that follows player after movement jumps
+-- **[7]** Add system for enemy actions when in range of player
+-- **[8]** Allow player to enter attack mode and aim
+-- **[9]** Add projectile fire to attack mode
+
+## Open Issues ##
+
+-- **[10]** Add enemy defeat after firing
+-- **[11]** Add ammo/reload mechanic
+-- **[12]** Add Health/Lives system
+-- **[13]** Add sound/music
+-- **[14]** Add art assets
+-- **[15]** Add menu splash
+-- **[16]** Add Ranged enemies
+-- **[17]** Dijkstras for Ranged enemies
+-- **[18]** Add game progression/levels
+-- **[19]** Add Enemy attacks
+-- **[20]** Fix bug where projectile collision doesn't hit enemy from 2 spaces away (by projectile pause)
+
+## High Bar Items ##
+-- **[19]** Add pick up items: Medkits/Armor
+-- **[20]** Improve ammo system, including ammo pickups
+-- **[21]** Add Beam Weapon
+-- **[22]** Add Smart Weapon
+-- **[23]** Add Explosive Weapon
+-- **[24]** Add Stage hazards such as slick tiles/acid tiles
+-- **[25]** Add traps that can be activated by different enemies
+-- **[26]** Add interaction system for doors, chests and levers
+-- **[27]** Diversify enemies
