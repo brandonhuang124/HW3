@@ -78,6 +78,8 @@ public class TestState extends BasicGameState {
     if(attackReady) {
       crosshair.render(g);
     }
+    // Ammo counter
+    g.drawString("Ammo: " + player.getAmmo() + "/" + player.getMaxAmmo(), 150, 700);
     // Render Entities
     player.render(g);
     for(Enemy enemy : enemyList) enemy.render(g);
@@ -139,10 +141,19 @@ public class TestState extends BasicGameState {
       }
       // Make attack
       else if (input.isKeyPressed(Input.KEY_SPACE)) {
-        attackReady = false;
-        projectileList.add(new Projectile(playerLoc, aimDirection));
-        waitInput();
-        System.out.println("Pew Pew");
+        // Check if the player has enough ammo
+        if(player.getAmmo() < 1) {
+          System.out.println("Not enough ammo!");
+          attackReady = false;
+          inputReady = true;
+        }
+        else {
+          attackReady = false;
+          projectileList.add(new Projectile(playerLoc, aimDirection));
+          player.modAmmo(-1);
+          waitInput();
+          System.out.println("Pew Pew");
+        }
       }
     }
     // Check if controls are ready.
@@ -174,13 +185,17 @@ public class TestState extends BasicGameState {
         waitInput();
       }
       // Attack
-
       else if (input.isKeyPressed(Input.KEY_SPACE)) {
-        System.out.println("Space pressed");
         attackReady = true;
         inputReady = false;
         crosshair.moveLeft(playerLoc);
         aimDirection = 4;
+      }
+      // Reload
+      else if (input.isKeyPressed(Input.KEY_R)) {
+        System.out.println("Reloading...");
+        player.reload();
+        waitInput();
       }
     }
     else if (enemyTurn) {
@@ -193,7 +208,6 @@ public class TestState extends BasicGameState {
     }
     else {
       inputWaitTimer -= delta;
-      System.out.println(inputWaitTimer);
       // Offset position back into the grid when done moving
       if(inputWaitTimer <= 0) {
         // If the enemies need to be reset
