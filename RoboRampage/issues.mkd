@@ -25,12 +25,12 @@
 -- **[20]** Fix bug where projectile collision doesn't hit enemy from 2 spaces away (by projectile pause)
 
 ## High Bar Items ##
--- **[19]** Add pick up items: Medkits/Armor
--- **[20]** Improve ammo system, including ammo pickups
--- **[21]** Add Beam Weapon
--- **[22]** Add Smart Weapon
--- **[23]** Add Explosive Weapon
--- **[24]** Add Stage hazards such as slick tiles/acid tiles
--- **[25]** Add traps that can be activated by different enemies
--- **[26]** Add interaction system for doors, chests and levers
--- **[27]** Diversify enemies
+-- **[30]** Add pick up items: Medkits/Armor
+-- **[31]** Improve ammo system, including ammo pickups
+-- **[32]** Add Beam Weapon
+-- **[33]** Add Smart Weapon
+-- **[34]** Add Explosive Weapon
+-- **[35]** Add Stage hazards such as slick tiles/acid tiles
+-- **[36]** Add traps that can be activated by different enemies
+-- **[37]** Add interaction system for doors, chests and levers
+-- **[38]** Diversify enemies
