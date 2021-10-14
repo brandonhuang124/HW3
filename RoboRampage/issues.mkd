@@ -10,11 +10,11 @@
 -- **[8]** Allow player to enter attack mode and aim
 -- **[9]** Add projectile fire to attack mode
 -- **[11]** Add ammo/reload mechanic
+-- **[12]** Add Health/Lives system
 
 ## Open Issues ##
 
 -- **[10]** Add enemy defeat after firing
--- **[12]** Add Health/Lives system
 -- **[13]** Add sound/music
 -- **[14]** Add art assets
 -- **[15]** Add menu splash

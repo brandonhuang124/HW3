@@ -17,7 +17,7 @@ public class TestState extends BasicGameState {
   LinkedList<Enemy> enemyList;
   LinkedList<Projectile> projectileList;
   boolean inputReady;
-  boolean enemyTurn, enemyMoveWait, attackReady;
+  boolean enemyTurn, enemyMoveWait, attackReady, gameover;
   int inputWaitTimer, aimDirection;
   Player player;
   Crosshair crosshair;
@@ -36,7 +36,7 @@ public class TestState extends BasicGameState {
   public void enter(GameContainer container, StateBasedGame game) {
     path = null;
     inputReady = true;
-    enemyTurn = enemyMoveWait = attackReady = false;
+    enemyTurn = enemyMoveWait = attackReady = gameover = false;
     inputWaitTimer = 0;
     RoboGame rg = (RoboGame)game;
     player = rg.player;
@@ -80,6 +80,8 @@ public class TestState extends BasicGameState {
     }
     // Ammo counter
     g.drawString("Ammo: " + player.getAmmo() + "/" + player.getMaxAmmo(), 150, 700);
+    // Health Bar
+    g.drawString("Health: " + player.getHealth() + "/" + player.getMaxHealth(), 300,700);
     // Render Entities
     player.render(g);
     for(Enemy enemy : enemyList) enemy.render(g);
@@ -92,6 +94,11 @@ public class TestState extends BasicGameState {
     RoboGame rg = (RoboGame)game;
     Coordinate playerLoc = player.getLocation();
     path = RoboGame.getDijkstras(playerLoc.x,playerLoc.y,tileMap);
+
+    // Check if gameover occured
+    if(gameover) {
+      container.exit();
+    }
 
     // Update entity locations
     for(Enemy enemy : enemyList) enemy.update(delta);
@@ -200,7 +207,11 @@ public class TestState extends BasicGameState {
     }
     else if (enemyTurn) {
       for (Enemy enemy : enemyList) {
-        enemy.makeMove(path, player.getLocation());
+        enemy.makeMove(path, player.getLocation(), player);
+      }
+      if(player.getHealth() == 0) {
+        gameover = true;
+        System.out.println("Health dropped to 0, gameover...");
       }
       enemyTurn = false;
       enemyMoveWait = true;

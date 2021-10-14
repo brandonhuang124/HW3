@@ -21,20 +21,20 @@ public class Enemy extends Entity {
 
   public Coordinate getLocation() { return location;}
 
-  public void makeMove(Vertex[][] pathMap, Coordinate playerLoc) {
+  public void makeMove(Vertex[][] pathMap, Coordinate playerLoc, Player player) {
     // Melee Enemy behavior
     if(id == 1) {
       // Check if the player is next to them
       int xdiff = playerLoc.x - location.x;
       int ydiff = playerLoc.y - location.y;
       // Square above
-      if(xdiff == 0 && ydiff == 1) attack(8);
+      if(xdiff == 0 && ydiff == 1) attack(8, player);
       // Square below
-      else if(xdiff == 0 && ydiff == -1) attack(2);
+      else if(xdiff == 0 && ydiff == -1) attack(2, player);
       // Square left
-      else if(xdiff == 1 && ydiff == 0) attack(4);
+      else if(xdiff == 1 && ydiff == 0) attack(4, player);
       // Square right
-      else if(xdiff == -1 && ydiff == 0) attack(6);
+      else if(xdiff == -1 && ydiff == 0) attack(6, player);
       // Otherwise move
       else {
         // Choose which direction based on the dijkstras map
@@ -47,8 +47,9 @@ public class Enemy extends Entity {
     }
   }
 
-  public void attack(int direction) {
+  public void attack(int direction, Player player) {
     System.out.println("Attacked: Hyah!" + direction);
+    player.modHealth(-1);
   }
   public void moveUp() {
     velocity = new Vector(0f, -speed);
