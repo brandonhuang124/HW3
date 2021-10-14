@@ -99,26 +99,29 @@ public class TestState extends BasicGameState {
     if(gameover) {
       container.exit();
     }
-
+    if (!projectileList.isEmpty()) {
+      // Update projectiles
+      for(Projectile projectile : projectileList) projectile.update(delta);
+      // Check for projectile collisions
+      for(Projectile projectile : projectileList) {
+        // Wall collision
+        if (projectile.wallCollision(tileMap)) {
+          System.out.println("Projectile hit wall");
+          projectileList.remove(projectile);
+        }
+        // Enemy collision
+        Coordinate collisionLocation = projectile.enemyCollision(enemyList);
+        if(collisionLocation.x != -1) {
+          System.out.println("Projectile hit enemy at: " + collisionLocation.x + ", " + collisionLocation.y);
+          projectileList.remove(projectile);
+        }
+      }
+      return;
+    }
     // Update entity locations
     for(Enemy enemy : enemyList) enemy.update(delta);
     player.update(delta);
-    for(Projectile projectile : projectileList) projectile.update(delta);
 
-    // Check for projectile collisions
-    for(Projectile projectile : projectileList) {
-      // Wall collision
-      if (projectile.wallCollision(tileMap)) {
-        System.out.println("Projectile hit wall");
-        projectileList.remove(projectile);
-      }
-      // Enemy collision
-      Coordinate collisionLocation = projectile.enemyCollision(enemyList);
-      if(collisionLocation.x != -1) {
-        System.out.println("Projectile hit enemy at: " + collisionLocation.x + ", " + collisionLocation.y);
-        projectileList.remove(projectile);
-      }
-    }
     // Check if were in attack mode
     if(attackReady) {
       // Move Crosshair up
