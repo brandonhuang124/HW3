@@ -18,7 +18,7 @@ public class TestState extends BasicGameState {
   LinkedList<Projectile> projectileList;
   boolean inputReady;
   boolean enemyTurn, enemyMoveWait, attackReady, gameover;
-  int inputWaitTimer, aimDirection;
+  int inputWaitTimer, aimDirection, turnDuration;
   Player player;
   Crosshair crosshair;
 
@@ -34,6 +34,7 @@ public class TestState extends BasicGameState {
 
   @Override
   public void enter(GameContainer container, StateBasedGame game) {
+    turnDuration = 300;
     path = null;
     inputReady = true;
     enemyTurn = enemyMoveWait = attackReady = gameover = false;
@@ -56,10 +57,21 @@ public class TestState extends BasicGameState {
       for(int x = 0; x < 10; x++) {
         Tile temp = tileMap[x][y];
         if (temp.getID() == 0) {
-          g.drawImage(ResourceManager.getImage(RoboGame.TILE_OPENGRIDIMG_RSC),x * 75, y * 75);
+          if(temp.getSubID() == 0) {
+            g.drawImage(ResourceManager.getImage(RoboGame.TILE_FLOORIMG_RSC),x * 75, y * 75);
+          }
+          else if(temp.getSubID() == 1) {
+            g.drawImage(ResourceManager.getImage(RoboGame.TILE_FLOORIMG2_RSC),x * 75, y * 75);
+          }
+          else if(temp.getSubID() == 2) {
+            g.drawImage(ResourceManager.getImage(RoboGame.TILE_FLOORIMG3_RSC),x * 75, y * 75);
+          }
+          else if(temp.getSubID() == 3) {
+            g.drawImage(ResourceManager.getImage(RoboGame.TILE_FLOORIMG4_RSC),x * 75, y * 75);
+          }
         }
         if (temp.getID() == 1) {
-          g.drawImage(ResourceManager.getImage(RoboGame.TILE_CLOSEDGRIDIMG_RSC),x * 75, y * 75);
+          g.drawImage(ResourceManager.getImage(RoboGame.TILE_WALLIMG_RSC),x * 75, y * 75);
         }
       }
     }
@@ -133,6 +145,7 @@ public class TestState extends BasicGameState {
       else if (input.isKeyPressed(Input.KEY_A)) {
         crosshair.moveLeft(playerLoc);
         aimDirection = 4;
+        player.faceLeft();
       }
       // Move Crosshair down
       else if (input.isKeyPressed(Input.KEY_S)) {
@@ -143,6 +156,7 @@ public class TestState extends BasicGameState {
       else if (input.isKeyPressed(Input.KEY_D)) {
         crosshair.moveRight(playerLoc);
         aimDirection = 6;
+        player.faceRight();
       }
       // Cancel attack
       else if (input.isKeyPressed(Input.KEY_Q)) {
@@ -163,6 +177,7 @@ public class TestState extends BasicGameState {
           player.modAmmo(-1);
           waitInput();
           System.out.println("Pew Pew");
+          player.shoot(aimDirection);
         }
       }
     }
@@ -199,7 +214,14 @@ public class TestState extends BasicGameState {
         attackReady = true;
         inputReady = false;
         crosshair.moveLeft(playerLoc);
-        aimDirection = 4;
+        if(player.isFaceRight()) {
+          aimDirection = 6;
+          crosshair.moveRight(playerLoc);
+        }
+        else {
+          aimDirection = 4;
+          crosshair.moveLeft(playerLoc);
+        }
       }
       // Reload
       else if (input.isKeyPressed(Input.KEY_R)) {
@@ -246,7 +268,7 @@ public class TestState extends BasicGameState {
 
   public void waitInput() {
     inputReady = false;
-    inputWaitTimer = 75;
+    inputWaitTimer = turnDuration;
   }
 
   private void initLists() {

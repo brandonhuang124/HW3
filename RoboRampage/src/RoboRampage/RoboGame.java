@@ -13,13 +13,35 @@ public class RoboGame extends StateBasedGame {
   public static final int STARTUPSTATE = 0;
   public static final int TESTSTATE = 1;
   // Resources
-  public static final String TILE_OPENGRIDIMG_RSC = "RoboRampage/Assets/gridOpen.png";
-  public static final String TILE_CLOSEDGRIDIMG_RSC = "RoboRampage/Assets/gridClosed.png";
+  public static final String TILE_FLOORIMG_RSC = "RoboRampage/Assets/floor.png";
+  public static final String TILE_FLOORIMG2_RSC = "RoboRampage/Assets/floor2.png";
+  public static final String TILE_FLOORIMG3_RSC = "RoboRampage/Assets/floor3.png";
+  public static final String TILE_FLOORIMG4_RSC = "RoboRampage/Assets/floor4.png";
+  public static final String TILE_WALLIMG_RSC = "RoboRampage/Assets/wall.png";
   public static final String UTIL_CROSSHAIRIMG_RSC = "RoboRampage/Assets/crosshair.png";
 
   public static final String ENEMY_MELEEIMG_RSC = "RoboRampage/Assets/meleeEnemy.png";
+  public static final String ENEMY_MELEEIDLERIGHT_RSC = "RoboRampage/Assets/enemyMeleeIdleRight.png";
+  public static final String ENEMY_MELEEIDLELEFT_RSC = "RoboRampage/Assets/enemyMeleeIdleLeft.png";
+  public static final String ENEMY_MELEEMOVELEFT_RSC = "RoboRampage/Assets/enemyMeleeMoveLeft.png";
+  public static final String ENEMY_MELEEMOVERIGHT_RSC = "RoboRampage/Assets/enemyMeleeMoveRight.png";
+  public static final String ENEMY_MELEEATTACKLEFT_RSC = "RoboRampage/Assets/enemyMeleeAttackLeft.png";
+  public static final String ENEMY_MELEEATTACKRIGHT_RSC = "RoboRampage/Assets/enemyMeleeAttackRight.png";
+  public static final String ENEMY_MELEEDEFEATLEFT_RSC = "RoboRampage/Assets/enemyMeleeDefeatLeft.png";
+  public static final String ENEMY_MELEEDEFEATRIGHT_RSC = "RoboRampage/Assets/enemyMeleeDefeatRight.png";
 
   public static final String PLAYER_PLAYERIMG_RSC = "RoboRampage/Assets/player.png";
+  public static final String PLAYER_PLAYERIDLELEFT_RSC = "RoboRampage/Assets/playerIdleLeft.png";
+  public static final String PLAYER_PLAYERIDLERIGHT_RSC = "RoboRampage/Assets/playerIdleRight.png";
+  public static final String PLAYER_PLAYERMOVELEFT_RSC = "RoboRampage/Assets/playerMoveLeft.png";
+  public static final String PLAYER_PLAYERMOVERIGHT_RSC = "RoboRampage/Assets/playerMoveRight.png";
+  public static final String PLAYER_PLAYERDEATHLEFT_RSC = "RoboRampage/Assets/playerDeathLeft.png";
+  public static final String PLAYER_PLAYERDEATHRIGHT_RSC = "RoboRampage/Assets/playerDeathRight.png";
+  public static final String PLAYER_PLAYERRELOADLEFT_RSC = "RoboRampage/Assets/playerReloadLeft.png";
+  public static final String PLAYER_PLAYERRELOADRIGHT_RSC = "RoboRampage/Assets/playerReloadRight.png";
+  public static final String PLAYER_PLAYERSHOOTLEFT_RSC = "RoboRampage/Assets/playerShootLeft.png";
+  public static final String PLAYER_PLAYERSHOOTRIGHT_RSC = "RoboRampage/Assets/playerShootRight.png";
+  public static final String PLAYER_PROJECTILEDEFAULT_RSC = "RoboRampage/Assets/playerProjectile.png";
   public static final String PLAYER_PROJECTILEDOWN_RSC = "RoboRampage/Assets/projectile_down.png";
   public static final String PLAYER_PROJECTILELEFT_RSC = "RoboRampage/Assets/projectile_left.png";
   public static final String PLAYER_PROJECTILERIGHT_RSC = "RoboRampage/Assets/projectile_right.png";
@@ -47,10 +69,36 @@ public class RoboGame extends StateBasedGame {
     addState(new StartState());
     addState(new TestState());
     // Load resources
-    ResourceManager.loadImage(TILE_OPENGRIDIMG_RSC);
-    ResourceManager.loadImage(TILE_CLOSEDGRIDIMG_RSC);
+    // Map Stuf
+    ResourceManager.loadImage(TILE_FLOORIMG_RSC);
+    ResourceManager.loadImage(TILE_WALLIMG_RSC);
+    ResourceManager.loadImage(TILE_FLOORIMG2_RSC);
+    ResourceManager.loadImage(TILE_FLOORIMG3_RSC);
+    ResourceManager.loadImage(TILE_FLOORIMG4_RSC);
+    // Player Stuff
     ResourceManager.loadImage(PLAYER_PLAYERIMG_RSC);
+    ResourceManager.loadImage(PLAYER_PLAYERDEATHLEFT_RSC);
+    ResourceManager.loadImage(PLAYER_PLAYERDEATHRIGHT_RSC);
+    ResourceManager.loadImage(PLAYER_PLAYERIDLELEFT_RSC);
+    ResourceManager.loadImage(PLAYER_PLAYERIDLERIGHT_RSC);
+    ResourceManager.loadImage(PLAYER_PLAYERSHOOTLEFT_RSC);
+    ResourceManager.loadImage(PLAYER_PLAYERSHOOTRIGHT_RSC);
+    ResourceManager.loadImage(PLAYER_PLAYERRELOADLEFT_RSC);
+    ResourceManager.loadImage(PLAYER_PLAYERRELOADRIGHT_RSC);
+    ResourceManager.loadImage(PLAYER_PLAYERMOVELEFT_RSC);
+    ResourceManager.loadImage(PLAYER_PLAYERMOVERIGHT_RSC);
+    ResourceManager.loadImage(PLAYER_PROJECTILEDEFAULT_RSC);
+    // Enemy Sheets
     ResourceManager.loadImage(ENEMY_MELEEIMG_RSC);
+    ResourceManager.loadImage(ENEMY_MELEEIDLERIGHT_RSC);
+    ResourceManager.loadImage(ENEMY_MELEEIDLELEFT_RSC);
+    ResourceManager.loadImage(ENEMY_MELEEMOVELEFT_RSC);
+    ResourceManager.loadImage(ENEMY_MELEEMOVERIGHT_RSC);
+    ResourceManager.loadImage(ENEMY_MELEEDEFEATLEFT_RSC);
+    ResourceManager.loadImage(ENEMY_MELEEDEFEATRIGHT_RSC);
+    ResourceManager.loadImage(ENEMY_MELEEATTACKLEFT_RSC);
+    ResourceManager.loadImage(ENEMY_MELEEATTACKRIGHT_RSC);
+    // UI stuff
     ResourceManager.loadImage(UTIL_CROSSHAIRIMG_RSC);
     ResourceManager.loadImage(PLAYER_PROJECTILEDOWN_RSC);
     ResourceManager.loadImage(PLAYER_PROJECTILELEFT_RSC);
