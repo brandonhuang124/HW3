@@ -191,7 +191,7 @@ class Player extends Entity {
         activeAnim = shootRight;
         break;
       default: removeAnimation(activeAnim);
-        if(faceRight) {
+        if(!faceRight) {
           addAnimation(shootLeft);
           shootLeft.restart();
           activeAnim = shootLeft;

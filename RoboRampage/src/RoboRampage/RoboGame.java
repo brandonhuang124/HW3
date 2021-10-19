@@ -19,6 +19,16 @@ public class RoboGame extends StateBasedGame {
   public static final String TILE_FLOORIMG4_RSC = "RoboRampage/Assets/floor4.png";
   public static final String TILE_WALLIMG_RSC = "RoboRampage/Assets/wall.png";
   public static final String UTIL_CROSSHAIRIMG_RSC = "RoboRampage/Assets/crosshair.png";
+  public static final String UTIL_GBARCAPRIGHT_RSC = "RoboRampage/Assets/barGreenCapRight.png";
+  public static final String UTIL_GBARCAPLEFT_RSC = "RoboRampage/Assets/barGreenCapLeft.png";
+  public static final String UTIL_GBAR_RSC = "RoboRampage/Assets/barGreen.png";
+  public static final String UTIL_RBARCAPRIGHT_RSC = "RoboRampage/Assets/barRedCapRight.png";
+  public static final String UTIL_RBARCAPLEFT_RSC = "RoboRampage/Assets/barRedCapLeft.png";
+  public static final String UTIL_RBAR_RSC = "RoboRampage/Assets/barRed.png";
+  public static final String UTIL_BULLET_RSC = "RoboRampage/Assets/bullet.png";
+  public static final String UTIL_BULLETGONE_RSC = "RoboRampage/Assets/bulletGone.png";
+  public static final String UTIL_HUDIMG_RSC = "RoboRampage/Assets/hud.png";
+  public static final String UTIL_GUNDEFAULT_RSC = "RoboRampage/Assets/gunDefault.png";
 
   public static final String ENEMY_MELEEIMG_RSC = "RoboRampage/Assets/meleeEnemy.png";
   public static final String ENEMY_MELEEIDLERIGHT_RSC = "RoboRampage/Assets/enemyMeleeIdleRight.png";
@@ -69,7 +79,7 @@ public class RoboGame extends StateBasedGame {
     addState(new StartState());
     addState(new TestState());
     // Load resources
-    // Map Stuf
+    // Map Stuff
     ResourceManager.loadImage(TILE_FLOORIMG_RSC);
     ResourceManager.loadImage(TILE_WALLIMG_RSC);
     ResourceManager.loadImage(TILE_FLOORIMG2_RSC);
@@ -88,6 +98,10 @@ public class RoboGame extends StateBasedGame {
     ResourceManager.loadImage(PLAYER_PLAYERMOVELEFT_RSC);
     ResourceManager.loadImage(PLAYER_PLAYERMOVERIGHT_RSC);
     ResourceManager.loadImage(PLAYER_PROJECTILEDEFAULT_RSC);
+    ResourceManager.loadImage(PLAYER_PROJECTILEDOWN_RSC);
+    ResourceManager.loadImage(PLAYER_PROJECTILELEFT_RSC);
+    ResourceManager.loadImage(PLAYER_PROJECTILERIGHT_RSC);
+    ResourceManager.loadImage(PLAYER_PROJECTILEUP_RSC);
     // Enemy Sheets
     ResourceManager.loadImage(ENEMY_MELEEIMG_RSC);
     ResourceManager.loadImage(ENEMY_MELEEIDLERIGHT_RSC);
@@ -100,10 +114,17 @@ public class RoboGame extends StateBasedGame {
     ResourceManager.loadImage(ENEMY_MELEEATTACKRIGHT_RSC);
     // UI stuff
     ResourceManager.loadImage(UTIL_CROSSHAIRIMG_RSC);
-    ResourceManager.loadImage(PLAYER_PROJECTILEDOWN_RSC);
-    ResourceManager.loadImage(PLAYER_PROJECTILELEFT_RSC);
-    ResourceManager.loadImage(PLAYER_PROJECTILERIGHT_RSC);
-    ResourceManager.loadImage(PLAYER_PROJECTILEUP_RSC);
+    ResourceManager.loadImage(UTIL_BULLET_RSC);
+    ResourceManager.loadImage(UTIL_BULLETGONE_RSC);
+    ResourceManager.loadImage(UTIL_GBAR_RSC);
+    ResourceManager.loadImage(UTIL_GBARCAPLEFT_RSC);
+    ResourceManager.loadImage(UTIL_GBARCAPRIGHT_RSC);
+    ResourceManager.loadImage(UTIL_RBAR_RSC);
+    ResourceManager.loadImage(UTIL_RBARCAPLEFT_RSC);
+    ResourceManager.loadImage(UTIL_RBARCAPRIGHT_RSC);
+    ResourceManager.loadImage(UTIL_HUDIMG_RSC);
+    ResourceManager.loadImage(UTIL_GUNDEFAULT_RSC);
+
 
     player = new Player(75,75,1,1);
   }
@@ -112,7 +133,7 @@ public class RoboGame extends StateBasedGame {
     AppGameContainer app;
     try {
       app = new AppGameContainer(new RoboGame("RoboRampage", 1000,1000));
-      app.setDisplayMode(750,750, false);
+      app.setDisplayMode(750,850, false);
       app.setVSync(true);
       app.setTargetFrameRate(60);
       app.start();
