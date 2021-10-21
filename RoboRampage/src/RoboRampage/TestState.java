@@ -16,7 +16,7 @@ public class TestState extends BasicGameState {
   Vertex [][] path;
   LinkedList<Enemy> enemyList;
   LinkedList<Projectile> projectileList;
-  boolean inputReady;
+  boolean inputReady, enemyDead;
   boolean enemyTurn, enemyMoveWait, attackReady, gameover;
   int inputWaitTimer, aimDirection, turnDuration;
   Player player;
@@ -37,7 +37,7 @@ public class TestState extends BasicGameState {
     turnDuration = 300;
     path = null;
     inputReady = true;
-    enemyTurn = enemyMoveWait = attackReady = gameover = false;
+    enemyTurn = enemyMoveWait = attackReady = gameover = enemyDead = false;
     inputWaitTimer = 0;
     RoboGame rg = (RoboGame)game;
     player = rg.player;
@@ -140,8 +140,9 @@ public class TestState extends BasicGameState {
 
     // Check if gameover occured
     if(gameover) {
-      container.exit();
+      rg.enterState(RoboGame.STARTUPSTATE);
     }
+    // Check for live projectiles
     if (!projectileList.isEmpty()) {
       // Update projectiles
       for(Projectile projectile : projectileList) projectile.update(delta);
@@ -153,14 +154,17 @@ public class TestState extends BasicGameState {
           projectileList.remove(projectile);
         }
         // Enemy collision
-        Coordinate collisionLocation = projectile.enemyCollision(enemyList);
-        if(collisionLocation.x != -1) {
-          System.out.println("Projectile hit enemy at: " + collisionLocation.x + ", " + collisionLocation.y);
+        Enemy enemyHit = projectile.enemyCollision(enemyList);
+        if(enemyHit != null) {
+          System.out.println("Projectile hit enemy at: " + enemyHit.getCoordinate().x + ", " + enemyHit.getCoordinate().y);
           projectileList.remove(projectile);
+          enemyDead = enemyHit.damage(5);
+          if(enemyDead) waitInput();
         }
       }
       return;
     }
+
     // Update entity locations
     for(Enemy enemy : enemyList) enemy.update(delta);
     player.update(delta);
@@ -291,6 +295,10 @@ public class TestState extends BasicGameState {
           player.update(inputWaitTimer);
           enemyTurn = true;
           player.stop();
+        }
+        // Clear any dead enemies
+        for(Enemy enemy : enemyList) {
+          if(enemy.getHealth() <= 0) enemyList.remove(enemy);
         }
       }
     }

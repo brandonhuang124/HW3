@@ -42,17 +42,16 @@ public class Projectile extends Entity {
   }
 
   // Returns (-1,-1) if no collision happened.
-  public Coordinate enemyCollision (LinkedList<Enemy> enemyList) {
-    Coordinate collisionLoc = new Coordinate(-1,-1);
+  public Enemy enemyCollision (LinkedList<Enemy> enemyList) {
+    Enemy enemyHit = null;
     Coordinate thisCoord = getCoord();
     for(Enemy enemy : enemyList) {
       if(thisCoord.x == enemy.getLocation().x && thisCoord.y == enemy.getLocation().y) {
-        collisionLoc.x = thisCoord.x;
-        collisionLoc.y = thisCoord.y;
+        enemyHit = enemy;
         break;
       }
     }
-    return collisionLoc;
+    return enemyHit;
   }
 
   public boolean wallCollision (Tile[][] tilemap) {

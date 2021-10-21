@@ -10,6 +10,7 @@ public class Enemy extends Entity {
   private Coordinate location;
   private float speed;
   private int id; // 1 for melee, 2 for ranged
+  private int health, maxhealth;
   private Animation leftIdle, rightIdle, activeAnimation, leftMove, rightMove, leftAttack, rightAttack, leftDefeat,
     rightDefeat;
   private boolean faceRight;
@@ -20,32 +21,36 @@ public class Enemy extends Entity {
     speed = 0.25f;
     velocity = new Vector(0f, 0f);
     id = newid;
-    addImageWithBoundingBox(ResourceManager.getImage(RoboGame.ENEMY_MELEEIMG_RSC));
-    rightIdle = new Animation(ResourceManager.getSpriteSheet(
-        RoboGame.ENEMY_MELEEIDLERIGHT_RSC, 75, 75), 0, 0, 3, 0,
-         true, 75, true);
-    leftIdle = new Animation(ResourceManager.getSpriteSheet(
-        RoboGame.ENEMY_MELEEIDLELEFT_RSC, 75, 75), 0, 0, 3, 0,
-        true, 75, true);
-    rightMove = new Animation(ResourceManager.getSpriteSheet(
-        RoboGame.ENEMY_MELEEMOVERIGHT_RSC, 75, 75), 0, 0, 3, 0,
-        true, 75, true);
-    leftMove = new Animation(ResourceManager.getSpriteSheet(
-        RoboGame.ENEMY_MELEEMOVELEFT_RSC, 75, 75), 0, 0, 3, 0,
-        true, 75, true);
-    leftAttack = new Animation(ResourceManager.getSpriteSheet(
-        RoboGame.ENEMY_MELEEATTACKLEFT_RSC, 75, 75), 0, 0, 3, 0,
-        true, 150, true);
-    rightAttack = new Animation(ResourceManager.getSpriteSheet(
-        RoboGame.ENEMY_MELEEATTACKRIGHT_RSC, 75, 75), 0, 0, 3, 0,
-        true, 150, true);
-    leftDefeat = new Animation(ResourceManager.getSpriteSheet(
-        RoboGame.ENEMY_MELEEDEFEATLEFT_RSC, 75, 75), 0, 0, 7, 0,
-        true, 75, true);
-    rightDefeat = new Animation(ResourceManager.getSpriteSheet(
-        RoboGame.ENEMY_MELEEDEFEATRIGHT_RSC, 75, 75), 0, 0, 7, 0,
-        true, 75, true);
-    faceRight = true;
+    health = maxhealth = 0;
+    if(id == 1) {
+      health = maxhealth = 5;
+      addImageWithBoundingBox(ResourceManager.getImage(RoboGame.ENEMY_MELEEIMG_RSC));
+      rightIdle = new Animation(ResourceManager.getSpriteSheet(
+          RoboGame.ENEMY_MELEEIDLERIGHT_RSC, 75, 75), 0, 0, 3, 0,
+          true, 75, true);
+      leftIdle = new Animation(ResourceManager.getSpriteSheet(
+          RoboGame.ENEMY_MELEEIDLELEFT_RSC, 75, 75), 0, 0, 3, 0,
+          true, 75, true);
+      rightMove = new Animation(ResourceManager.getSpriteSheet(
+          RoboGame.ENEMY_MELEEMOVERIGHT_RSC, 75, 75), 0, 0, 3, 0,
+          true, 75, true);
+      leftMove = new Animation(ResourceManager.getSpriteSheet(
+          RoboGame.ENEMY_MELEEMOVELEFT_RSC, 75, 75), 0, 0, 3, 0,
+          true, 75, true);
+      leftAttack = new Animation(ResourceManager.getSpriteSheet(
+          RoboGame.ENEMY_MELEEATTACKLEFT_RSC, 75, 75), 0, 0, 3, 0,
+          true, 150, true);
+      rightAttack = new Animation(ResourceManager.getSpriteSheet(
+          RoboGame.ENEMY_MELEEATTACKRIGHT_RSC, 75, 75), 0, 0, 3, 0,
+          true, 150, true);
+      leftDefeat = new Animation(ResourceManager.getSpriteSheet(
+          RoboGame.ENEMY_MELEEDEFEATLEFT_RSC, 75, 75), 0, 0, 7, 0,
+          true, 38, true);
+      rightDefeat = new Animation(ResourceManager.getSpriteSheet(
+          RoboGame.ENEMY_MELEEDEFEATRIGHT_RSC, 75, 75), 0, 0, 7, 0,
+          true, 38, true);
+    }
+    faceRight = false;
     activeAnimation = leftIdle;
     addAnimation(leftIdle);
     rightIdle.setLooping(true);
@@ -156,11 +161,38 @@ public class Enemy extends Entity {
     }
   }
 
+  public void dead() {
+    removeAnimation(activeAnimation);
+    if(faceRight) {
+      addAnimation(rightDefeat);
+      activeAnimation = rightDefeat;
+    }
+    else {
+      addAnimation(leftDefeat);
+      activeAnimation = leftDefeat;
+    }
+  }
+
   public void update(final int delta) {
     translate(velocity.scale(delta));
   }
 
+  public boolean damage(int damage) {
+    health -= damage;
+    if(this.health <= 0) {
+      dead();
+      return true;
+    }
+    return false;
+  }
+
+  public Coordinate getCoordinate() { return location;}
+
   public int getID() { return id;}
+
+  public int getHealth() { return health;}
+
+  public int getMaxHealth() { return maxhealth;}
 
   public Vector getVelocity() { return velocity;}
 }

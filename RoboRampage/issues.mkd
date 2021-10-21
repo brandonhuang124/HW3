@@ -17,7 +17,7 @@
 
 ## Open Issues ##
 
--- **[10]** Add enemy defeat after firing
+-- **[10]** Add enemy defeat after firing and Player defeat animation.
 -- **[13]** Add sound/music
 -- **[16]** Add Ranged enemies
 -- **[17]** Dijkstras for Ranged enemies
