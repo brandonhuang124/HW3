@@ -3,31 +3,34 @@ package RoboRampage;
 import jig.Entity;
 import jig.ResourceManager;
 import jig.Vector;
+import org.newdawn.slick.Animation;
 
 import java.util.LinkedList;
 
 public class Projectile extends Entity {
   private float speed;
   private Vector velocity;
+  private Animation image;
 
   public Projectile (Coordinate loc, int direction) {
     float x = (loc.x * 75f) + 37;
     float y = (loc.y * 75f) + 37;
-    speed = 1f;
+    speed = .75f;
     this.setX(x);
     this.setY(y);
+    image = new Animation(ResourceManager.getSpriteSheet(
+        RoboGame.PLAYER_PROJECTILEDEFAULT_RSC, 25, 25), 0, 0, 3, 0,
+        true, 75, true);
+    addAnimation(image);
+    image.setLooping(true);
     switch(direction) {
       case 2: velocity = new Vector(0f, speed);
-              addImageWithBoundingBox(ResourceManager.getImage(RoboGame.PLAYER_PROJECTILEDOWN_RSC));
               break;
       case 4: velocity = new Vector(-speed, 0f);
-              addImageWithBoundingBox(ResourceManager.getImage(RoboGame.PLAYER_PROJECTILELEFT_RSC));
               break;
       case 6: velocity = new Vector(speed, 0f);
-              addImageWithBoundingBox(ResourceManager.getImage(RoboGame.PLAYER_PROJECTILERIGHT_RSC));
               break;
       default: velocity = new Vector(0f, -speed);
-              addImageWithBoundingBox(ResourceManager.getImage(RoboGame.PLAYER_PROJECTILEUP_RSC));
                break;
     }
   }

@@ -18,7 +18,7 @@ public class TestState extends BasicGameState {
   LinkedList<Projectile> projectileList;
   boolean inputReady;
   boolean enemyTurn, enemyMoveWait, attackReady, gameover;
-  int inputWaitTimer, aimDirection;
+  int inputWaitTimer, aimDirection, turnDuration;
   Player player;
   Crosshair crosshair;
 
@@ -34,6 +34,7 @@ public class TestState extends BasicGameState {
 
   @Override
   public void enter(GameContainer container, StateBasedGame game) {
+    turnDuration = 300;
     path = null;
     inputReady = true;
     enemyTurn = enemyMoveWait = attackReady = gameover = false;
@@ -56,10 +57,21 @@ public class TestState extends BasicGameState {
       for(int x = 0; x < 10; x++) {
         Tile temp = tileMap[x][y];
         if (temp.getID() == 0) {
-          g.drawImage(ResourceManager.getImage(RoboGame.TILE_OPENGRIDIMG_RSC),x * 75, y * 75);
+          if(temp.getSubID() == 0) {
+            g.drawImage(ResourceManager.getImage(RoboGame.TILE_FLOORIMG_RSC),x * 75, y * 75);
+          }
+          else if(temp.getSubID() == 1) {
+            g.drawImage(ResourceManager.getImage(RoboGame.TILE_FLOORIMG2_RSC),x * 75, y * 75);
+          }
+          else if(temp.getSubID() == 2) {
+            g.drawImage(ResourceManager.getImage(RoboGame.TILE_FLOORIMG3_RSC),x * 75, y * 75);
+          }
+          else if(temp.getSubID() == 3) {
+            g.drawImage(ResourceManager.getImage(RoboGame.TILE_FLOORIMG4_RSC),x * 75, y * 75);
+          }
         }
         if (temp.getID() == 1) {
-          g.drawImage(ResourceManager.getImage(RoboGame.TILE_CLOSEDGRIDIMG_RSC),x * 75, y * 75);
+          g.drawImage(ResourceManager.getImage(RoboGame.TILE_WALLIMG_RSC),x * 75, y * 75);
         }
       }
     }
@@ -75,13 +87,44 @@ public class TestState extends BasicGameState {
       }
     }
     // Render HUD stuff
+    g.drawImage(ResourceManager.getImage(RoboGame.UTIL_HUDIMG_RSC), 0, 750);
     if(attackReady) {
       crosshair.render(g);
     }
-    // Ammo counter
-    g.drawString("Ammo: " + player.getAmmo() + "/" + player.getMaxAmmo(), 150, 700);
-    // Health Bar
-    g.drawString("Health: " + player.getHealth() + "/" + player.getMaxHealth(), 300,700);
+    // Current Gun x:410 y:765
+    g.drawImage(ResourceManager.getImage(RoboGame.UTIL_GUNDEFAULT_RSC), 410, 765);
+    // Ammo counter x: 520 y: 782 width:13
+    int currentAmmo = player.getAmmo();
+    int maxAmmo = player.getMaxAmmo();
+    for(int i = 0; i < maxAmmo; i++) {
+      if(currentAmmo > 0)
+          g.drawImage(ResourceManager.getImage(RoboGame.UTIL_BULLET_RSC), 520 + (13 * i), 782);
+      else
+          g.drawImage(ResourceManager.getImage(RoboGame.UTIL_BULLETGONE_RSC), 520 + (13 * i), 782);
+      currentAmmo--;
+    }
+    // Health Bar x:94 y:795 width:25
+    int currentHealth = player.getHealth();
+    int maxHealth = player.getMaxHealth();
+    // Render left cap
+    if(currentHealth == 0)
+        g.drawImage(ResourceManager.getImage(RoboGame.UTIL_RBARCAPLEFT_RSC), 94, 795);
+    else
+        g.drawImage(ResourceManager.getImage(RoboGame.UTIL_GBARCAPLEFT_RSC), 94, 795);
+    currentHealth--;
+    // Render middlebar
+    for(int i = 1; i < maxHealth - 1; i++) {
+      if(currentHealth > 0)
+        g.drawImage(ResourceManager.getImage(RoboGame.UTIL_GBAR_RSC), 94 + (25 * i), 795);
+      else
+        g.drawImage(ResourceManager.getImage(RoboGame.UTIL_RBAR_RSC), 94 + (25 * i), 795);
+      currentHealth--;
+    }
+    // Render right cap
+    if(currentHealth > 0)
+      g.drawImage(ResourceManager.getImage(RoboGame.UTIL_GBARCAPRIGHT_RSC), 94 + (25 * (maxHealth - 1)), 795);
+    else
+      g.drawImage(ResourceManager.getImage(RoboGame.UTIL_RBARCAPRIGHT_RSC), 94 + (25 * (maxHealth - 1)), 795);
     // Render Entities
     player.render(g);
     for(Enemy enemy : enemyList) enemy.render(g);
@@ -133,6 +176,7 @@ public class TestState extends BasicGameState {
       else if (input.isKeyPressed(Input.KEY_A)) {
         crosshair.moveLeft(playerLoc);
         aimDirection = 4;
+        player.faceLeft();
       }
       // Move Crosshair down
       else if (input.isKeyPressed(Input.KEY_S)) {
@@ -143,6 +187,7 @@ public class TestState extends BasicGameState {
       else if (input.isKeyPressed(Input.KEY_D)) {
         crosshair.moveRight(playerLoc);
         aimDirection = 6;
+        player.faceRight();
       }
       // Cancel attack
       else if (input.isKeyPressed(Input.KEY_Q)) {
@@ -163,6 +208,7 @@ public class TestState extends BasicGameState {
           player.modAmmo(-1);
           waitInput();
           System.out.println("Pew Pew");
+          player.shoot(aimDirection);
         }
       }
     }
@@ -199,7 +245,14 @@ public class TestState extends BasicGameState {
         attackReady = true;
         inputReady = false;
         crosshair.moveLeft(playerLoc);
-        aimDirection = 4;
+        if(player.isFaceRight()) {
+          aimDirection = 6;
+          crosshair.moveRight(playerLoc);
+        }
+        else {
+          aimDirection = 4;
+          crosshair.moveLeft(playerLoc);
+        }
       }
       // Reload
       else if (input.isKeyPressed(Input.KEY_R)) {
@@ -246,7 +299,7 @@ public class TestState extends BasicGameState {
 
   public void waitInput() {
     inputReady = false;
-    inputWaitTimer = 75;
+    inputWaitTimer = turnDuration;
   }
 
   private void initLists() {

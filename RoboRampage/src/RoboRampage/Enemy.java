@@ -3,20 +3,55 @@ package RoboRampage;
 import jig.Entity;
 import jig.ResourceManager;
 import jig.Vector;
+import org.newdawn.slick.Animation;
 
 public class Enemy extends Entity {
   private Vector velocity;
   private Coordinate location;
   private float speed;
   private int id; // 1 for melee, 2 for ranged
+  private Animation leftIdle, rightIdle, activeAnimation, leftMove, rightMove, leftAttack, rightAttack, leftDefeat,
+    rightDefeat;
+  private boolean faceRight;
 
   public Enemy(final float x, final float y, int xcoord, int ycoord, int newid) {
     super( x + 37, y + 37);
     location = new Coordinate(xcoord, ycoord);
-    speed = 1f;
+    speed = 0.25f;
     velocity = new Vector(0f, 0f);
     id = newid;
     addImageWithBoundingBox(ResourceManager.getImage(RoboGame.ENEMY_MELEEIMG_RSC));
+    rightIdle = new Animation(ResourceManager.getSpriteSheet(
+        RoboGame.ENEMY_MELEEIDLERIGHT_RSC, 75, 75), 0, 0, 3, 0,
+         true, 75, true);
+    leftIdle = new Animation(ResourceManager.getSpriteSheet(
+        RoboGame.ENEMY_MELEEIDLELEFT_RSC, 75, 75), 0, 0, 3, 0,
+        true, 75, true);
+    rightMove = new Animation(ResourceManager.getSpriteSheet(
+        RoboGame.ENEMY_MELEEMOVERIGHT_RSC, 75, 75), 0, 0, 3, 0,
+        true, 75, true);
+    leftMove = new Animation(ResourceManager.getSpriteSheet(
+        RoboGame.ENEMY_MELEEMOVELEFT_RSC, 75, 75), 0, 0, 3, 0,
+        true, 75, true);
+    leftAttack = new Animation(ResourceManager.getSpriteSheet(
+        RoboGame.ENEMY_MELEEATTACKLEFT_RSC, 75, 75), 0, 0, 3, 0,
+        true, 150, true);
+    rightAttack = new Animation(ResourceManager.getSpriteSheet(
+        RoboGame.ENEMY_MELEEATTACKRIGHT_RSC, 75, 75), 0, 0, 3, 0,
+        true, 150, true);
+    leftDefeat = new Animation(ResourceManager.getSpriteSheet(
+        RoboGame.ENEMY_MELEEDEFEATLEFT_RSC, 75, 75), 0, 0, 7, 0,
+        true, 75, true);
+    rightDefeat = new Animation(ResourceManager.getSpriteSheet(
+        RoboGame.ENEMY_MELEEDEFEATRIGHT_RSC, 75, 75), 0, 0, 7, 0,
+        true, 75, true);
+    faceRight = true;
+    activeAnimation = leftIdle;
+    addAnimation(leftIdle);
+    rightIdle.setLooping(true);
+    leftIdle.setLooping(true);
+    leftAttack.setLooping(false);
+    rightAttack.setLooping(false);
   }
 
   public Coordinate getLocation() { return location;}
@@ -50,29 +85,75 @@ public class Enemy extends Entity {
   public void attack(int direction, Player player) {
     System.out.println("Attacked: Hyah!" + direction);
     player.modHealth(-1);
+    removeAnimation(activeAnimation);
+    // Attack animation for facing right
+    if(faceRight) {
+      addAnimation(rightAttack);
+      activeAnimation = rightAttack;
+    }
+    // Attack animation for facing left
+    else {
+      addAnimation(leftAttack);
+      activeAnimation = leftAttack;
+    }
   }
   public void moveUp() {
     velocity = new Vector(0f, -speed);
     location.y = location.y - 1;
+    removeAnimation(activeAnimation);
+    if(faceRight) {
+      addAnimation(rightMove);
+      activeAnimation = rightMove;
+    }
+    else {
+      addAnimation(leftMove);
+      activeAnimation = leftMove;
+    }
   }
 
   public void moveLeft() {
     velocity = new Vector(-speed, 0f);
     location.x = location.x - 1;
+    removeAnimation(activeAnimation);
+    activeAnimation = leftMove;
+    addAnimation(leftMove);
+    faceRight = false;
   }
 
   public void moveDown() {
     velocity = new Vector(0f, speed);
     location.y = location.y + 1;
+    removeAnimation(activeAnimation);
+    if(faceRight) {
+      addAnimation(rightMove);
+      activeAnimation = rightMove;
+    }
+    else {
+      addAnimation(leftMove);
+      activeAnimation = leftMove;
+    }
   }
 
   public void moveRight() {
     velocity = new Vector(speed, 0);
     location.x = location.x + 1;
+    removeAnimation(activeAnimation);
+    activeAnimation = rightMove;
+    addAnimation(rightMove);
+    faceRight = true;
   }
 
   public void stop() {
     velocity = new Vector(0f, 0f);
+    removeAnimation(activeAnimation);
+    if(faceRight) {
+      addAnimation(rightIdle);
+      activeAnimation = rightIdle;
+    }
+    else {
+      addAnimation(leftIdle);
+      activeAnimation = leftIdle;
+    }
   }
 
   public void update(final int delta) {
