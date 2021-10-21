@@ -12,6 +12,8 @@ public class RoboGame extends StateBasedGame {
   // States
   public static final int STARTUPSTATE = 0;
   public static final int TESTSTATE = 1;
+  public static final int HOWTOPLAYSTATE = 2;
+  public static final int LEVELSELECTSTATE = 3;
   // Resources
   public static final String TILE_FLOORIMG_RSC = "RoboRampage/Assets/floor.png";
   public static final String TILE_FLOORIMG2_RSC = "RoboRampage/Assets/floor2.png";
@@ -39,6 +41,9 @@ public class RoboGame extends StateBasedGame {
   public static final String MENU_HOWTOPLAY_RSC = "RoboRampage/Assets/menuHowToPlay.png";
   public static final String MENU_START_RSC = "RoboRampage/Assets/menuStart.png";
   public static final String MENU_LEVELSELECT_RSC = "RoboRampage/Assets/menuLevelSelect.png";
+  public static final String MENU_BACK_RSC = "RoboRampage/Assets/menuBack.png";
+  public static final String MENU_HOWTOPLAYSPLASH_RSC = "RoboRampage/Assets/howToPlaySplash.png";
+  public static final String MENU_LEVELSELECTSPLASH_RSC = "RoboRampage/Assets/levelSelectSplash.png";
 
   public static final String ENEMY_MELEEIMG_RSC = "RoboRampage/Assets/meleeEnemy.png";
   public static final String ENEMY_MELEEIDLERIGHT_RSC = "RoboRampage/Assets/enemyMeleeIdleRight.png";
@@ -118,6 +123,8 @@ public class RoboGame extends StateBasedGame {
     // Load states
     addState(new StartState());
     addState(new TestState());
+    addState(new HowState());
+    addState(new LevelState());
     // Load resources
     // Map Stuff
     ResourceManager.loadImage(TILE_FLOORIMG_RSC);
@@ -184,6 +191,9 @@ public class RoboGame extends StateBasedGame {
     ResourceManager.loadImage(MENU_HOWTOPLAY_RSC);
     ResourceManager.loadImage(MENU_START_RSC);
     ResourceManager.loadImage(MENU_LEVELSELECT_RSC);
+    ResourceManager.loadImage(MENU_LEVELSELECTSPLASH_RSC);
+    ResourceManager.loadImage(MENU_BACK_RSC);
+    ResourceManager.loadImage(MENU_HOWTOPLAYSPLASH_RSC);
     // Music and SFX
     ResourceManager.loadSound(SOUND_EXPLOSION_RSC);
     ResourceManager.loadSound(SOUND_FOOTSTEPS_RSC);
