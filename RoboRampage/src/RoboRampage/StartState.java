@@ -1,10 +1,7 @@
 package RoboRampage;
 
 import jig.ResourceManager;
-import org.newdawn.slick.GameContainer;
-import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Input;
-import org.newdawn.slick.SlickException;
+import org.newdawn.slick.*;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
@@ -12,6 +9,7 @@ public class StartState extends BasicGameState {
 
   private int select, timer;
   private boolean selected, arrowBlink;
+  Animation player, melee, melee2, ranged;
   @Override
   public int getID() {
     return RoboGame.STARTUPSTATE;
@@ -29,6 +27,15 @@ public class StartState extends BasicGameState {
     select = 0;
     selected = false;
     arrowBlink = true;
+    player = new Animation(ResourceManager.getSpriteSheet(
+        RoboGame.PLAYER_PLAYERSHOOTRIGHT_RSC, 75, 75), 0, 0, 3, 0,
+        true, 120, true);
+    melee = new Animation(ResourceManager.getSpriteSheet(
+        RoboGame.ENEMY_MELEEMOVELEFT_RSC, 75, 75), 0, 0, 3, 0,
+        true, 120, true);
+    ranged = new Animation(ResourceManager.getSpriteSheet(
+        RoboGame.ENEMY_RANGEDSHOOTLEFT_RSC, 75, 75), 0, 0, 3, 0,
+        true, 120, true);
   }
 
   @Override
@@ -38,6 +45,10 @@ public class StartState extends BasicGameState {
     g.drawImage(ResourceManager.getImage(RoboGame.MENU_START_RSC), 290, 450);
     g.drawImage(ResourceManager.getImage(RoboGame.MENU_HOWTOPLAY_RSC), 210, 520);
     g.drawImage(ResourceManager.getImage(RoboGame.MENU_LEVELSELECT_RSC), 183, 590);
+    g.drawAnimation(player, 150, 750);
+    g.drawAnimation(melee, 350, 750);
+    g.drawAnimation(melee, 470, 750);
+    g.drawAnimation(ranged, 550, 750);
     // Draw Arrow Location
     if (arrowBlink) {
       switch(select) {
@@ -69,14 +80,12 @@ public class StartState extends BasicGameState {
       if(timer <= 0) {
         switch(select) {
           case 1:
-            System.out.println("Nothing here yet!");
-            selected = false;
-            arrowBlink = true;
+            System.out.println("To how to play...");
+            rg.enterState(RoboGame.HOWTOPLAYSTATE);
             break;
           case 2:
-            System.out.println("No Level Select Screen yet!");
-            selected = false;
-            arrowBlink = true;
+            System.out.println("To Level Select...");
+            rg.enterState(RoboGame.LEVELSELECTSTATE);
             break;
           default:
             System.out.println("Game starting...");
@@ -93,7 +102,7 @@ public class StartState extends BasicGameState {
       selected = true;
     }
     // If moving down
-    else if(input.isKeyPressed(Input.KEY_D) || input.isKeyPressed(Input.KEY_DOWN)) {
+    else if(input.isKeyPressed(Input.KEY_S) || input.isKeyPressed(Input.KEY_DOWN)) {
       select ++;
     }
     // If moving up

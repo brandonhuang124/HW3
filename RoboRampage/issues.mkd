@@ -12,16 +12,17 @@
 -- **[11]** Add ammo/reload mechanic
 -- **[12]** Add Health/Lives system
 -- **[14]** Add art assets
+-- **[15]** Add menu splash
 -- **[20]** Fix bug where projectile collision doesn't hit enemy from 2 spaces away (by projectile pause)
 
 ## Open Issues ##
 
 -- **[10]** Add enemy defeat after firing
 -- **[13]** Add sound/music
--- **[15]** Add menu splash
 -- **[16]** Add Ranged enemies
 -- **[17]** Dijkstras for Ranged enemies
 -- **[18]** Add game progression/levels
+-- **[19]** Complete how to play and level select screens.
 
 ## High Bar Items ##
 -- **[30]** Add pick up items: Medkits/Armor
