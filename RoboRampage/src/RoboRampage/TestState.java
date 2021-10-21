@@ -16,9 +16,9 @@ public class TestState extends BasicGameState {
   Vertex [][] path;
   LinkedList<Enemy> enemyList;
   LinkedList<Projectile> projectileList;
-  boolean inputReady;
+  boolean inputReady, enemyDead;
   boolean enemyTurn, enemyMoveWait, attackReady, gameover;
-  int inputWaitTimer, aimDirection, turnDuration;
+  int inputWaitTimer, levelOverTimer, aimDirection, turnDuration;
   Player player;
   Crosshair crosshair;
 
@@ -37,10 +37,10 @@ public class TestState extends BasicGameState {
     turnDuration = 300;
     path = null;
     inputReady = true;
-    enemyTurn = enemyMoveWait = attackReady = gameover = false;
-    inputWaitTimer = 0;
+    enemyTurn = enemyMoveWait = attackReady = gameover = enemyDead = false;
+    inputWaitTimer = levelOverTimer = 0;
     RoboGame rg = (RoboGame)game;
-    player = rg.player;
+    player = new Player(75, 75, 1, 1);
     container.setSoundOn(true);
     crosshair = new Crosshair(0,0);
     initLists();
@@ -140,8 +140,13 @@ public class TestState extends BasicGameState {
 
     // Check if gameover occured
     if(gameover) {
-      container.exit();
+      if(levelOverTimer <= 0) {
+        rg.enterState(RoboGame.STARTUPSTATE);
+      }
+      levelOverTimer -= delta;
+      return;
     }
+    // Check for live projectiles
     if (!projectileList.isEmpty()) {
       // Update projectiles
       for(Projectile projectile : projectileList) projectile.update(delta);
@@ -153,14 +158,17 @@ public class TestState extends BasicGameState {
           projectileList.remove(projectile);
         }
         // Enemy collision
-        Coordinate collisionLocation = projectile.enemyCollision(enemyList);
-        if(collisionLocation.x != -1) {
-          System.out.println("Projectile hit enemy at: " + collisionLocation.x + ", " + collisionLocation.y);
+        Enemy enemyHit = projectile.enemyCollision(enemyList);
+        if(enemyHit != null) {
+          System.out.println("Projectile hit enemy at: " + enemyHit.getCoordinate().x + ", " + enemyHit.getCoordinate().y);
           projectileList.remove(projectile);
+          enemyDead = enemyHit.damage(5);
+          if(enemyDead) waitInput();
         }
       }
       return;
     }
+
     // Update entity locations
     for(Enemy enemy : enemyList) enemy.update(delta);
     player.update(delta);
@@ -265,9 +273,15 @@ public class TestState extends BasicGameState {
       for (Enemy enemy : enemyList) {
         enemy.makeMove(path, player.getLocation(), player);
       }
-      if(player.getHealth() == 0) {
-        gameover = true;
-        System.out.println("Health dropped to 0, gameover...");
+      // If the player got hit
+      if(player.gotHit()) {
+        // Check if theyre dead
+        if(player.getHealth() <= 0) {
+          gameover = true;
+          levelOverTimer = turnDuration * 4;
+          player.death();
+          System.out.println("Health dropped to 0, gameover...");
+        }
       }
       enemyTurn = false;
       enemyMoveWait = true;
@@ -291,6 +305,10 @@ public class TestState extends BasicGameState {
           player.update(inputWaitTimer);
           enemyTurn = true;
           player.stop();
+        }
+        // Clear any dead enemies
+        for(Enemy enemy : enemyList) {
+          if(enemy.getHealth() <= 0) enemyList.remove(enemy);
         }
       }
     }
