@@ -141,6 +141,7 @@ public class TestState extends BasicGameState {
     // Check if gameover occured
     if(gameover) {
       if(levelOverTimer <= 0) {
+        ((StartState)game.getState(RoboGame.STARTUPSTATE)).restartMusic(true);
         rg.enterState(RoboGame.STARTUPSTATE);
       }
       levelOverTimer -= delta;

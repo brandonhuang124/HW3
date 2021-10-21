@@ -23,7 +23,7 @@ public class Enemy extends Entity {
     id = newid;
     health = maxhealth = 0;
     if(id == 1) {
-      health = maxhealth = 5;
+      health = maxhealth = 10;
       addImageWithBoundingBox(ResourceManager.getImage(RoboGame.ENEMY_MELEEIMG_RSC));
       rightIdle = new Animation(ResourceManager.getSpriteSheet(
           RoboGame.ENEMY_MELEEIDLERIGHT_RSC, 75, 75), 0, 0, 3, 0,
@@ -83,6 +83,7 @@ public class Enemy extends Entity {
         if(direction == 4) moveLeft();
         if(direction == 6) moveRight();
         if(direction == 8) moveUp();
+        ResourceManager.getSound(RoboGame.SOUND_MELEEMOVE_RSC).play();
       }
     }
   }
@@ -103,6 +104,7 @@ public class Enemy extends Entity {
       leftAttack.restart();
       activeAnimation = leftAttack;
     }
+    ResourceManager.getSound(RoboGame.SOUND_PLAYERHITMELEE_RSC).play();
   }
   public void moveUp() {
     velocity = new Vector(0f, -speed);
@@ -173,6 +175,7 @@ public class Enemy extends Entity {
       addAnimation(leftDefeat);
       activeAnimation = leftDefeat;
     }
+    ResourceManager.getSound(RoboGame.SOUND_MELEEDEFEAT_RSC).play();
   }
 
   public void update(final int delta) {
@@ -185,6 +188,7 @@ public class Enemy extends Entity {
       dead();
       return true;
     }
+    ResourceManager.getSound(RoboGame.SOUND_MELEEHIT_RSC).play();
     return false;
   }
 

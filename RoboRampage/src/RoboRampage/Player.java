@@ -94,6 +94,7 @@ class Player extends Entity {
       activeAnim = moveLeft;
       addAnimation(moveLeft);
     }
+    ResourceManager.getSound(RoboGame.SOUND_FOOTSTEPS_RSC).play();
   }
 
   public void moveLeft() {
@@ -103,6 +104,7 @@ class Player extends Entity {
    addAnimation(moveLeft);
    activeAnim = moveLeft;
    faceRight = false;
+   ResourceManager.getSound(RoboGame.SOUND_FOOTSTEPS_RSC).play();
   }
 
   public void moveDown() {
@@ -117,6 +119,7 @@ class Player extends Entity {
       activeAnim = moveLeft;
       addAnimation(moveLeft);
     }
+    ResourceManager.getSound(RoboGame.SOUND_FOOTSTEPS_RSC).play();
   }
 
   public void moveRight() {
@@ -126,6 +129,7 @@ class Player extends Entity {
     addAnimation(moveRight);
     activeAnim = moveRight;
     faceRight = true;
+    ResourceManager.getSound(RoboGame.SOUND_FOOTSTEPS_RSC).play();
   }
 
   public void stop() {
@@ -153,6 +157,7 @@ class Player extends Entity {
       addAnimation(defeatLeft);
       defeatLeft.restart();
     }
+    ResourceManager.getSound(RoboGame.SOUND_PLAYERDEATH_RSC).play();
   }
 
   public void update(final int delta) {
@@ -219,6 +224,7 @@ class Player extends Entity {
       addAnimation(reloadLeft);
       reloadLeft.restart();
     }
+    ResourceManager.getSound(RoboGame.SOUND_RELOAD_RSC).play();
   }
 
   public void shoot(int direction) {
@@ -247,5 +253,6 @@ class Player extends Entity {
         }
         break;
     }
+    ResourceManager.getSound(RoboGame.SOUND_LASER1_RSC).play();
   }
 }

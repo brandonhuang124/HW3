@@ -101,6 +101,9 @@ public class RoboGame extends StateBasedGame {
   public static final String SOUND_MELEEHIT_RSC = "RoboRampage/Assets/Sounds/robotHit.wav";
   public static final String SOUND_RANGEDHIT_RSC = "RoboRampage/Assets/Sounds/robotNoise.wav";
 
+  // Music
+  public static final String MUSIC_MENU_RSC = "RoboRampage/Assets/Sounds/menuMusic.wav";
+
   // Parameters
   public final int ScreenWidth;
   public final int ScreenHeight;
@@ -213,6 +216,7 @@ public class RoboGame extends StateBasedGame {
     ResourceManager.loadSound(SOUND_RELOAD_RSC);
     ResourceManager.loadSound(SOUND_MELEEHIT_RSC);
     ResourceManager.loadSound(SOUND_RANGEDHIT_RSC);
+    ResourceManager.loadMusic(MUSIC_MENU_RSC);
 
   }
 
