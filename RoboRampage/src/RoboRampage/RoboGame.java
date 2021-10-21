@@ -29,6 +29,16 @@ public class RoboGame extends StateBasedGame {
   public static final String UTIL_BULLETGONE_RSC = "RoboRampage/Assets/bulletGone.png";
   public static final String UTIL_HUDIMG_RSC = "RoboRampage/Assets/hud.png";
   public static final String UTIL_GUNDEFAULT_RSC = "RoboRampage/Assets/gunDefault.png";
+  public static final String UTIL_GUNBEAM_RSC = "RoboRampage/Assets/gunBeam.png";
+  public static final String UTIL_GUNLAUNCHER_RSC = "RoboRampage/Assets/gunLauncher.png";
+  public static final String UTIL_PICKUPARMOR_RSC = "RoboRampage/Assets/pickupArmor.png";
+  public static final String UTIL_PICKUPAMMO_RSC = "RoboRampage/Assets/pickupAmmo.png";
+
+  public static final String MENU_SPLASH_RSC = "RoboRampage/Assets/menuSplash.png";
+  public static final String MENU_ARROW_RSC = "RoboRampage/Assets/menuArrow.png";
+  public static final String MENU_HOWTOPLAY_RSC = "RoboRampage/Assets/menuHowToPlay.png";
+  public static final String MENU_START_RSC = "RoboRampage/Assets/menuStart.png";
+  public static final String MENU_LEVELSELECT_RSC = "RoboRampage/Assets/menuLevelSelect.png";
 
   public static final String ENEMY_MELEEIMG_RSC = "RoboRampage/Assets/meleeEnemy.png";
   public static final String ENEMY_MELEEIDLERIGHT_RSC = "RoboRampage/Assets/enemyMeleeIdleRight.png";
@@ -39,6 +49,15 @@ public class RoboGame extends StateBasedGame {
   public static final String ENEMY_MELEEATTACKRIGHT_RSC = "RoboRampage/Assets/enemyMeleeAttackRight.png";
   public static final String ENEMY_MELEEDEFEATLEFT_RSC = "RoboRampage/Assets/enemyMeleeDefeatLeft.png";
   public static final String ENEMY_MELEEDEFEATRIGHT_RSC = "RoboRampage/Assets/enemyMeleeDefeatRight.png";
+
+  public static final String ENEMY_RANGEDIDLERIGHT_RSC = "RoboRampage/Assets/enemyRangedIdleRight.png";
+  public static final String ENEMY_RANGEDIDLELEFT_RSC = "RoboRampage/Assets/enemyRangedIdleLeft.png";
+  public static final String ENEMY_RANGEDDEFEATRIGHT_RSC = "RoboRampage/Assets/enemyRangedDefeatRight.png";
+  public static final String ENEMY_RANGEDDEFEATLEFT_RSC = "RoboRampage/Assets/enemyRangedDefeatLeft.png";
+  public static final String ENEMY_RANGEDMOVERIGHT_RSC = "RoboRampage/Assets/enemyRangedMoveRight.png";
+  public static final String ENEMY_RANGEDMOVELEFT_RSC = "RoboRampage/Assets/enemyRangedMoveLeft.png";
+  public static final String ENEMY_RANGEDSHOOTRIGHT_RSC = "RoboRampage/Assets/enemyRangedShootRight.png";
+  public static final String ENEMY_RANGEDSHOOTLEFT_RSC = "RoboRampage/Assets/enemyRangedShootLeft.png";
 
   public static final String PLAYER_PLAYERIMG_RSC = "RoboRampage/Assets/player.png";
   public static final String PLAYER_PLAYERIDLELEFT_RSC = "RoboRampage/Assets/playerIdleLeft.png";
@@ -56,6 +75,27 @@ public class RoboGame extends StateBasedGame {
   public static final String PLAYER_PROJECTILELEFT_RSC = "RoboRampage/Assets/projectile_left.png";
   public static final String PLAYER_PROJECTILERIGHT_RSC = "RoboRampage/Assets/projectile_right.png";
   public static final String PLAYER_PROJECTILEUP_RSC = "RoboRampage/Assets/projectile_up.png";
+
+  // Sounds
+  public static final String SOUND_EXPLOSION_RSC = "RoboRampage/Assets/Sounds/explosion.wav";
+  public static final String SOUND_FOOTSTEPS_RSC = "RoboRampage/Assets/Sounds/footstep.wav";
+  public static final String SOUND_LASER1_RSC = "RoboRampage/Assets/Sounds/laser.wav";
+  public static final String SOUND_LASER2_RSC = "RoboRampage/Assets/Sounds/laser2.wav";
+  public static final String SOUND_LASER3_RSC = "RoboRampage/Assets/Sounds/laser3.wav";
+  public static final String SOUND_MELEEDEFEAT_RSC = "RoboRampage/Assets/Sounds/meleeDefeat.wav";
+  public static final String SOUND_MELEEMOVE_RSC = "RoboRampage/Assets/Sounds/meleeMove.wav";
+  public static final String SOUND_MENUSELECT_RSC = "RoboRampage/Assets/Sounds/menuSound1.wav";
+  public static final String SOUND_MENUACTIVATE_RSC = "RoboRampage/Assets/Sounds/menuSound2.wav";
+  public static final String SOUND_AIM_RSC = "RoboRampage/Assets/Sounds/menuSound3.wav";
+  public static final String SOUND_PLAYERDEATH_RSC = "RoboRampage/Assets/Sounds/playerDeath.wav";
+  public static final String SOUND_PLAYERHITMELEE_RSC = "RoboRampage/Assets/Sounds/playerHitMelee.wav";
+  public static final String SOUND_POWERUP_RSC = "RoboRampage/Assets/Sounds/powerup.wav";
+  public static final String SOUND_RANGEDDEFEAT_RSC = "RoboRampage/Assets/Sounds/rangedDefeat.wav";
+  public static final String SOUND_RANGEDMOVE_RSC = "RoboRampage/Assets/Sounds/rangedMove.wav";
+  public static final String SOUND_RELOAD_RSC = "RoboRampage/Assets/Sounds/reload.wav";
+  public static final String SOUND_MELEEHIT_RSC = "RoboRampage/Assets/Sounds/robotHit.wav";
+  public static final String SOUND_RANGEDHIT_RSC = "RoboRampage/Assets/Sounds/robotNoise.wav";
+
   // Parameters
   public final int ScreenWidth;
   public final int ScreenHeight;
@@ -103,6 +143,7 @@ public class RoboGame extends StateBasedGame {
     ResourceManager.loadImage(PLAYER_PROJECTILERIGHT_RSC);
     ResourceManager.loadImage(PLAYER_PROJECTILEUP_RSC);
     // Enemy Sheets
+      // Melee
     ResourceManager.loadImage(ENEMY_MELEEIMG_RSC);
     ResourceManager.loadImage(ENEMY_MELEEIDLERIGHT_RSC);
     ResourceManager.loadImage(ENEMY_MELEEIDLELEFT_RSC);
@@ -112,6 +153,15 @@ public class RoboGame extends StateBasedGame {
     ResourceManager.loadImage(ENEMY_MELEEDEFEATRIGHT_RSC);
     ResourceManager.loadImage(ENEMY_MELEEATTACKLEFT_RSC);
     ResourceManager.loadImage(ENEMY_MELEEATTACKRIGHT_RSC);
+      // Ranged
+    ResourceManager.loadImage(ENEMY_RANGEDIDLERIGHT_RSC);
+    ResourceManager.loadImage(ENEMY_RANGEDIDLELEFT_RSC);
+    ResourceManager.loadImage(ENEMY_RANGEDDEFEATRIGHT_RSC);
+    ResourceManager.loadImage(ENEMY_RANGEDDEFEATLEFT_RSC);
+    ResourceManager.loadImage(ENEMY_RANGEDMOVERIGHT_RSC);
+    ResourceManager.loadImage(ENEMY_RANGEDMOVELEFT_RSC);
+    ResourceManager.loadImage(ENEMY_RANGEDSHOOTRIGHT_RSC);
+    ResourceManager.loadImage(ENEMY_RANGEDSHOOTLEFT_RSC);
     // UI stuff
     ResourceManager.loadImage(UTIL_CROSSHAIRIMG_RSC);
     ResourceManager.loadImage(UTIL_BULLET_RSC);
@@ -124,7 +174,35 @@ public class RoboGame extends StateBasedGame {
     ResourceManager.loadImage(UTIL_RBARCAPRIGHT_RSC);
     ResourceManager.loadImage(UTIL_HUDIMG_RSC);
     ResourceManager.loadImage(UTIL_GUNDEFAULT_RSC);
-
+    ResourceManager.loadImage(UTIL_GUNBEAM_RSC);
+    ResourceManager.loadImage(UTIL_GUNLAUNCHER_RSC);
+    ResourceManager.loadImage(UTIL_PICKUPARMOR_RSC);
+    ResourceManager.loadImage(UTIL_PICKUPAMMO_RSC);
+    // Menu Stuff
+    ResourceManager.loadImage(MENU_SPLASH_RSC);
+    ResourceManager.loadImage(MENU_ARROW_RSC);
+    ResourceManager.loadImage(MENU_HOWTOPLAY_RSC);
+    ResourceManager.loadImage(MENU_START_RSC);
+    ResourceManager.loadImage(MENU_LEVELSELECT_RSC);
+    // Music and SFX
+    ResourceManager.loadSound(SOUND_EXPLOSION_RSC);
+    ResourceManager.loadSound(SOUND_FOOTSTEPS_RSC);
+    ResourceManager.loadSound(SOUND_LASER1_RSC);
+    ResourceManager.loadSound(SOUND_LASER2_RSC);
+    ResourceManager.loadSound(SOUND_LASER3_RSC);
+    ResourceManager.loadSound(SOUND_MELEEDEFEAT_RSC);
+    ResourceManager.loadSound(SOUND_MELEEMOVE_RSC);
+    ResourceManager.loadSound(SOUND_MENUSELECT_RSC);
+    ResourceManager.loadSound(SOUND_MENUACTIVATE_RSC);
+    ResourceManager.loadSound(SOUND_AIM_RSC);
+    ResourceManager.loadSound(SOUND_PLAYERDEATH_RSC);
+    ResourceManager.loadSound(SOUND_PLAYERHITMELEE_RSC);
+    ResourceManager.loadSound(SOUND_POWERUP_RSC);
+    ResourceManager.loadSound(SOUND_RANGEDDEFEAT_RSC);
+    ResourceManager.loadSound(SOUND_RANGEDMOVE_RSC);
+    ResourceManager.loadSound(SOUND_RELOAD_RSC);
+    ResourceManager.loadSound(SOUND_MELEEHIT_RSC);
+    ResourceManager.loadSound(SOUND_RANGEDHIT_RSC);
 
     player = new Player(75,75,1,1);
   }
