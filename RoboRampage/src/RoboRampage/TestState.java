@@ -18,7 +18,7 @@ public class TestState extends BasicGameState {
   LinkedList<Projectile> projectileList;
   boolean inputReady, enemyDead;
   boolean enemyTurn, enemyMoveWait, attackReady, gameover;
-  int inputWaitTimer, aimDirection, turnDuration;
+  int inputWaitTimer, levelOverTimer, aimDirection, turnDuration;
   Player player;
   Crosshair crosshair;
 
@@ -38,9 +38,9 @@ public class TestState extends BasicGameState {
     path = null;
     inputReady = true;
     enemyTurn = enemyMoveWait = attackReady = gameover = enemyDead = false;
-    inputWaitTimer = 0;
+    inputWaitTimer = levelOverTimer = 0;
     RoboGame rg = (RoboGame)game;
-    player = rg.player;
+    player = new Player(75, 75, 1, 1);
     container.setSoundOn(true);
     crosshair = new Crosshair(0,0);
     initLists();
@@ -140,7 +140,11 @@ public class TestState extends BasicGameState {
 
     // Check if gameover occured
     if(gameover) {
-      rg.enterState(RoboGame.STARTUPSTATE);
+      if(levelOverTimer <= 0) {
+        rg.enterState(RoboGame.STARTUPSTATE);
+      }
+      levelOverTimer -= delta;
+      return;
     }
     // Check for live projectiles
     if (!projectileList.isEmpty()) {
@@ -269,9 +273,15 @@ public class TestState extends BasicGameState {
       for (Enemy enemy : enemyList) {
         enemy.makeMove(path, player.getLocation(), player);
       }
-      if(player.getHealth() == 0) {
-        gameover = true;
-        System.out.println("Health dropped to 0, gameover...");
+      // If the player got hit
+      if(player.gotHit()) {
+        // Check if theyre dead
+        if(player.getHealth() <= 0) {
+          gameover = true;
+          levelOverTimer = turnDuration * 4;
+          player.death();
+          System.out.println("Health dropped to 0, gameover...");
+        }
       }
       enemyTurn = false;
       enemyMoveWait = true;

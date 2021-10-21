@@ -11,8 +11,9 @@ class Player extends Entity {
   private Coordinate location;
   private int ammo, maxammo;
   private int health, maxhealth;
-  private Animation moveLeft, moveRight, shootLeft, shootRight, reloadLeft, reloadRight, idleLeft, idleRight, activeAnim;
-  boolean faceRight;
+  private Animation moveLeft, moveRight, shootLeft, shootRight, reloadLeft, reloadRight, idleLeft, idleRight,
+      defeatRight, defeatLeft, activeAnim;
+  private boolean faceRight, gotHit;
 
   public Player(final float x, final float y, int xcoord, int ycoord) {
     super(x + 37,y + 37);
@@ -48,16 +49,38 @@ class Player extends Entity {
     reloadRight = new Animation(ResourceManager.getSpriteSheet(
         RoboGame.PLAYER_PLAYERRELOADRIGHT_RSC, 75, 75), 0, 0, 3, 0,
         true, 75, true);
+    defeatLeft = new Animation(ResourceManager.getSpriteSheet(
+        RoboGame.PLAYER_PLAYERDEATHLEFT_RSC, 75, 75), 0, 0, 6, 0,
+        true, 75, true);
+    defeatRight = new Animation(ResourceManager.getSpriteSheet(
+        RoboGame.PLAYER_PLAYERDEATHRIGHT_RSC, 75, 75), 0, 0, 6, 0,
+        true, 75, true);
     activeAnim = idleRight;
     addAnimation(idleRight);
     faceRight = true;
+    gotHit = false;
     shootLeft.setLooping(false);
     shootRight.setLooping(false);
     reloadRight.setLooping(false);
     reloadLeft.setLooping(false);
+    defeatRight.setLooping(false);
+    defeatLeft.setLooping(false);
   }
 
   public Coordinate getLocation() { return location;}
+
+  public void resetPlayer(float x, float y, int xcoord, int ycoord) {
+    health = maxhealth;
+    ammo = maxammo;
+    activeAnim = idleRight;
+    addAnimation(idleRight);
+    faceRight = true;
+    gotHit = false;
+    setPosition(x + 37, y = 37);
+    addImageWithBoundingBox(ResourceManager.getImage(RoboGame.PLAYER_PLAYERIMG_RSC));
+    location = new Coordinate(xcoord, ycoord);
+    velocity = new Vector(0f,0f);
+  }
 
   public void moveUp() {
     velocity = new Vector(0f, -speed);
@@ -118,6 +141,20 @@ class Player extends Entity {
     }
   }
 
+  public void death() {
+    removeAnimation(activeAnim);
+    if(faceRight) {
+      activeAnim = defeatRight;
+      addAnimation(defeatRight);
+      defeatRight.restart();
+    }
+    else {
+      activeAnim = defeatLeft;
+      addAnimation(defeatLeft);
+      defeatLeft.restart();
+    }
+  }
+
   public void update(final int delta) {
     translate(velocity.scale(delta));
   }
@@ -142,11 +179,18 @@ class Player extends Entity {
 
   public boolean modHealth(int change) {
     health += change;
+    gotHit = true;
     if(health <= 0) {
       health = 0;
       return true;
     }
     return false;
+  }
+
+  public boolean gotHit() {
+    boolean status = gotHit;
+    gotHit = false;
+    return status;
   }
 
   public void faceRight() {

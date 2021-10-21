@@ -214,7 +214,6 @@ public class RoboGame extends StateBasedGame {
     ResourceManager.loadSound(SOUND_MELEEHIT_RSC);
     ResourceManager.loadSound(SOUND_RANGEDHIT_RSC);
 
-    player = new Player(75,75,1,1);
   }
 
   public static void main(String[] args) {

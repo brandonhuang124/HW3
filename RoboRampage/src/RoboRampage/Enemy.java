@@ -94,11 +94,13 @@ public class Enemy extends Entity {
     // Attack animation for facing right
     if(faceRight) {
       addAnimation(rightAttack);
+      rightAttack.restart();
       activeAnimation = rightAttack;
     }
     // Attack animation for facing left
     else {
       addAnimation(leftAttack);
+      leftAttack.restart();
       activeAnimation = leftAttack;
     }
   }
