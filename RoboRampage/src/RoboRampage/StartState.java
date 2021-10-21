@@ -8,7 +8,7 @@ import org.newdawn.slick.state.StateBasedGame;
 public class StartState extends BasicGameState {
 
   private int select, timer;
-  private boolean selected, arrowBlink;
+  private boolean selected, arrowBlink, musicRestart;
   Animation player, melee, melee2, ranged;
   @Override
   public int getID() {
@@ -17,7 +17,7 @@ public class StartState extends BasicGameState {
 
   @Override
   public void init(GameContainer container, StateBasedGame game) throws SlickException {
-
+    musicRestart = true;
   }
 
   @Override
@@ -36,6 +36,9 @@ public class StartState extends BasicGameState {
     ranged = new Animation(ResourceManager.getSpriteSheet(
         RoboGame.ENEMY_RANGEDSHOOTLEFT_RSC, 75, 75), 0, 0, 3, 0,
         true, 120, true);
+    if(musicRestart) {
+      ResourceManager.getMusic(RoboGame.MUSIC_MENU_RSC).loop();
+    }
   }
 
   @Override
@@ -89,6 +92,7 @@ public class StartState extends BasicGameState {
             break;
           default:
             System.out.println("Game starting...");
+            ResourceManager.getMusic(RoboGame.MUSIC_MENU_RSC).stop();
             rg.enterState(RoboGame.TESTSTATE);
             break;
         }
@@ -100,17 +104,22 @@ public class StartState extends BasicGameState {
     else if(input.isKeyPressed(Input.KEY_SPACE)) {
       timer = 75;
       selected = true;
+      ResourceManager.getSound(RoboGame.SOUND_MENUSELECT_RSC).play();
     }
     // If moving down
     else if(input.isKeyPressed(Input.KEY_S) || input.isKeyPressed(Input.KEY_DOWN)) {
       select ++;
+      ResourceManager.getSound(RoboGame.SOUND_MENUACTIVATE_RSC).play();
     }
     // If moving up
     else if(input.isKeyPressed(Input.KEY_W) || input.isKeyPressed(Input.KEY_UP)) {
       select --;
+      ResourceManager.getSound(RoboGame.SOUND_MENUACTIVATE_RSC).play();
     }
     // Mod select by 3 to snap back to top, set negatives to 2 to snap to the bottom when going up at the top.
     select = select % 3;
     if(select < 0) select = 2;
   }
+
+  public void restartMusic(boolean state) {musicRestart = state;}
 }

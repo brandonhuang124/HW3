@@ -54,6 +54,7 @@ public class LevelState extends BasicGameState {
       if(timer <= 0) {
         switch(select) {
           default:
+            ((StartState)game.getState(RoboGame.STARTUPSTATE)).restartMusic(false);
             rg.enterState(RoboGame.STARTUPSTATE);
             break;
         }
@@ -65,14 +66,17 @@ public class LevelState extends BasicGameState {
     else if(input.isKeyPressed(Input.KEY_SPACE)) {
       timer = 75;
       selected = true;
+      ResourceManager.getSound(RoboGame.SOUND_MENUSELECT_RSC).play();
     }
     // If moving down
-    else if(input.isKeyPressed(Input.KEY_D) || input.isKeyPressed(Input.KEY_DOWN)) {
+    else if(input.isKeyPressed(Input.KEY_S) || input.isKeyPressed(Input.KEY_DOWN)) {
       select ++;
+      ResourceManager.getSound(RoboGame.SOUND_MENUACTIVATE_RSC).play();
     }
     // If moving up
     else if(input.isKeyPressed(Input.KEY_W) || input.isKeyPressed(Input.KEY_UP)) {
       select --;
+      ResourceManager.getSound(RoboGame.SOUND_MENUACTIVATE_RSC).play();
     }
     // Mod select by 3 to snap back to top, set negatives to 2 to snap to the bottom when going up at the top.
     select = select % 1;
