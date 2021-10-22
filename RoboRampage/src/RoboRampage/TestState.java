@@ -243,6 +243,17 @@ public class TestState extends BasicGameState {
     }
     // Check if controls are ready.
     else if (inputReady) {
+      // If so check if the player is dead
+      // If the player got hit
+      if(player.gotHit()) {
+        // Check if theyre dead
+        if(player.getHealth() <= 0) {
+          gameover = true;
+          levelOverTimer = turnDuration * 4;
+          player.death();
+          System.out.println("Health dropped to 0, gameover...");
+        }
+      }
       // Up
       if (input.isKeyPressed(Input.KEY_W) && tileMap[playerLoc.x][playerLoc.y-1].getID() != 1) {
         // Check if tile above is a wall
@@ -296,16 +307,6 @@ public class TestState extends BasicGameState {
           enemy.makeMove(path, player.getLocation(), player, tileMap, projectileList);
         else if(enemy.getID() == 2) {
           enemy.makeMove(rangedPath, player.getLocation(), player, tileMap, projectileList);
-        }
-      }
-      // If the player got hit
-      if(player.gotHit()) {
-        // Check if theyre dead
-        if(player.getHealth() <= 0) {
-          gameover = true;
-          levelOverTimer = turnDuration * 4;
-          player.death();
-          System.out.println("Health dropped to 0, gameover...");
         }
       }
       enemyTurn = false;
