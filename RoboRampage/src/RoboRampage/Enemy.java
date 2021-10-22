@@ -49,6 +49,33 @@ public class Enemy extends Entity {
       rightDefeat = new Animation(ResourceManager.getSpriteSheet(
           RoboGame.ENEMY_MELEEDEFEATRIGHT_RSC, 75, 75), 0, 0, 7, 0,
           true, 38, true);
+    } else if (id == 2) {
+      health = maxhealth = 5;
+      addImageWithBoundingBox(ResourceManager.getImage(RoboGame.ENEMY_MELEEIMG_RSC));
+      rightIdle = new Animation(ResourceManager.getSpriteSheet(
+          RoboGame.ENEMY_RANGEDIDLERIGHT_RSC, 75, 75), 0, 0, 3, 0,
+          true, 75, true);
+      leftIdle = new Animation(ResourceManager.getSpriteSheet(
+          RoboGame.ENEMY_RANGEDIDLELEFT_RSC, 75, 75), 0, 0, 3, 0,
+          true, 75, true);
+      rightMove = new Animation(ResourceManager.getSpriteSheet(
+          RoboGame.ENEMY_RANGEDMOVERIGHT_RSC, 75, 75), 0, 0, 3, 0,
+          true, 75, true);
+      leftMove = new Animation(ResourceManager.getSpriteSheet(
+          RoboGame.ENEMY_RANGEDMOVELEFT_RSC, 75, 75), 0, 0, 3, 0,
+          true, 75, true);
+      leftAttack = new Animation(ResourceManager.getSpriteSheet(
+          RoboGame.ENEMY_RANGEDSHOOTLEFT_RSC, 75, 75), 0, 0, 3, 0,
+          true, 150, true);
+      rightAttack = new Animation(ResourceManager.getSpriteSheet(
+          RoboGame.ENEMY_RANGEDSHOOTRIGHT_RSC, 75, 75), 0, 0, 3, 0,
+          true, 150, true);
+      leftDefeat = new Animation(ResourceManager.getSpriteSheet(
+          RoboGame.ENEMY_RANGEDDEFEATLEFT_RSC, 75, 75), 0, 0, 7, 0,
+          true, 38, true);
+      rightDefeat = new Animation(ResourceManager.getSpriteSheet(
+          RoboGame.ENEMY_RANGEDDEFEATRIGHT_RSC, 75, 75), 0, 0, 7, 0,
+          true, 38, true);
     }
     faceRight = false;
     activeAnimation = leftIdle;
@@ -63,7 +90,7 @@ public class Enemy extends Entity {
 
   public void makeMove(Vertex[][] pathMap, Coordinate playerLoc, Player player) {
     // Melee Enemy behavior
-    if(id == 1) {
+    if(id == 1 || id == 2) {
       // Check if the player is next to them
       int xdiff = playerLoc.x - location.x;
       int ydiff = playerLoc.y - location.y;

@@ -275,7 +275,11 @@ public class TestState extends BasicGameState {
     }
     else if (enemyTurn) {
       for (Enemy enemy : enemyList) {
-        enemy.makeMove(rangedPath, player.getLocation(), player);
+        if(enemy.getID() == 1)
+          enemy.makeMove(path, player.getLocation(), player);
+        else if(enemy.getID() == 2) {
+          enemy.makeMove(rangedPath, player.getLocation(), player);
+        }
       }
       // If the player got hit
       if(player.gotHit()) {
@@ -327,6 +331,7 @@ public class TestState extends BasicGameState {
   private void initLists() {
     enemyList = new LinkedList<Enemy>();
     enemyList.add(new Enemy(375,75,5,1,1));
+    enemyList.add(new Enemy(600, 75, 8, 1, 2));
     projectileList = new LinkedList<Projectile>();
   }
 }
