@@ -14,6 +14,7 @@ public class TestState extends BasicGameState {
 
   Tile tileMap[][];
   Vertex [][] path;
+  Vertex [][] rangedPath;
   LinkedList<Enemy> enemyList;
   LinkedList<Projectile> projectileList;
   boolean inputReady, enemyDead;
@@ -36,6 +37,7 @@ public class TestState extends BasicGameState {
   public void enter(GameContainer container, StateBasedGame game) {
     turnDuration = 300;
     path = null;
+    rangedPath = null;
     inputReady = true;
     enemyTurn = enemyMoveWait = attackReady = gameover = enemyDead = false;
     inputWaitTimer = levelOverTimer = 0;
@@ -76,12 +78,12 @@ public class TestState extends BasicGameState {
       }
     }
     // Draw the numbers
-    if(path != null) {
+    if(rangedPath != null) {
       for(int x = 0; x < 10; x++) {
         for(int y = 0; y < 10; y++) {
-          if(path[x][y].getDistance() < 1000) {
-            g.drawString("" + path[x][y].getDistance(), (x * 75) + 10, (y * 75) + 40);
-            g.drawString("" + path[x][y].getDirection(), (x * 75) + 10, (y * 75) + 20);
+          if(rangedPath[x][y].getDistance() < 1000) {
+            g.drawString("" + rangedPath[x][y].getDistance(), (x * 75) + 10, (y * 75) + 40);
+            g.drawString("" + rangedPath[x][y].getDirection(), (x * 75) + 10, (y * 75) + 20);
           }
         }
       }
@@ -137,6 +139,7 @@ public class TestState extends BasicGameState {
     RoboGame rg = (RoboGame)game;
     Coordinate playerLoc = player.getLocation();
     path = RoboGame.getDijkstras(playerLoc.x,playerLoc.y,tileMap);
+    rangedPath = RoboGame.getRangedDijkstras(player, tileMap);
 
     // Check if gameover occured
     if(gameover) {
@@ -272,7 +275,7 @@ public class TestState extends BasicGameState {
     }
     else if (enemyTurn) {
       for (Enemy enemy : enemyList) {
-        enemy.makeMove(path, player.getLocation(), player);
+        enemy.makeMove(rangedPath, player.getLocation(), player);
       }
       // If the player got hit
       if(player.gotHit()) {
