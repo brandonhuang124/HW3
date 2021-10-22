@@ -17,7 +17,7 @@ public class Enemy extends Entity {
   private Animation leftIdle, rightIdle, activeAnimation, leftMove, rightMove, leftAttack, rightAttack, leftDefeat,
     rightDefeat;
   private Sound attackSound, moveSound, hitSound, defeatSound;
-  private boolean faceRight;
+  private boolean faceRight, animationPaused;
 
   public Enemy(final float x, final float y, int xcoord, int ycoord, int newid) {
     super( x + 37, y + 37);
@@ -92,6 +92,7 @@ public class Enemy extends Entity {
     }
     faceRight = false;
     activeAnimation = leftIdle;
+    animationPaused = false;
     addAnimation(leftIdle);
     rightIdle.setLooping(true);
     leftIdle.setLooping(true);
@@ -112,9 +113,9 @@ public class Enemy extends Entity {
       // Square below
       else if(xdiff == 0 && ydiff == -1) attack(2, player, projectileList);
       // Square left
-      else if(xdiff == 1 && ydiff == 0) attack(4, player, projectileList);
+      else if(xdiff == -1 && ydiff == 0) attack(4, player, projectileList);
       // Square right
-      else if(xdiff == -1 && ydiff == 0) attack(6, player, projectileList);
+      else if(xdiff == 1 && ydiff == 0) attack(6, player, projectileList);
       // Otherwise move
       else {
         // Choose which direction based on the dijkstras map
@@ -320,6 +321,30 @@ public class Enemy extends Entity {
     }
     hitSound.play();
     return false;
+  }
+
+  public void pauseMoveAnimation() {
+    if(!animationPaused) {
+      if(activeAnimation == leftMove){
+        removeAnimation(activeAnimation);
+        addAnimation(leftIdle);
+        animationPaused = true;
+      }
+      if(activeAnimation == rightMove) {
+        removeAnimation(activeAnimation);
+        addAnimation(rightIdle);
+        animationPaused = true;
+      }
+    }
+  }
+
+  public void resumeAnimation() {
+    if(animationPaused) {
+      removeAnimation(rightIdle);
+      removeAnimation(leftIdle);
+      addAnimation(activeAnimation);
+      animationPaused = false;
+    }
   }
 
   public Coordinate getCoordinate() { return location;}

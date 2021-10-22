@@ -152,6 +152,10 @@ public class TestState extends BasicGameState {
     }
     // Check for live projectiles
     if (!projectileList.isEmpty()) {
+      // Pause enemy move animations
+      for(Enemy enemy : enemyList) {
+          enemy.pauseMoveAnimation();
+      }
       // Update projectiles
       for(Projectile projectile : projectileList) projectile.update(delta);
       // Check for projectile collisions
@@ -184,7 +188,10 @@ public class TestState extends BasicGameState {
     }
 
     // Update entity locations
-    for(Enemy enemy : enemyList) enemy.update(delta);
+    for(Enemy enemy : enemyList) {
+      enemy.resumeAnimation();
+      enemy.update(delta);
+    }
     player.update(delta);
 
     // Check if were in attack mode
