@@ -11,16 +11,27 @@ public class Projectile extends Entity {
   private float speed;
   private Vector velocity;
   private Animation image;
+  int id;
 
-  public Projectile (Coordinate loc, int direction) {
+  public Projectile (Coordinate loc, int direction, int type) {
     float x = (loc.x * 75f) + 37;
     float y = (loc.y * 75f) + 37;
     speed = .75f;
     this.setX(x);
     this.setY(y);
-    image = new Animation(ResourceManager.getSpriteSheet(
-        RoboGame.PLAYER_PROJECTILEDEFAULT_RSC, 25, 25), 0, 0, 3, 0,
-        true, 75, true);
+    id = type;
+    // Player Projectile
+    if(id == 1) {
+      image = new Animation(ResourceManager.getSpriteSheet(
+          RoboGame.PLAYER_PROJECTILEDEFAULT_RSC, 25, 25), 0, 0, 3, 0,
+          true, 75, true);
+    }
+    // Enemy Projectile
+    else if(id ==2) {
+      image = new Animation(ResourceManager.getSpriteSheet(
+          RoboGame.ENEMY_PROJECTILE_RSC, 25, 25), 0, 0, 3, 0,
+          true, 75, true);
+    }
     addAnimation(image);
     image.setLooping(true);
     switch(direction) {
@@ -60,7 +71,19 @@ public class Projectile extends Entity {
     return false;
   }
 
+  public boolean playerCollision(Player player) {
+    Coordinate location = getCoord();
+    Coordinate playerLoc = player.getLocation();
+    if(location.x == playerLoc.x && location.y == playerLoc.y) {
+      player.modHealth(-1);
+      return true;
+    }
+    return false;
+  }
+
   public void update(final int delta) {
     translate(velocity.scale(delta));
   }
+
+  public int getID() { return id;}
 }

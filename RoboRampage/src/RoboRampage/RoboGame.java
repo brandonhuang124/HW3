@@ -63,6 +63,7 @@ public class RoboGame extends StateBasedGame {
   public static final String ENEMY_RANGEDMOVELEFT_RSC = "RoboRampage/Assets/enemyRangedMoveLeft.png";
   public static final String ENEMY_RANGEDSHOOTRIGHT_RSC = "RoboRampage/Assets/enemyRangedShootRight.png";
   public static final String ENEMY_RANGEDSHOOTLEFT_RSC = "RoboRampage/Assets/enemyRangedShootLeft.png";
+  public static final String ENEMY_PROJECTILE_RSC = "RoboRampage/Assets/enemyProjectile.png";
 
   public static final String PLAYER_PLAYERIMG_RSC = "RoboRampage/Assets/player.png";
   public static final String PLAYER_PLAYERIDLELEFT_RSC = "RoboRampage/Assets/playerIdleLeft.png";
@@ -172,6 +173,7 @@ public class RoboGame extends StateBasedGame {
     ResourceManager.loadImage(ENEMY_RANGEDMOVELEFT_RSC);
     ResourceManager.loadImage(ENEMY_RANGEDSHOOTRIGHT_RSC);
     ResourceManager.loadImage(ENEMY_RANGEDSHOOTLEFT_RSC);
+    ResourceManager.loadImage(ENEMY_PROJECTILE_RSC);
     // UI stuff
     ResourceManager.loadImage(UTIL_CROSSHAIRIMG_RSC);
     ResourceManager.loadImage(UTIL_BULLET_RSC);

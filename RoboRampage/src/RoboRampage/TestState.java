@@ -152,29 +152,46 @@ public class TestState extends BasicGameState {
     }
     // Check for live projectiles
     if (!projectileList.isEmpty()) {
+      // Pause enemy move animations
+      for(Enemy enemy : enemyList) {
+          enemy.pauseMoveAnimation();
+      }
       // Update projectiles
       for(Projectile projectile : projectileList) projectile.update(delta);
       // Check for projectile collisions
       for(Projectile projectile : projectileList) {
-        // Wall collision
-        if (projectile.wallCollision(tileMap)) {
-          System.out.println("Projectile hit wall");
-          projectileList.remove(projectile);
+        // If a player projectile:
+        if(projectile.getID() == 1) {
+          // Wall collision
+          if (projectile.wallCollision(tileMap)) {
+            System.out.println("Projectile hit wall");
+            projectileList.remove(projectile);
+          }
+          // Enemy collision
+          Enemy enemyHit = projectile.enemyCollision(enemyList);
+          if(enemyHit != null) {
+            System.out.println("Projectile hit enemy at: " + enemyHit.getCoordinate().x + ", " + enemyHit.getCoordinate().y);
+            projectileList.remove(projectile);
+            enemyDead = enemyHit.damage(5);
+            if(enemyDead) waitInput();
+          }
         }
-        // Enemy collision
-        Enemy enemyHit = projectile.enemyCollision(enemyList);
-        if(enemyHit != null) {
-          System.out.println("Projectile hit enemy at: " + enemyHit.getCoordinate().x + ", " + enemyHit.getCoordinate().y);
-          projectileList.remove(projectile);
-          enemyDead = enemyHit.damage(5);
-          if(enemyDead) waitInput();
+        // otherwise is an enemy projectile
+        else {
+          if(projectile.playerCollision(player)) {
+            System.out.println("Projectile hit player.");
+            projectileList.remove(projectile);
+          }
         }
       }
       return;
     }
 
     // Update entity locations
-    for(Enemy enemy : enemyList) enemy.update(delta);
+    for(Enemy enemy : enemyList) {
+      enemy.resumeAnimation();
+      enemy.update(delta);
+    }
     player.update(delta);
 
     // Check if were in attack mode
@@ -216,7 +233,7 @@ public class TestState extends BasicGameState {
         }
         else {
           attackReady = false;
-          projectileList.add(new Projectile(playerLoc, aimDirection));
+          projectileList.add(new Projectile(playerLoc, aimDirection,1));
           player.modAmmo(-1);
           waitInput();
           System.out.println("Pew Pew");
@@ -226,6 +243,17 @@ public class TestState extends BasicGameState {
     }
     // Check if controls are ready.
     else if (inputReady) {
+      // If so check if the player is dead
+      // If the player got hit
+      if(player.gotHit()) {
+        // Check if theyre dead
+        if(player.getHealth() <= 0) {
+          gameover = true;
+          levelOverTimer = turnDuration * 4;
+          player.death();
+          System.out.println("Health dropped to 0, gameover...");
+        }
+      }
       // Up
       if (input.isKeyPressed(Input.KEY_W) && tileMap[playerLoc.x][playerLoc.y-1].getID() != 1) {
         // Check if tile above is a wall
@@ -275,16 +303,10 @@ public class TestState extends BasicGameState {
     }
     else if (enemyTurn) {
       for (Enemy enemy : enemyList) {
-        enemy.makeMove(rangedPath, player.getLocation(), player);
-      }
-      // If the player got hit
-      if(player.gotHit()) {
-        // Check if theyre dead
-        if(player.getHealth() <= 0) {
-          gameover = true;
-          levelOverTimer = turnDuration * 4;
-          player.death();
-          System.out.println("Health dropped to 0, gameover...");
+        if(enemy.getID() == 1)
+          enemy.makeMove(path, player.getLocation(), player, tileMap, projectileList);
+        else if(enemy.getID() == 2) {
+          enemy.makeMove(rangedPath, player.getLocation(), player, tileMap, projectileList);
         }
       }
       enemyTurn = false;
@@ -327,6 +349,7 @@ public class TestState extends BasicGameState {
   private void initLists() {
     enemyList = new LinkedList<Enemy>();
     enemyList.add(new Enemy(375,75,5,1,1));
+    enemyList.add(new Enemy(600, 75, 8, 1, 2));
     projectileList = new LinkedList<Projectile>();
   }
 }
