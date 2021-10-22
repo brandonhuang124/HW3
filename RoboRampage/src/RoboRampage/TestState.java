@@ -276,9 +276,9 @@ public class TestState extends BasicGameState {
     else if (enemyTurn) {
       for (Enemy enemy : enemyList) {
         if(enemy.getID() == 1)
-          enemy.makeMove(path, player.getLocation(), player);
+          enemy.makeMove(path, player.getLocation(), player, tileMap);
         else if(enemy.getID() == 2) {
-          enemy.makeMove(rangedPath, player.getLocation(), player);
+          enemy.makeMove(rangedPath, player.getLocation(), player, tileMap);
         }
       }
       // If the player got hit
