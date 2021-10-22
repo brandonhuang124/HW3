@@ -6,6 +6,8 @@ import jig.Vector;
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.Sound;
 
+import java.util.LinkedList;
+
 public class Enemy extends Entity {
   private Vector velocity;
   private Coordinate location;
@@ -99,20 +101,20 @@ public class Enemy extends Entity {
 
   public Coordinate getLocation() { return location;}
 
-  public void makeMove(Vertex[][] pathMap, Coordinate playerLoc, Player player, Tile[][] tileMap) {
-    /*** Begin Ranged Behavior Block ***/
+  public void makeMove(Vertex[][] pathMap, Coordinate playerLoc, Player player, Tile[][] tileMap,LinkedList<Projectile> projectileList) {
+    /*** Begin Melee Behavior Block ***/
     if(id == 1) {
       // Check if the player is next to them
       int xdiff = playerLoc.x - location.x;
       int ydiff = playerLoc.y - location.y;
       // Square above
-      if(xdiff == 0 && ydiff == 1) attack(8, player);
+      if(xdiff == 0 && ydiff == 1) attack(8, player, projectileList);
       // Square below
-      else if(xdiff == 0 && ydiff == -1) attack(2, player);
+      else if(xdiff == 0 && ydiff == -1) attack(2, player, projectileList);
       // Square left
-      else if(xdiff == 1 && ydiff == 0) attack(4, player);
+      else if(xdiff == 1 && ydiff == 0) attack(4, player, projectileList);
       // Square right
-      else if(xdiff == -1 && ydiff == 0) attack(6, player);
+      else if(xdiff == -1 && ydiff == 0) attack(6, player, projectileList);
       // Otherwise move
       else {
         // Choose which direction based on the dijkstras map
@@ -186,7 +188,7 @@ public class Enemy extends Entity {
       }
       // Now if we have found no obstruction between the player and the enemy, and they were on the same row or column,
       if(lineOfSight) {
-        attack(attackDirection, player);
+        attack(attackDirection, player, projectileList);
       }
       // Otherwise just make a move.
       else {
@@ -201,9 +203,8 @@ public class Enemy extends Entity {
     /*** End Ranged Behavior Block ***/
   }
 
-  public void attack(int direction, Player player) {
+  public void attack(int direction, Player player, LinkedList<Projectile> projectileList) {
     System.out.println("Attacked: Hyah!" + direction);
-    player.modHealth(-1);
     removeAnimation(activeAnimation);
     // Reface the enemy if the player is on a certain side
     if(direction == 4)
@@ -223,6 +224,16 @@ public class Enemy extends Entity {
       activeAnimation = leftAttack;
     }
     attackSound.play();
+    // If this is a melee attack
+    if(id == 1) {
+      player.modHealth(-1);
+      System.out.println("Melee Attack");
+    }
+    // If this is a ranged attack
+    else if(id == 2) {
+      System.out.println("Ranged Attack");
+      projectileList.add(new Projectile(this.location, direction, 2));
+    }
   }
 
   public void moveUp() {

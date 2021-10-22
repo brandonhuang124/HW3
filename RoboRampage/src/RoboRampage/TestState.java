@@ -156,18 +156,28 @@ public class TestState extends BasicGameState {
       for(Projectile projectile : projectileList) projectile.update(delta);
       // Check for projectile collisions
       for(Projectile projectile : projectileList) {
-        // Wall collision
-        if (projectile.wallCollision(tileMap)) {
-          System.out.println("Projectile hit wall");
-          projectileList.remove(projectile);
+        // If a player projectile:
+        if(projectile.getID() == 1) {
+          // Wall collision
+          if (projectile.wallCollision(tileMap)) {
+            System.out.println("Projectile hit wall");
+            projectileList.remove(projectile);
+          }
+          // Enemy collision
+          Enemy enemyHit = projectile.enemyCollision(enemyList);
+          if(enemyHit != null) {
+            System.out.println("Projectile hit enemy at: " + enemyHit.getCoordinate().x + ", " + enemyHit.getCoordinate().y);
+            projectileList.remove(projectile);
+            enemyDead = enemyHit.damage(5);
+            if(enemyDead) waitInput();
+          }
         }
-        // Enemy collision
-        Enemy enemyHit = projectile.enemyCollision(enemyList);
-        if(enemyHit != null) {
-          System.out.println("Projectile hit enemy at: " + enemyHit.getCoordinate().x + ", " + enemyHit.getCoordinate().y);
-          projectileList.remove(projectile);
-          enemyDead = enemyHit.damage(5);
-          if(enemyDead) waitInput();
+        // otherwise is an enemy projectile
+        else {
+          if(projectile.playerCollision(player)) {
+            System.out.println("Projectile hit player.");
+            projectileList.remove(projectile);
+          }
         }
       }
       return;
@@ -216,7 +226,7 @@ public class TestState extends BasicGameState {
         }
         else {
           attackReady = false;
-          projectileList.add(new Projectile(playerLoc, aimDirection));
+          projectileList.add(new Projectile(playerLoc, aimDirection,1));
           player.modAmmo(-1);
           waitInput();
           System.out.println("Pew Pew");
@@ -276,9 +286,9 @@ public class TestState extends BasicGameState {
     else if (enemyTurn) {
       for (Enemy enemy : enemyList) {
         if(enemy.getID() == 1)
-          enemy.makeMove(path, player.getLocation(), player, tileMap);
+          enemy.makeMove(path, player.getLocation(), player, tileMap, projectileList);
         else if(enemy.getID() == 2) {
-          enemy.makeMove(rangedPath, player.getLocation(), player, tileMap);
+          enemy.makeMove(rangedPath, player.getLocation(), player, tileMap, projectileList);
         }
       }
       // If the player got hit
