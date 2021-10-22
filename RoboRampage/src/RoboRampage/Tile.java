@@ -8,7 +8,7 @@ public class Tile {
   public Tile(int newID) {
     id = newID;
     if (id == 0) {
-      cost = 1;
+      cost = 10;
       if (new Random().nextInt(10) == 0) {
         subid = 1;
       }
@@ -33,4 +33,11 @@ public class Tile {
   public int getSubID() { return subid;}
 
   public int getCost() { return cost;}
+
+  public void setCost(int newcost) { cost = newcost;}
+
+  Tile getCopy() {
+    Tile tile = new Tile(this.id);
+    return tile;
+  }
 }

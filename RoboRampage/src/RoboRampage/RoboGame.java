@@ -249,6 +249,49 @@ public class RoboGame extends StateBasedGame {
     return tileMap;
   }
 
+  public static Vertex[][] getRangedDijkstras(Player player, Tile[][] tilemap) {
+    Vertex path[][];
+    // Build a copy of the tileMap
+    Tile rangedTileMap[][] = new Tile[10][10];
+    for(int i = 0; i < 10; i++) {
+      for(int j = 0; j < 10; j++) {
+        rangedTileMap[i][j] = tilemap[i][j].getCopy();
+      }
+    }
+    Coordinate playerLoc = player.getLocation();
+    // Set tiles with line of sight on player to a lower ranged cost
+    int x = playerLoc.x;
+    int y = playerLoc.y;
+    // Update left tiles
+    while(rangedTileMap[x-1][y].getID() != 1) {
+      rangedTileMap[x-1][y].setCost(1);
+      x--;
+    }
+    // Update right tiles
+    x = playerLoc.x;
+    while(rangedTileMap[x+1][y].getID() != 1) {
+      rangedTileMap[x+1][y].setCost(1);
+      x++;
+    }
+    // Update above tiles
+    x = playerLoc.x;
+    while(rangedTileMap[x][y-1].getID() != 1) {
+      rangedTileMap[x][y-1].setCost(1);
+      y--;
+    }
+    // Update below tiles
+    y = playerLoc.y;
+    while(rangedTileMap[x][y+1].getID() != 1) {
+      rangedTileMap[x][y+1].setCost(1);
+      y++;
+    }
+    // Use dijkstras on the new tile map.
+    path = getDijkstras(playerLoc.x, playerLoc.y, rangedTileMap);
+    //
+
+    return path;
+  }
+
   public static Vertex[][] getDijkstras(int sourcex, int sourcey, Tile[][] tileMap) {
     Vertex path[][] = new Vertex[10][10];
     boolean seen[][] = new boolean[10][10];

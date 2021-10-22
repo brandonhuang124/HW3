@@ -15,12 +15,12 @@
 -- **[13]** Add sound/music
 -- **[14]** Add art assets
 -- **[15]** Add menu splash
+-- **[17]** Dijkstras for Ranged enemies
 -- **[20]** Fix bug where projectile collision doesn't hit enemy from 2 spaces away (by projectile pause)
 
 ## Open Issues ##
 
 -- **[16]** Add Ranged enemies
--- **[17]** Dijkstras for Ranged enemies
 -- **[18]** Add game progression/levels
 -- **[19]** Complete how to play and level select screens
 -- **[21]** Add Indicator for player getting hit
