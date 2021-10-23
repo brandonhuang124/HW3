@@ -39,6 +39,8 @@ public class StartState extends BasicGameState {
     if(musicRestart) {
       ResourceManager.getMusic(RoboGame.MUSIC_MENU_RSC).loop();
     }
+    Input input = container.getInput();
+    input.clearKeyPressedRecord();
   }
 
   @Override

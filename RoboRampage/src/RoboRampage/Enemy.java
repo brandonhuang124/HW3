@@ -102,8 +102,9 @@ public class Enemy extends Entity {
 
   public Coordinate getLocation() { return location;}
 
-  public void makeMove(Vertex[][] pathMap, Coordinate playerLoc, Player player, Tile[][] tileMap,LinkedList<Projectile> projectileList) {
+  public void makeMove(Vertex[][] pathMap, Player player, Tile[][] tileMap, LinkedList<Projectile> projectileList, LinkedList<Enemy> enemyList) {
     /*** Begin Melee Behavior Block ***/
+    Coordinate playerLoc = player.getLocation();
     if(id == 1) {
       // Check if the player is next to them
       int xdiff = playerLoc.x - location.x;
@@ -118,12 +119,15 @@ public class Enemy extends Entity {
       else if(xdiff == 1 && ydiff == 0) attack(6, player, projectileList);
       // Otherwise move
       else {
-        // Choose which direction based on the dijkstras map
         int direction = pathMap[location.x][location.y].getDirection();
-        if(direction == 2) moveDown();
-        if(direction == 4) moveLeft();
-        if(direction == 6) moveRight();
-        if(direction == 8) moveUp();
+        if(direction == 2 && spaceClear(this.location.x, this.location.y + 1, enemyList))
+          moveDown();
+        if(direction == 4 && spaceClear(this.location.x - 1, this.location.y, enemyList))
+          moveLeft();
+        if(direction == 6 && spaceClear(this.location.x, this.location.y - 1, enemyList))
+          moveRight();
+        if(direction == 8 && spaceClear(this.location.x + 1, this.location.y, enemyList))
+          moveUp();
         moveSound.play();
       }
     }
@@ -194,10 +198,14 @@ public class Enemy extends Entity {
       // Otherwise just make a move.
       else {
         int direction = pathMap[location.x][location.y].getDirection();
-        if(direction == 2) moveDown();
-        if(direction == 4) moveLeft();
-        if(direction == 6) moveRight();
-        if(direction == 8) moveUp();
+        if(direction == 2 && spaceClear(this.location.x, this.location.y + 1, enemyList))
+          moveDown();
+        if(direction == 4 && spaceClear(this.location.x - 1, this.location.y, enemyList))
+          moveLeft();
+        if(direction == 6 && spaceClear(this.location.x, this.location.y - 1, enemyList))
+          moveRight();
+        if(direction == 8 && spaceClear(this.location.x + 1, this.location.y, enemyList))
+          moveUp();
         moveSound.play();
       }
     }
@@ -235,6 +243,16 @@ public class Enemy extends Entity {
       System.out.println("Ranged Attack");
       projectileList.add(new Projectile(this.location, direction, 2));
     }
+  }
+
+  private boolean spaceClear(int x, int y, LinkedList<Enemy> enemyList) {
+    // Check the list to see if the space isn't already occupied.
+    for(Enemy enemy : enemyList) {
+      Coordinate enemyLoc = enemy.getCoordinate();
+      if(enemy != this && enemyLoc.x == x && enemyLoc.y == y)
+        return false;
+    }
+    return true;
   }
 
   public void moveUp() {
