@@ -44,6 +44,7 @@ public class RoboGame extends StateBasedGame {
   public static final String MENU_BACK_RSC = "RoboRampage/Assets/menuBack.png";
   public static final String MENU_HOWTOPLAYSPLASH_RSC = "RoboRampage/Assets/howToPlaySplash.png";
   public static final String MENU_LEVELSELECTSPLASH_RSC = "RoboRampage/Assets/levelSelectSplash.png";
+  public static final String MENU_GAMEOVER_RSC = "RoboRampage/Assets/menuGameover.png";
 
   public static final String ENEMY_MELEEIMG_RSC = "RoboRampage/Assets/meleeEnemy.png";
   public static final String ENEMY_MELEEIDLERIGHT_RSC = "RoboRampage/Assets/enemyMeleeIdleRight.png";
@@ -199,6 +200,7 @@ public class RoboGame extends StateBasedGame {
     ResourceManager.loadImage(MENU_LEVELSELECTSPLASH_RSC);
     ResourceManager.loadImage(MENU_BACK_RSC);
     ResourceManager.loadImage(MENU_HOWTOPLAYSPLASH_RSC);
+    ResourceManager.loadImage(MENU_GAMEOVER_RSC);
     // Music and SFX
     ResourceManager.loadSound(SOUND_EXPLOSION_RSC);
     ResourceManager.loadSound(SOUND_FOOTSTEPS_RSC);
