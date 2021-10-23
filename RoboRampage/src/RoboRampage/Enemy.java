@@ -81,10 +81,10 @@ public class Enemy extends Entity {
           true, 150, true);
       leftDefeat = new Animation(ResourceManager.getSpriteSheet(
           RoboGame.ENEMY_RANGEDDEFEATLEFT_RSC, 75, 75), 0, 0, 7, 0,
-          true, 38, true);
+          true, 75, true);
       rightDefeat = new Animation(ResourceManager.getSpriteSheet(
           RoboGame.ENEMY_RANGEDDEFEATRIGHT_RSC, 75, 75), 0, 0, 7, 0,
-          true, 38, true);
+          true, 75, true);
       attackSound = ResourceManager.getSound(RoboGame.SOUND_LASER2_RSC);
       moveSound = ResourceManager.getSound(RoboGame.SOUND_RANGEDMOVE_RSC);
       hitSound = ResourceManager.getSound(RoboGame.SOUND_RANGEDHIT_RSC);
