@@ -257,6 +257,7 @@ public class TestState extends BasicGameState {
           levelOverTimer = turnDuration * 8;
           player.death();
           System.out.println("Health dropped to 0, gameover...");
+          return;
         }
       }
       // Up
@@ -287,6 +288,7 @@ public class TestState extends BasicGameState {
       }
       // Attack
       else if (input.isKeyPressed(Input.KEY_SPACE)) {
+        ResourceManager.getSound(RoboGame.SOUND_AIM_RSC).play();
         attackReady = true;
         inputReady = false;
         crosshair.moveLeft(playerLoc);
