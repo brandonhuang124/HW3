@@ -82,6 +82,7 @@ public class RoboGame extends StateBasedGame {
   public static final String PLAYER_PROJECTILELEFT_RSC = "RoboRampage/Assets/projectile_left.png";
   public static final String PLAYER_PROJECTILERIGHT_RSC = "RoboRampage/Assets/projectile_right.png";
   public static final String PLAYER_PROJECTILEUP_RSC = "RoboRampage/Assets/projectile_up.png";
+  public static final String PLAYER_HITINDICATOR_RSC = "RoboRampage/Assets/playerHitIndicator.png";
 
   // Sounds
   public static final String SOUND_EXPLOSION_RSC = "RoboRampage/Assets/Sounds/explosion.wav";
@@ -154,6 +155,7 @@ public class RoboGame extends StateBasedGame {
     ResourceManager.loadImage(PLAYER_PROJECTILELEFT_RSC);
     ResourceManager.loadImage(PLAYER_PROJECTILERIGHT_RSC);
     ResourceManager.loadImage(PLAYER_PROJECTILEUP_RSC);
+    ResourceManager.loadImage(PLAYER_HITINDICATOR_RSC);
     // Enemy Sheets
       // Melee
     ResourceManager.loadImage(ENEMY_MELEEIMG_RSC);

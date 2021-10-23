@@ -12,7 +12,7 @@ class Player extends Entity {
   private int ammo, maxammo;
   private int health, maxhealth;
   private Animation moveLeft, moveRight, shootLeft, shootRight, reloadLeft, reloadRight, idleLeft, idleRight,
-      defeatRight, defeatLeft, activeAnim;
+      defeatRight, defeatLeft, activeAnim, hitIndicator;
   private boolean faceRight, gotHit;
 
   public Player(final float x, final float y, int xcoord, int ycoord) {
@@ -55,10 +55,16 @@ class Player extends Entity {
     defeatRight = new Animation(ResourceManager.getSpriteSheet(
         RoboGame.PLAYER_PLAYERDEATHRIGHT_RSC, 75, 75), 0, 0, 6, 0,
         true, 100, true);
+    hitIndicator = new Animation(ResourceManager.getSpriteSheet(
+        RoboGame.PLAYER_HITINDICATOR_RSC, 75, 75), 0, 0, 1, 0,
+        true, 300, true);
     activeAnim = idleRight;
     addAnimation(idleRight);
+    addAnimation(hitIndicator);
     faceRight = true;
     gotHit = false;
+    hitIndicator.setCurrentFrame(1);
+    hitIndicator.setLooping(false);
     shootLeft.setLooping(false);
     shootRight.setLooping(false);
     reloadRight.setLooping(false);
@@ -185,6 +191,7 @@ class Player extends Entity {
   public boolean modHealth(int change) {
     health += change;
     gotHit = true;
+    hitIndicator.restart();
     if(health <= 0) {
       health = 0;
       return true;
