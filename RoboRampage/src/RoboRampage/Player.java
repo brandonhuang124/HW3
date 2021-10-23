@@ -51,10 +51,10 @@ class Player extends Entity {
         true, 75, true);
     defeatLeft = new Animation(ResourceManager.getSpriteSheet(
         RoboGame.PLAYER_PLAYERDEATHLEFT_RSC, 75, 75), 0, 0, 6, 0,
-        true, 75, true);
+        true, 100, true);
     defeatRight = new Animation(ResourceManager.getSpriteSheet(
         RoboGame.PLAYER_PLAYERDEATHRIGHT_RSC, 75, 75), 0, 0, 6, 0,
-        true, 75, true);
+        true, 100, true);
     activeAnim = idleRight;
     addAnimation(idleRight);
     faceRight = true;

@@ -1,7 +1,0 @@
-Sounds that need cleaning up:
-footsteps: Too long
-melee move: Too long
-
-Animations that need cleaning up:
-Death animation for player needs longer pause to compensate for sound
-Death animations for enemies needs to be longer to slow down the animation time

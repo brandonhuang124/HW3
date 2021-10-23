@@ -173,7 +173,7 @@ public class TestState extends BasicGameState {
             System.out.println("Projectile hit enemy at: " + enemyHit.getCoordinate().x + ", " + enemyHit.getCoordinate().y);
             projectileList.remove(projectile);
             enemyDead = enemyHit.damage(5);
-            if(enemyDead) waitInput();
+            if(enemyDead) waitInputDeathAnimation();
           }
         }
         // otherwise is an enemy projectile
@@ -249,7 +249,7 @@ public class TestState extends BasicGameState {
         // Check if theyre dead
         if(player.getHealth() <= 0) {
           gameover = true;
-          levelOverTimer = turnDuration * 4;
+          levelOverTimer = turnDuration * 8;
           player.death();
           System.out.println("Health dropped to 0, gameover...");
         }
@@ -333,6 +333,7 @@ public class TestState extends BasicGameState {
           player.stop();
         }
         // Clear any dead enemies
+        enemyList.removeIf( (Enemy enemy) -> enemy.getHealth() <= 0);
         for(Enemy enemy : enemyList) {
           if(enemy.getHealth() <= 0) enemyList.remove(enemy);
         }
@@ -346,9 +347,15 @@ public class TestState extends BasicGameState {
     inputWaitTimer = turnDuration;
   }
 
+  public void waitInputDeathAnimation() {
+    inputReady = false;
+    inputWaitTimer = turnDuration * 2;
+  }
+
   private void initLists() {
     enemyList = new LinkedList<Enemy>();
     enemyList.add(new Enemy(375,75,5,1,1));
+    enemyList.add(new Enemy(525,75,7 ,1,1));
     enemyList.add(new Enemy(600, 75, 8, 1, 2));
     projectileList = new LinkedList<Projectile>();
   }
