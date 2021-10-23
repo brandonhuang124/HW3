@@ -131,6 +131,11 @@ public class TestState extends BasicGameState {
     player.render(g);
     for(Enemy enemy : enemyList) enemy.render(g);
     for(Projectile projectile : projectileList) projectile.render(g);
+
+    // Render the Gameover message if needed.
+    if(gameover) {
+      g.drawImage(ResourceManager.getImage(RoboGame.MENU_GAMEOVER_RSC), 119, 300);
+    }
   }
 
   @Override

@@ -19,6 +19,7 @@
 -- **[17]** Dijkstras for Ranged enemies
 -- **[20]** Fix bug where projectile collision doesn't hit enemy from 2 spaces away (by projectile pause)
 -- **[22]** Cleanup sound and animation timing issues
+-- **[24]** Add Gameover Screen popup or screen.
 
 ## Open Issues ##
 
@@ -26,7 +27,7 @@
 -- **[19]** Complete how to play and level select screens
 -- **[21]** Add Indicator for player getting hit
 -- **[23]** Cleanup comments, organization, and descriptions throughout code.
--- **[24]** Add Gameover Screen popup or screen.
+-- **[25]** Stop enemies from entering the same square
 
 ## High Bar Items ##
 -- **[30]** Add pick up items: Medkits/Armor
@@ -38,3 +39,7 @@
 -- **[36]** Add traps that can be activated by different enemies
 -- **[37]** Add interaction system for doors, chests and levers
 -- **[38]** Diversify enemies
+
+## Known Issues ##
+-- Animation for melee enemies play a single frame before stopping if a projectile is in mid air fired by a ranged enemy
+who was spawned before them.
