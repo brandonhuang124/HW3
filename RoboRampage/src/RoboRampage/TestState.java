@@ -260,24 +260,24 @@ public class TestState extends BasicGameState {
         }
       }
       // Up
-      if (input.isKeyPressed(Input.KEY_W) && tileMap[playerLoc.x][playerLoc.y-1].getID() != 1) {
+      if (input.isKeyPressed(Input.KEY_W) && isSpaceClear(playerLoc.x, playerLoc.y-1)) {
         // Check if tile above is a wall
         player.moveUp();
         waitInput();
       }
       // Left
-      else if (input.isKeyPressed(Input.KEY_A) && tileMap[playerLoc.x-1][playerLoc.y].getID() != 1) {
+      else if (input.isKeyPressed(Input.KEY_A) && isSpaceClear(playerLoc.x-1, playerLoc.y)) {
         // Check if tile left is a wall
         player.moveLeft();
         waitInput();
       }
       // Down
-      else if (input.isKeyPressed(Input.KEY_S) && tileMap[playerLoc.x][playerLoc.y+1].getID() != 1) {
+      else if (input.isKeyPressed(Input.KEY_S) && isSpaceClear(playerLoc.x, playerLoc.y+1)) {
         player.moveDown();
         waitInput();
       }
       // Right
-      else if (input.isKeyPressed(Input.KEY_D) && tileMap[playerLoc.x+1][playerLoc.y].getID() != 1) {
+      else if (input.isKeyPressed(Input.KEY_D) && isSpaceClear(playerLoc.x+1, playerLoc.y)) {
         player.moveRight();
         waitInput();
       }
@@ -309,9 +309,9 @@ public class TestState extends BasicGameState {
     else if (enemyTurn) {
       for (Enemy enemy : enemyList) {
         if(enemy.getID() == 1)
-          enemy.makeMove(path, player.getLocation(), player, tileMap, projectileList);
+          enemy.makeMove(path, player, tileMap, projectileList, enemyList);
         else if(enemy.getID() == 2) {
-          enemy.makeMove(rangedPath, player.getLocation(), player, tileMap, projectileList);
+          enemy.makeMove(rangedPath, player, tileMap, projectileList, enemyList);
         }
       }
       enemyTurn = false;
@@ -363,5 +363,19 @@ public class TestState extends BasicGameState {
     enemyList.add(new Enemy(525,75,7 ,1,1));
     enemyList.add(new Enemy(600, 75, 8, 1, 2));
     projectileList = new LinkedList<Projectile>();
+  }
+
+  private boolean isSpaceClear(int x, int y) {
+    // Check if moving would take us out of the map
+    // First check if the space is a wall
+    if (tileMap[x][y].getID() == 1)
+      return false;
+    // Then check if the space is occupied by an enemy
+    for (Enemy enemy : enemyList) {
+      Coordinate enemyLoc = enemy.getLocation();
+      if (enemyLoc.x == x && enemyLoc.y == y)
+        return false;
+    }
+    return true;
   }
 }

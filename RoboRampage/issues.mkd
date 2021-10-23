@@ -20,6 +20,7 @@
 -- **[20]** Fix bug where projectile collision doesn't hit enemy from 2 spaces away (by projectile pause)
 -- **[22]** Cleanup sound and animation timing issues
 -- **[24]** Add Gameover Screen popup or screen.
+-- **[25]** Stop enemies from entering the same square and player from entering enemy squares
 
 ## Open Issues ##
 
@@ -27,7 +28,6 @@
 -- **[19]** Complete how to play and level select screens
 -- **[21]** Add Indicator for player getting hit
 -- **[23]** Cleanup comments, organization, and descriptions throughout code.
--- **[25]** Stop enemies from entering the same square
 
 ## High Bar Items ##
 -- **[30]** Add pick up items: Medkits/Armor
