@@ -104,7 +104,9 @@ public class TestState extends BasicGameState {
     }
 
     // Current Gun x:410 y:765
-    g.drawImage(ResourceManager.getImage(RoboGame.UTIL_GUNDEFAULT_RSC), 410, 765);
+    if(player.getWeapon() == 1) {
+      g.drawImage(ResourceManager.getImage(RoboGame.UTIL_GUNDEFAULT_RSC), 410, 765);
+    }
 
     // Ammo counter x: 520 y: 782 width:13
     int currentAmmo = player.getAmmo();
@@ -216,6 +218,7 @@ public class TestState extends BasicGameState {
     if(enemyList.isEmpty() && !levelComplete) {
       levelComplete = true;
       levelOverTimer = turnDuration * 8;
+      ResourceManager.getSound(RoboGame.SOUND_EXPLOSION_RSC);
     }
     // If all the enemies are dead, the level is complete.
     if(levelComplete) {
@@ -318,8 +321,10 @@ public class TestState extends BasicGameState {
         }
         else {
           attackReady = false;
-          projectileList.add(new Projectile(playerLoc, aimDirection,1));
-          player.modAmmo(-1);
+          if(player.getWeapon() == 1) {
+            projectileList.add(new Projectile(playerLoc, aimDirection,1));
+            player.modAmmo(-1);
+          }
           waitInput();
           System.out.println("Pew Pew");
           player.shoot(aimDirection);
@@ -493,7 +498,7 @@ public class TestState extends BasicGameState {
   private void initLists() {
     enemyList = new LinkedList<Enemy>();
     enemyList.add(new Enemy(375,75,5,1,1));
-    enemyList.add(new Enemy(525,75,7 ,1,1));
+    enemyList.add(new Enemy(525,75,7 ,1,2));
     enemyList.add(new Enemy(600, 75, 8, 1, 2));
     projectileList = new LinkedList<Projectile>();
     pickupList = new LinkedList<PickupItem>();
