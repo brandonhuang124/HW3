@@ -33,7 +33,7 @@ public class TestState extends BasicGameState {
   LinkedList<Projectile> projectileList;
   boolean inputReady, enemyDead;
   boolean enemyTurn, enemyMoveWait, attackReady, gameover, levelComplete;
-  int inputWaitTimer, levelOverTimer, aimDirection, turnDuration;
+  int inputWaitTimer, levelOverTimer, aimDirection, turnDuration, level;
   Player player;
   Crosshair crosshair;
 
@@ -44,7 +44,7 @@ public class TestState extends BasicGameState {
 
   @Override
   public void init(GameContainer container, StateBasedGame game) throws SlickException {
-
+    level = 1;
   }
 
   @Override
@@ -193,6 +193,12 @@ public class TestState extends BasicGameState {
     if(levelComplete) {
       System.out.println(levelOverTimer);
       if(levelOverTimer <= 0) {
+        // Check if the last level was completed.
+        level++;
+        if(level == 2) {
+          rg.enterState(RoboGame.GAMECOMPLETESTATE);
+          return;
+        }
         nextLevel();
         ((StartState)game.getState(RoboGame.STARTUPSTATE)).restartMusic(true);
         rg.enterState(RoboGame.STARTUPSTATE);
@@ -455,6 +461,10 @@ public class TestState extends BasicGameState {
         return false;
     }
     return true;
+  }
+
+  public void setLevel(int newLevel) {
+    level = newLevel;
   }
 
   private void nextLevel() {
