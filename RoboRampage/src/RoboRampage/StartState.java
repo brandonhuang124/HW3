@@ -5,11 +5,21 @@ import org.newdawn.slick.*;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
+/***
+ * This state is the main menu and startup state of the game. The player can use the arrows keys or wasd to move through
+ * selections in the menu, and space bar selects the current selection. Depending on what the player selects, they enter
+ * the how to play screen, level select screen, or simply begins the game at level 1.
+ *
+ * Transitions From (Initialization)
+ *
+ * Transitions To HowState, LevelState and TestState
+ */
 public class StartState extends BasicGameState {
 
   private int select, timer;
   private boolean selected, arrowBlink, musicRestart;
   Animation player, melee, melee2, ranged;
+
   @Override
   public int getID() {
     return RoboGame.STARTUPSTATE;
@@ -36,6 +46,7 @@ public class StartState extends BasicGameState {
     ranged = new Animation(ResourceManager.getSpriteSheet(
         RoboGame.ENEMY_RANGEDSHOOTLEFT_RSC, 75, 75), 0, 0, 3, 0,
         true, 120, true);
+    // Only restart the music if before entering the state, music restart has been requested.
     if(musicRestart) {
       ResourceManager.getMusic(RoboGame.MUSIC_MENU_RSC).loop();
     }
@@ -50,6 +61,7 @@ public class StartState extends BasicGameState {
     g.drawImage(ResourceManager.getImage(RoboGame.MENU_START_RSC), 290, 450);
     g.drawImage(ResourceManager.getImage(RoboGame.MENU_HOWTOPLAY_RSC), 210, 520);
     g.drawImage(ResourceManager.getImage(RoboGame.MENU_LEVELSELECT_RSC), 183, 590);
+    // Draw the little animations at the bottom of the screen
     g.drawAnimation(player, 150, 750);
     g.drawAnimation(melee, 350, 750);
     g.drawAnimation(melee, 470, 750);
@@ -76,7 +88,7 @@ public class StartState extends BasicGameState {
     Input input = container.getInput();
     RoboGame rg = (RoboGame)game;
 
-    // Checking if a selection has been made
+    // Check if a selection has been made, if so, do a countdown before transitioning.
     if(selected) {
       if(timer % 15 == 0) {
         arrowBlink = !arrowBlink;
@@ -102,6 +114,7 @@ public class StartState extends BasicGameState {
       timer --;
     }
 
+    /*** Controls Section ***/
     // If Space is pressed to select
     else if(input.isKeyPressed(Input.KEY_SPACE)) {
       timer = 75;
@@ -118,6 +131,7 @@ public class StartState extends BasicGameState {
       select --;
       ResourceManager.getSound(RoboGame.SOUND_MENUACTIVATE_RSC).play();
     }
+    /*** End Controls Section ***/
     // Mod select by 3 to snap back to top, set negatives to 2 to snap to the bottom when going up at the top.
     select = select % 3;
     if(select < 0) select = 2;

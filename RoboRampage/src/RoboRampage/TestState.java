@@ -10,6 +10,20 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
+/***
+ * This state is the gameplay state of RoboGame. Here is where the game is actually played. A map will render which the
+ * player, enemies, and obstacles in the way. The objective is to defeat all the enemies on the the screen, after which
+ * the next level will start after a short pause. The game is played in discrete turns, where the player takes an action
+ * then all the enemies take an action. The player can Move, shoot, or reload on their turn, and the enemies can move or
+ * attack on theirs. If the players health drops to 0, the game transitions back to startup state after a short delay.
+ * The play can use wasd to move around the map, Q to skip their turn, R to reload, or Spacebar to begin aiming an
+ * attack. After beginning aim, the player can use wasd to choose a direction, and space bar to confirm the attack in
+ * that direction.
+ *
+ * Transitions From StartState
+ *
+ * Transitions To StartState
+ */
 public class TestState extends BasicGameState {
 
   Tile tileMap[][];
@@ -77,6 +91,7 @@ public class TestState extends BasicGameState {
         }
       }
     }
+
     // Draw the numbers
     if(rangedPath != null) {
       for(int x = 0; x < 10; x++) {
@@ -88,13 +103,16 @@ public class TestState extends BasicGameState {
         }
       }
     }
+
     // Render HUD stuff
     g.drawImage(ResourceManager.getImage(RoboGame.UTIL_HUDIMG_RSC), 0, 750);
     if(attackReady) {
       crosshair.render(g);
     }
+
     // Current Gun x:410 y:765
     g.drawImage(ResourceManager.getImage(RoboGame.UTIL_GUNDEFAULT_RSC), 410, 765);
+
     // Ammo counter x: 520 y: 782 width:13
     int currentAmmo = player.getAmmo();
     int maxAmmo = player.getMaxAmmo();
@@ -105,9 +123,11 @@ public class TestState extends BasicGameState {
           g.drawImage(ResourceManager.getImage(RoboGame.UTIL_BULLETGONE_RSC), 520 + (13 * i), 782);
       currentAmmo--;
     }
+
     // Health Bar x:94 y:795 width:25
     int currentHealth = player.getHealth();
     int maxHealth = player.getMaxHealth();
+
     // Render left cap
     if(currentHealth == 0)
         g.drawImage(ResourceManager.getImage(RoboGame.UTIL_RBARCAPLEFT_RSC), 94, 795);
@@ -122,11 +142,13 @@ public class TestState extends BasicGameState {
         g.drawImage(ResourceManager.getImage(RoboGame.UTIL_RBAR_RSC), 94 + (25 * i), 795);
       currentHealth--;
     }
+
     // Render right cap
     if(currentHealth > 0)
       g.drawImage(ResourceManager.getImage(RoboGame.UTIL_GBARCAPRIGHT_RSC), 94 + (25 * (maxHealth - 1)), 795);
     else
       g.drawImage(ResourceManager.getImage(RoboGame.UTIL_RBARCAPRIGHT_RSC), 94 + (25 * (maxHealth - 1)), 795);
+
     // Render Entities
     player.render(g);
     for(Enemy enemy : enemyList) enemy.render(g);
@@ -148,6 +170,7 @@ public class TestState extends BasicGameState {
 
     // Check if gameover occured
     if(gameover) {
+      // If so, countdown until transitioning.
       if(levelOverTimer <= 0) {
         ((StartState)game.getState(RoboGame.STARTUPSTATE)).restartMusic(true);
         rg.enterState(RoboGame.STARTUPSTATE);
@@ -155,17 +178,18 @@ public class TestState extends BasicGameState {
       levelOverTimer -= delta;
       return;
     }
-    // Check for live projectiles
+
+    // Check for projectiles, noone can take actions if projectiles are in the air.
     if (!projectileList.isEmpty()) {
       // Pause enemy move animations
       for(Enemy enemy : enemyList) {
           enemy.pauseMoveAnimation();
       }
-      // Update projectiles
+      // Update projectile location
       for(Projectile projectile : projectileList) projectile.update(delta);
       // Check for projectile collisions
       for(Projectile projectile : projectileList) {
-        // If a player projectile:
+        // If a player projectile, check for wall and enemy collisions
         if(projectile.getID() == 1) {
           // Wall collision
           if (projectile.wallCollision(tileMap)) {
@@ -181,7 +205,7 @@ public class TestState extends BasicGameState {
             if(enemyDead) waitInputDeathAnimation();
           }
         }
-        // otherwise is an enemy projectile
+        // If an enemy projectile, check for player collisions. (Should never shoot at a wall due to behavior)
         else {
           if(projectile.playerCollision(player)) {
             System.out.println("Projectile hit player.");
@@ -192,13 +216,14 @@ public class TestState extends BasicGameState {
       return;
     }
 
-    // Update entity locations
+    // Update entity locations as long as no projectiles are in the air.
     for(Enemy enemy : enemyList) {
       enemy.resumeAnimation();
       enemy.update(delta);
     }
     player.update(delta);
 
+    /*** ATTACK MODE SECTIONS ***/
     // Check if were in attack mode
     if(attackReady) {
       // Move Crosshair up
@@ -246,9 +271,10 @@ public class TestState extends BasicGameState {
         }
       }
     }
+
+    /*** USUAL CONTROLS SECTION ***/
     // Check if controls are ready.
     else if (inputReady) {
-      // If so check if the player is dead
       // If the player got hit
       if(player.gotHit()) {
         // Check if theyre dead
@@ -260,32 +286,38 @@ public class TestState extends BasicGameState {
           return;
         }
       }
+
       // Up
       if (input.isKeyPressed(Input.KEY_W) && isSpaceClear(playerLoc.x, playerLoc.y-1)) {
         // Check if tile above is a wall
         player.moveUp();
         waitInput();
       }
+
       // Left
       else if (input.isKeyPressed(Input.KEY_A) && isSpaceClear(playerLoc.x-1, playerLoc.y)) {
         // Check if tile left is a wall
         player.moveLeft();
         waitInput();
       }
+
       // Down
       else if (input.isKeyPressed(Input.KEY_S) && isSpaceClear(playerLoc.x, playerLoc.y+1)) {
         player.moveDown();
         waitInput();
       }
+
       // Right
       else if (input.isKeyPressed(Input.KEY_D) && isSpaceClear(playerLoc.x+1, playerLoc.y)) {
         player.moveRight();
         waitInput();
       }
+
       // Wait
       else if (input.isKeyPressed(Input.KEY_Q)) {
         waitInput();
       }
+
       // Attack
       else if (input.isKeyPressed(Input.KEY_SPACE)) {
         ResourceManager.getSound(RoboGame.SOUND_AIM_RSC).play();
@@ -301,6 +333,7 @@ public class TestState extends BasicGameState {
           crosshair.moveLeft(playerLoc);
         }
       }
+
       // Reload
       else if (input.isKeyPressed(Input.KEY_R)) {
         System.out.println("Reloading...");
@@ -308,6 +341,8 @@ public class TestState extends BasicGameState {
         waitInput();
       }
     }
+
+    /*** ENEMY TURN SECTION ***/
     else if (enemyTurn) {
       for (Enemy enemy : enemyList) {
         if(enemy.getID() == 1)
@@ -320,6 +355,8 @@ public class TestState extends BasicGameState {
       enemyMoveWait = true;
       waitInput();
     }
+    /*** IN BETWEEN TURNS SECTION ***/
+    // Here the wait timer is countdown and entitys are snapped back into the grid if they strayed.
     else {
       inputWaitTimer -= delta;
       // Offset position back into the grid when done moving
@@ -346,19 +383,27 @@ public class TestState extends BasicGameState {
         }
       }
     }
-
   }
 
-  public void waitInput() {
+  /***
+   * Internal method to be called when moves are being executed.
+   */
+  private void waitInput() {
     inputReady = false;
     inputWaitTimer = turnDuration;
   }
 
-  public void waitInputDeathAnimation() {
+  /***
+   * Internal method to be called when the player is dead.
+   */
+  private void waitInputDeathAnimation() {
     inputReady = false;
     inputWaitTimer = turnDuration * 2;
   }
 
+  /***
+   * Internal method which initializes Lists which are needed for level function
+   */
   private void initLists() {
     enemyList = new LinkedList<Enemy>();
     enemyList.add(new Enemy(375,75,5,1,1));
@@ -367,6 +412,16 @@ public class TestState extends BasicGameState {
     projectileList = new LinkedList<Projectile>();
   }
 
+  /***
+   * Internal method that checks if the node in the tilemap is open for the player to move into.
+   * @param x
+   *  The x coordinate in tile coordinates
+   * @param y
+   *  The y coordinate in tile coordinates
+   * @return
+   *  true: if the space is unoccupied and isnt a wall
+   *  false: if the space is occupied or a wall.
+   */
   private boolean isSpaceClear(int x, int y) {
     // Check if moving would take us out of the map
     // First check if the space is a wall

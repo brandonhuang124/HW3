@@ -8,6 +8,24 @@ import org.newdawn.slick.Sound;
 
 import java.util.LinkedList;
 
+/***
+ * Entity class for representing the enemies of RoboGame. Behavior differs depending on which id the enemy is
+ * constructed with. Tracks enemy's health.
+ *
+ * Methods:
+ *  makeMove()
+ *  attack()
+ *  spaceClear()
+ *  moveUp()
+ *  moveDown()
+ *  moveRight()
+ *  moveLeft()
+ *  stop()
+ *  dead()
+ *  damage()
+ *  pauseMoveAnimation()
+ *  resumeMoveAnimation()
+ */
 public class Enemy extends Entity {
   private Vector velocity;
   private Coordinate location;
@@ -19,13 +37,30 @@ public class Enemy extends Entity {
   private Sound attackSound, moveSound, hitSound, defeatSound;
   private boolean faceRight, animationPaused;
 
+  /***
+   * Constructor.
+   * @param x
+   *  x coordinate in absolute coordinates to spawn the enemy in
+   * @param y
+   *  y coodrinate in absolute coordinate to spawn the enemy in
+   * @param xcoord
+   *  x coordinate in tilemap coordinates to spawn the enemy in
+   * @param ycoord
+   *  y coodrinate in tilemap coordinates to spawn the enemy in
+   * @param newid
+   *  The id of the enemy. Current available ids:
+   *    1: Melee robot enemy type
+   *    2: Ranged robot enemy type
+   */
   public Enemy(final float x, final float y, int xcoord, int ycoord, int newid) {
+    // Set paramaters
     super( x + 37, y + 37);
     location = new Coordinate(xcoord, ycoord);
     speed = 0.25f;
     velocity = new Vector(0f, 0f);
     id = newid;
     health = maxhealth = 0;
+    /*** MELEE ENEMY: SET ANIMATIONS AND HEALTH ***/
     if(id == 1) {
       health = maxhealth = 10;
       addImageWithBoundingBox(ResourceManager.getImage(RoboGame.ENEMY_MELEEIMG_RSC));
@@ -58,6 +93,7 @@ public class Enemy extends Entity {
       hitSound = ResourceManager.getSound(RoboGame.SOUND_MELEEHIT_RSC);
       defeatSound = ResourceManager.getSound(RoboGame.SOUND_MELEEDEFEAT_RSC);
     }
+    /*** RANGED ENEMY: SET ANIMATIONS AND HEALTH ***/
     else if (id == 2) {
       health = maxhealth = 5;
       addImageWithBoundingBox(ResourceManager.getImage(RoboGame.ENEMY_MELEEIMG_RSC));
@@ -102,6 +138,20 @@ public class Enemy extends Entity {
 
   public Coordinate getLocation() { return location;}
 
+  /***
+   * Method which is called when the enemy is ready to take a turn. Enemy will execute the appropriate move based on
+   * their situation. Enemy logic is in this function.
+   * @param pathMap
+   *  The 2d Vertex array obtained by calling getDijktras() or getRangedDijkstras().
+   * @param player
+   *  The Player object which is the player character in the level.
+   * @param tileMap
+   *  The tilemap object representing the level the enemy is in
+   * @param projectileList
+   *  The projectile list of the level where new projectiles can be added to.
+   * @param enemyList
+   *  The linked list of enemies of the level, for checking locations of other enemies.
+   */
   public void makeMove(Vertex[][] pathMap, Player player, Tile[][] tileMap, LinkedList<Projectile> projectileList, LinkedList<Enemy> enemyList) {
     /*** Begin Melee Behavior Block ***/
     Coordinate playerLoc = player.getLocation();
@@ -147,6 +197,7 @@ public class Enemy extends Entity {
             playerAbove = true;
         if(playerAbove) {
           attackDirection = 8;
+          // Travel through the tile map until we get to the player checking if there is a wall on the way.
           for(int y = this.location.y; y > playerLoc.y; y--) {
             if(tileMap[this.location.x][y].getID() == 1) {
               lineOfSight = false;
@@ -156,6 +207,7 @@ public class Enemy extends Entity {
         }
         else {
           attackDirection = 2;
+          // Travel through the tile map until we get to the player, checking if there is a wall on the way
           for(int y = this.location.y; y < playerLoc.y; y++) {
             if (tileMap[this.location.x][y].getID() == 1) {
               lineOfSight = false;
@@ -174,6 +226,7 @@ public class Enemy extends Entity {
           playerToTheLeft = true;
         if(playerToTheLeft) {
           attackDirection = 4;
+          // Travel through the tile map until we get to the player, checking if there is a wall on the way
           for(int x = this.location.x; x > playerLoc.y; x--) {
             if(tileMap[x][this.location.y].getID() == 1) {
               lineOfSight = false;
@@ -183,6 +236,7 @@ public class Enemy extends Entity {
         }
         else {
           attackDirection = 6;
+          // Travel through the tile map until we get to the player, checking if there is a wall on the way
           for(int x = this.location.x; x < playerLoc.x; x++) {
             if (tileMap[x][this.location.y].getID() == 1) {
               lineOfSight = false;
@@ -212,6 +266,16 @@ public class Enemy extends Entity {
     /*** End Ranged Behavior Block ***/
   }
 
+  /***
+   * Method to be called if the enemy is going to make an attack on the player.
+   * @param direction
+   *  Direction of the attack:
+   *    2: Down, 4: Left, 6: Up, 8: Right
+   * @param player
+   *  Player object of the player character in the level.
+   * @param projectileList
+   *  Linked list of projectiles of the level for adding more projectiles when ranged attacks occur.
+   */
   public void attack(int direction, Player player, LinkedList<Projectile> projectileList) {
     System.out.println("Attacked: Hyah!" + direction);
     removeAnimation(activeAnimation);
@@ -245,6 +309,18 @@ public class Enemy extends Entity {
     }
   }
 
+  /***
+   * Internal function for checking if a certain space isn't occupied by another enemy.
+   * @param x
+   *  tilemap x coordinate to check
+   * @param y
+   *  tilemap y coordinate to check
+   * @param enemyList
+   *  Linked list of enemies to check.
+   * @return
+   *  true: if the space doesn't have an enemy in it.
+   *  false: if the space does have an enemy in it.
+   */
   private boolean spaceClear(int x, int y, LinkedList<Enemy> enemyList) {
     // Check the list to see if the space isn't already occupied.
     for(Enemy enemy : enemyList) {
@@ -255,9 +331,15 @@ public class Enemy extends Entity {
     return true;
   }
 
+  /***
+   * Functions to be called when the enemy is to move in a direction. One for each direction.
+   */
   public void moveUp() {
+    // Begin moving
     velocity = new Vector(0f, -speed);
+    // Update location
     location.y = location.y - 1;
+    // Set animations
     removeAnimation(activeAnimation);
     if(faceRight) {
       addAnimation(rightMove);
@@ -300,9 +382,15 @@ public class Enemy extends Entity {
     addAnimation(rightMove);
     faceRight = true;
   }
+  /*** End of move functions ***/
 
+  /***
+   * Function to be called once the enemy must stop moving.
+   */
   public void stop() {
+    // Stop the movement
     velocity = new Vector(0f, 0f);
+    // Update animations
     removeAnimation(activeAnimation);
     if(faceRight) {
       addAnimation(rightIdle);
@@ -314,7 +402,11 @@ public class Enemy extends Entity {
     }
   }
 
+  /***
+   * Function to be called once the enemies health drops to 0 or below. Starts death animations and sounds.
+   */
   public void dead() {
+    // Set animations
     removeAnimation(activeAnimation);
     if(faceRight) {
       addAnimation(rightDefeat);
@@ -324,6 +416,7 @@ public class Enemy extends Entity {
       addAnimation(leftDefeat);
       activeAnimation = leftDefeat;
     }
+    // Play defeat sound
     defeatSound.play();
   }
 
@@ -331,6 +424,15 @@ public class Enemy extends Entity {
     translate(velocity.scale(delta));
   }
 
+  /***
+   * This function is for modifying the enemies health when they are attacked by the player. Returns the death status of
+   * the enemy.
+   * @param damage
+   *  The amount of damage taken.
+   * @return
+   *  true: if the enemy's health drops to 0 or below
+   *  false: if the enemy still has health
+   */
   public boolean damage(int damage) {
     health -= damage;
     if(this.health <= 0) {
@@ -341,6 +443,10 @@ public class Enemy extends Entity {
     return false;
   }
 
+  /***
+   * Method to be called to stop enemy animations if they need to be paused, such as when a projectile is in the air
+   * and melee enemies are moving.  Only works if the animations aren't already paused.
+   */
   public void pauseMoveAnimation() {
     if(!animationPaused) {
       if(activeAnimation == leftMove){
@@ -356,6 +462,10 @@ public class Enemy extends Entity {
     }
   }
 
+  /***
+   * Method to be called to resume animations after calling pauseMoveAnimations(). Won't do anything if
+   * pauseMoveAnimation() wasn't called on this object previously.
+   */
   public void resumeAnimation() {
     if(animationPaused) {
       removeAnimation(rightIdle);
