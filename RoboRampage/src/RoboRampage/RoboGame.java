@@ -41,6 +41,8 @@ public class RoboGame extends StateBasedGame {
   public static final String TILE_FLOORIMG3_RSC = "RoboRampage/Assets/floor3.png";
   public static final String TILE_FLOORIMG4_RSC = "RoboRampage/Assets/floor4.png";
   public static final String TILE_WALLIMG_RSC = "RoboRampage/Assets/wall.png";
+  public static final String TILE_FLOORACID_RSC = "RoboRampage/Assets/floorAcid.png";
+
   public static final String UTIL_CROSSHAIRIMG_RSC = "RoboRampage/Assets/crosshair.png";
   public static final String UTIL_GBARCAPRIGHT_RSC = "RoboRampage/Assets/barGreenCapRight.png";
   public static final String UTIL_GBARCAPLEFT_RSC = "RoboRampage/Assets/barGreenCapLeft.png";
@@ -167,6 +169,7 @@ public class RoboGame extends StateBasedGame {
     ResourceManager.loadImage(TILE_FLOORIMG2_RSC);
     ResourceManager.loadImage(TILE_FLOORIMG3_RSC);
     ResourceManager.loadImage(TILE_FLOORIMG4_RSC);
+    ResourceManager.loadImage(TILE_FLOORACID_RSC);
     // Player Stuff
     ResourceManager.loadImage(PLAYER_PLAYERIMG_RSC);
     ResourceManager.loadImage(PLAYER_PLAYERDEATHLEFT_RSC);

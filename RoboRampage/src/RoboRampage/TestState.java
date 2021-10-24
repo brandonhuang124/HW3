@@ -61,7 +61,7 @@ public class TestState extends BasicGameState {
     crosshair = new Crosshair(0,0);
     initLists();
     tileMap = RoboGame.getTileMap
-        ("1111111111100000000110111111011000000001100011000110001100011010000101101000010110100001011111111111");
+        ("1111111111102000000110111111011000000001100011000110001100011010000101101000010110100001011111111111");
   }
 
   @Override
@@ -88,6 +88,9 @@ public class TestState extends BasicGameState {
         }
         if (temp.getID() == 1) {
           g.drawImage(ResourceManager.getImage(RoboGame.TILE_WALLIMG_RSC),x * 75, y * 75);
+        }
+        if (temp.getID() == 2) {
+          g.drawImage(ResourceManager.getImage(RoboGame.TILE_FLOORACID_RSC), x * 75, y * 75);
         }
       }
     }
@@ -377,6 +380,10 @@ public class TestState extends BasicGameState {
         else if(enemy.getID() == 2) {
           enemy.makeMove(rangedPath, player, tileMap, projectileList, enemyList);
         }
+      }
+      // Check if the player is standing in acid
+      if(tileMap[playerLoc.x][playerLoc.y].getID() == 2) {
+        player.modHealth(-1);
       }
       enemyTurn = false;
       enemyMoveWait = true;
