@@ -31,7 +31,9 @@ public class TestState extends BasicGameState {
   Vertex [][] rangedPath;
   LinkedList<Enemy> enemyList;
   LinkedList<Projectile> projectileList;
+  LinkedList<PickupItem> pickupList;
   boolean inputReady, enemyDead;
+  boolean rangedDijkstrasDisplay, dijkstrasDisplay;
   boolean enemyTurn, enemyMoveWait, attackReady, gameover, levelComplete;
   int inputWaitTimer, levelOverTimer, aimDirection, turnDuration, level;
   Player player;
@@ -53,7 +55,7 @@ public class TestState extends BasicGameState {
     path = null;
     rangedPath = null;
     inputReady = true;
-    enemyTurn = enemyMoveWait = attackReady = gameover = enemyDead = levelComplete = false;
+    enemyTurn = enemyMoveWait = attackReady = gameover = enemyDead = levelComplete = dijkstrasDisplay = rangedDijkstrasDisplay = false;
     inputWaitTimer = levelOverTimer = 0;
     RoboGame rg = (RoboGame)game;
     player = new Player(75, 75, 1, 1);
@@ -91,18 +93,6 @@ public class TestState extends BasicGameState {
         }
         if (temp.getID() == 2) {
           g.drawImage(ResourceManager.getImage(RoboGame.TILE_FLOORACID_RSC), x * 75, y * 75);
-        }
-      }
-    }
-
-    // Draw the numbers
-    if(rangedPath != null) {
-      for(int x = 0; x < 10; x++) {
-        for(int y = 0; y < 10; y++) {
-          if(rangedPath[x][y].getDistance() < 1000) {
-            g.drawString("" + rangedPath[x][y].getDistance(), (x * 75) + 10, (y * 75) + 40);
-            g.drawString("" + rangedPath[x][y].getDirection(), (x * 75) + 10, (y * 75) + 20);
-          }
         }
       }
     }
@@ -152,10 +142,45 @@ public class TestState extends BasicGameState {
     else
       g.drawImage(ResourceManager.getImage(RoboGame.UTIL_RBARCAPRIGHT_RSC), 94 + (25 * (maxHealth - 1)), 795);
 
+    // Render item pickups
+    for(PickupItem pickup : pickupList) {
+      // If its a armor pickup
+      if(pickup.getId() == 1) {
+        Coordinate loc = pickup.getLocation();
+        g.drawImage(ResourceManager.getImage(RoboGame.UTIL_PICKUPARMOR_RSC), loc.x * 75, loc.y * 75);
+      }
+    }
     // Render Entities
     player.render(g);
     for(Enemy enemy : enemyList) enemy.render(g);
     for(Projectile projectile : projectileList) projectile.render(g);
+
+    // Draw the Dijkstras overlay if enabled.
+    if(dijkstrasDisplay) {
+      if(path != null) {
+        for(int x = 0; x < 10; x++) {
+          for(int y = 0; y < 10; y++) {
+            if(path[x][y].getDistance() < 1000) {
+              g.drawString("" + path[x][y].getDistance(), (x * 75) + 10, (y * 75) + 40);
+              g.drawString("" + path[x][y].getDirection(), (x * 75) + 10, (y * 75) + 20);
+            }
+          }
+        }
+      }
+    }
+
+    else if(rangedDijkstrasDisplay) {
+      if(rangedPath != null) {
+        for(int x = 0; x < 10; x++) {
+          for(int y = 0; y < 10; y++) {
+            if(rangedPath[x][y].getDistance() < 1000) {
+              g.drawString("" + rangedPath[x][y].getDistance(), (x * 75) + 10, (y * 75) + 40);
+              g.drawString("" + rangedPath[x][y].getDirection(), (x * 75) + 10, (y * 75) + 20);
+            }
+          }
+        }
+      }
+    }
 
     // Render the Gameover message if needed.
     if(gameover) {
@@ -370,10 +395,37 @@ public class TestState extends BasicGameState {
         player.reload();
         waitInput();
       }
+
+      // Enable Dijkstras overlay
+      else if(input.isKeyPressed(Input.KEY_9)) {
+        dijkstrasDisplay = !dijkstrasDisplay;
+        if(rangedDijkstrasDisplay)
+          rangedDijkstrasDisplay = false;
+      }
+
+      // Enable Ranged Dijkstras overlay
+      else if(input.isKeyPressed(Input.KEY_0)) {
+        rangedDijkstrasDisplay = !rangedDijkstrasDisplay;
+        if(dijkstrasDisplay)
+          dijkstrasDisplay = false;
+      }
     }
 
     /*** ENEMY TURN SECTION ***/
     else if (enemyTurn) {
+      // Check if the player is on a pickup:
+      for (PickupItem item : pickupList) {
+        if(item.playerCollision(player)) {
+          // If its a armor pickup
+          if(item.getId() == 1) {
+            player.restoreHealth();
+            // Play the sound
+            ResourceManager.getSound(RoboGame.SOUND_POWERUP_RSC).play();
+          }
+        }
+      }
+      // Clear any items that need clearing.
+      pickupList.removeIf( (PickupItem pickup) -> pickup.getRemoveMe());
       for (Enemy enemy : enemyList) {
         if(enemy.getID() == 1)
           enemy.makeMove(path, player, tileMap, projectileList, enemyList);
@@ -444,6 +496,8 @@ public class TestState extends BasicGameState {
     enemyList.add(new Enemy(525,75,7 ,1,1));
     enemyList.add(new Enemy(600, 75, 8, 1, 2));
     projectileList = new LinkedList<Projectile>();
+    pickupList = new LinkedList<PickupItem>();
+    pickupList.add(new PickupItem(2,4,1));
   }
 
   /***
