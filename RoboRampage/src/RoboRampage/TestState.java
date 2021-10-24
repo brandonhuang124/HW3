@@ -32,7 +32,7 @@ public class TestState extends BasicGameState {
   LinkedList<Enemy> enemyList;
   LinkedList<Projectile> projectileList;
   boolean inputReady, enemyDead;
-  boolean enemyTurn, enemyMoveWait, attackReady, gameover;
+  boolean enemyTurn, enemyMoveWait, attackReady, gameover, levelComplete;
   int inputWaitTimer, levelOverTimer, aimDirection, turnDuration;
   Player player;
   Crosshair crosshair;
@@ -53,7 +53,7 @@ public class TestState extends BasicGameState {
     path = null;
     rangedPath = null;
     inputReady = true;
-    enemyTurn = enemyMoveWait = attackReady = gameover = enemyDead = false;
+    enemyTurn = enemyMoveWait = attackReady = gameover = enemyDead = levelComplete = false;
     inputWaitTimer = levelOverTimer = 0;
     RoboGame rg = (RoboGame)game;
     player = new Player(75, 75, 1, 1);
@@ -158,6 +158,11 @@ public class TestState extends BasicGameState {
     if(gameover) {
       g.drawImage(ResourceManager.getImage(RoboGame.MENU_GAMEOVER_RSC), 119, 300);
     }
+
+    // Render the level complete message if needed.
+    if(levelComplete) {
+      g.drawImage(ResourceManager.getImage(RoboGame.MENU_LEVELCOMPLETE_RSC), 113,300);
+    }
   }
 
   @Override
@@ -179,6 +184,22 @@ public class TestState extends BasicGameState {
       return;
     }
 
+    // Check if all the enemies have been defeated
+    if(enemyList.isEmpty() && !levelComplete) {
+      levelComplete = true;
+      levelOverTimer = turnDuration * 8;
+    }
+    // If all the enemies are dead, the level is complete.
+    if(levelComplete) {
+      System.out.println(levelOverTimer);
+      if(levelOverTimer <= 0) {
+        nextLevel();
+        ((StartState)game.getState(RoboGame.STARTUPSTATE)).restartMusic(true);
+        rg.enterState(RoboGame.STARTUPSTATE);
+      }
+      levelOverTimer -= delta;
+      return;
+    }
     // Check for projectiles, noone can take actions if projectiles are in the air.
     if (!projectileList.isEmpty()) {
       // Pause enemy move animations
@@ -434,5 +455,10 @@ public class TestState extends BasicGameState {
         return false;
     }
     return true;
+  }
+
+  private void nextLevel() {
+    // Reset player values and positions
+    // block the screen while new level is being built
   }
 }
