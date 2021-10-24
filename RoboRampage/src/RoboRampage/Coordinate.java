@@ -1,5 +1,9 @@
 package RoboRampage;
 
+/***
+ * Simple coordinate class for interacting with the tile map.
+ * Has only two properties, an x and y coordinate integer.
+ */
 public class Coordinate {
   public int x, y;
 

@@ -5,6 +5,15 @@ import org.newdawn.slick.*;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
+/***
+ * This state is the level selection screen for skipping to certain levels of the game. Controls are similar to startup
+ * state, wasd or arrow keys to navigate and space bar to make a selection. Depending on which button the player selects
+ * they can return to the main menu or enter the test state at a specific level.
+ *
+ * Transitions From StartState
+ *
+ * Transitions To StartState or TestState
+ */
 public class LevelState extends BasicGameState {
   private int select, timer;
   private boolean selected, arrowBlink;

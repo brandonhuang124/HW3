@@ -5,6 +5,14 @@ import org.newdawn.slick.*;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
+/***
+ * This state is instructions and how to play section of the menu. Controls are similar to StartUp State, using wasd or
+ * the arrow keys to navigate and space bar to select. The player can only return to the StartupState from here.
+ *
+ * Transitions From StartState
+ *
+ * Transitions To StartState
+ */
 public class HowState extends BasicGameState {
   private int timer, select;
   boolean arrowBlink, selected;

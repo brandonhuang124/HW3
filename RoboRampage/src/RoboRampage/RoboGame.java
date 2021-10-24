@@ -8,13 +8,33 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
+/**
+ * Robo Recall, a turn based robot shooter.
+ *
+ *
+ * STATE LIST HERE
+ *
+ * GAME DESCRIPTION HERE
+ *
+ * GRAPHIC CREDITS HERE
+ *
+ * SOUND CREDITS HERE
+ *
+ *
+ * @author Brandon Huang,
+ *
+ */
+
 public class RoboGame extends StateBasedGame {
   // States
   public static final int STARTUPSTATE = 0;
   public static final int TESTSTATE = 1;
   public static final int HOWTOPLAYSTATE = 2;
   public static final int LEVELSELECTSTATE = 3;
-  // Resources
+
+  /*** ASSET PATHS ***/
+
+  // Map and Hud
   public static final String TILE_FLOORIMG_RSC = "RoboRampage/Assets/floor.png";
   public static final String TILE_FLOORIMG2_RSC = "RoboRampage/Assets/floor2.png";
   public static final String TILE_FLOORIMG3_RSC = "RoboRampage/Assets/floor3.png";
@@ -36,6 +56,7 @@ public class RoboGame extends StateBasedGame {
   public static final String UTIL_PICKUPARMOR_RSC = "RoboRampage/Assets/pickupArmor.png";
   public static final String UTIL_PICKUPAMMO_RSC = "RoboRampage/Assets/pickupAmmo.png";
 
+  // Menu
   public static final String MENU_SPLASH_RSC = "RoboRampage/Assets/menuSplash.png";
   public static final String MENU_ARROW_RSC = "RoboRampage/Assets/menuArrow.png";
   public static final String MENU_HOWTOPLAY_RSC = "RoboRampage/Assets/menuHowToPlay.png";
@@ -46,6 +67,7 @@ public class RoboGame extends StateBasedGame {
   public static final String MENU_LEVELSELECTSPLASH_RSC = "RoboRampage/Assets/levelSelectSplash.png";
   public static final String MENU_GAMEOVER_RSC = "RoboRampage/Assets/menuGameover.png";
 
+  // Melee Enemy
   public static final String ENEMY_MELEEIMG_RSC = "RoboRampage/Assets/meleeEnemy.png";
   public static final String ENEMY_MELEEIDLERIGHT_RSC = "RoboRampage/Assets/enemyMeleeIdleRight.png";
   public static final String ENEMY_MELEEIDLELEFT_RSC = "RoboRampage/Assets/enemyMeleeIdleLeft.png";
@@ -56,6 +78,7 @@ public class RoboGame extends StateBasedGame {
   public static final String ENEMY_MELEEDEFEATLEFT_RSC = "RoboRampage/Assets/enemyMeleeDefeatLeft.png";
   public static final String ENEMY_MELEEDEFEATRIGHT_RSC = "RoboRampage/Assets/enemyMeleeDefeatRight.png";
 
+  // Ranged Enemy
   public static final String ENEMY_RANGEDIDLERIGHT_RSC = "RoboRampage/Assets/enemyRangedIdleRight.png";
   public static final String ENEMY_RANGEDIDLELEFT_RSC = "RoboRampage/Assets/enemyRangedIdleLeft.png";
   public static final String ENEMY_RANGEDDEFEATRIGHT_RSC = "RoboRampage/Assets/enemyRangedDefeatRight.png";
@@ -66,6 +89,7 @@ public class RoboGame extends StateBasedGame {
   public static final String ENEMY_RANGEDSHOOTLEFT_RSC = "RoboRampage/Assets/enemyRangedShootLeft.png";
   public static final String ENEMY_PROJECTILE_RSC = "RoboRampage/Assets/enemyProjectile.png";
 
+  // Player
   public static final String PLAYER_PLAYERIMG_RSC = "RoboRampage/Assets/player.png";
   public static final String PLAYER_PLAYERIDLELEFT_RSC = "RoboRampage/Assets/playerIdleLeft.png";
   public static final String PLAYER_PLAYERIDLERIGHT_RSC = "RoboRampage/Assets/playerIdleRight.png";
@@ -131,7 +155,8 @@ public class RoboGame extends StateBasedGame {
     addState(new TestState());
     addState(new HowState());
     addState(new LevelState());
-    // Load resources
+
+    /*** RESOURCE LOADING ***/
     // Map Stuff
     ResourceManager.loadImage(TILE_FLOORIMG_RSC);
     ResourceManager.loadImage(TILE_WALLIMG_RSC);
@@ -239,6 +264,17 @@ public class RoboGame extends StateBasedGame {
     }
   }
 
+  /***
+   * This function builds a tilemap from a given string which represents the level layout. The string is one long
+   * uninterrupted string of 100 characters to build a 10x10 map. The String consists of integers which are IDs for
+   * what type each space is. Specifically only works for 100 character strings to build 10x10s. DO NOT GIVE OTHER
+   * STINGS.
+   * Note: This method needs to be modified if different sized maps are made.
+   * @param map
+   *  The string for building the level
+   * @return
+   *  A finished tile map (2D tile array) of constructed tiles
+   */
   public static Tile[][] getTileMap(String map) {
     Tile tileMap[][] = new Tile[10][10];
     char tempMap[] = map.toCharArray();
@@ -255,52 +291,85 @@ public class RoboGame extends StateBasedGame {
     return tileMap;
   }
 
+  /***
+   * Special version of the getDijkstras method (see below). This method builds a new Tile map with new costs to cause
+   * different pathing behavior for ranged enemies who just need line of sight on the player. Each floor tile not in
+   * line of sight of the player has an increased tile cost so the shortest path is to get in sight of the player.
+   * Calls getDijkstras with the new costed graph to get the vertex array.
+   *
+   * @param player
+   *  Location of the player to path to
+   * @param tilemap
+   *  tile map of the level showing its layout.
+   * @return
+   *  A 2D vertex array filled with distances and shortest path directions for the corresponding tilemap.
+   */
   public static Vertex[][] getRangedDijkstras(Player player, Tile[][] tilemap) {
     Vertex path[][];
-    // Build a copy of the tileMap
+
+    // Build a copy of the tileMap so we don't modify it.
     Tile rangedTileMap[][] = new Tile[10][10];
     for(int i = 0; i < 10; i++) {
       for(int j = 0; j < 10; j++) {
         rangedTileMap[i][j] = tilemap[i][j].getCopy();
       }
     }
+
     Coordinate playerLoc = player.getLocation();
-    // Set tiles with line of sight on player to a lower ranged cost
     int x = playerLoc.x;
     int y = playerLoc.y;
+
+    // Set tiles with line of sight on player to a lower ranged cost by traversing in each direction until we hit a wall
     // Update left tiles
     while(rangedTileMap[x-1][y].getID() != 1) {
       rangedTileMap[x-1][y].setCost(1);
       x--;
     }
+
     // Update right tiles
     x = playerLoc.x;
     while(rangedTileMap[x+1][y].getID() != 1) {
       rangedTileMap[x+1][y].setCost(1);
       x++;
     }
+
     // Update above tiles
     x = playerLoc.x;
     while(rangedTileMap[x][y-1].getID() != 1) {
       rangedTileMap[x][y-1].setCost(1);
       y--;
     }
+
     // Update below tiles
     y = playerLoc.y;
     while(rangedTileMap[x][y+1].getID() != 1) {
       rangedTileMap[x][y+1].setCost(1);
       y++;
     }
-    // Use dijkstras on the new tile map.
-    path = getDijkstras(playerLoc.x, playerLoc.y, rangedTileMap);
-    //
 
+    // Use dijkstras on the new tile map to get the path.
+    path = getDijkstras(playerLoc.x, playerLoc.y, rangedTileMap);
     return path;
   }
 
+  /**
+   * Dijkstras Algorithm for a 10x10 map of Tile objects. Will build a 2D Vertex array to be used for pathfinding for
+   * enemies in the game. Only works for 10x10 maps currently
+   * Note: If different maps sizes are ever used, this function needs to be modified.
+   *
+   * @param sourcex
+   *  The x coordinate to path to
+   * @param sourcey
+   *  The y coordinate to path to
+   * @param tileMap
+   *  The constructed tile map showing the map layout
+   * @return
+   *  A completed 2D vertex array, filled with costs and directions to move in.
+   */
   public static Vertex[][] getDijkstras(int sourcex, int sourcey, Tile[][] tileMap) {
     Vertex path[][] = new Vertex[10][10];
     boolean seen[][] = new boolean[10][10];
+
     // Intialize the path and seen arrays
     for(int x = 0; x < 10; x++) {
       for(int y = 0; y < 10; y++) {
@@ -308,18 +377,22 @@ public class RoboGame extends StateBasedGame {
         seen[x][y] = false;
       }
     }
+
     // Set the source distance to 0
     path[sourcex][sourcey].setDistance(0);
 
     // Keep going until all nodes are seen
     while(hasUnseenNodes(seen)) {
+      // Get the node with the current shortest distance
       Coordinate current = shortestDistance(path, seen);
       int x = current.x;
       int y = current.y;
+      // Mark the current node as seen.
       seen[x][y] = true;
       int compare;
       int currentDist = path[x][y].getDistance();
 
+      // Now update tile distances that are adjacent if the distance is shorter then currently recorded.
       // Tile above
       if(y > 0) {
         compare = currentDist + path[x][y-1].getCost();
@@ -356,6 +429,14 @@ public class RoboGame extends StateBasedGame {
     return path;
   }
 
+  /***
+   * Sub method for getDijkstras(). Checks the seen array if there are unseen nodes.
+   * @param seen
+   *  2D array of booleans showing all the currently seen nodes
+   * @return
+   *  true if there are unseen nodes
+   *  false if there aren't
+   */
   private static boolean hasUnseenNodes(boolean seen[][]) {
     for (int x = 0; x < 10; x++) {
       for (int y = 0; y < 10; y++) {
@@ -368,9 +449,19 @@ public class RoboGame extends StateBasedGame {
     return false;
   }
 
+  /***
+   * Sub method for getDijkstras(). Searches the vertex graph for the unseen node with the lowest distance.
+   * @param graph
+   *  Vertex graph being searched
+   * @param seen
+   *  2D boolean array showing which nodes have been marked as seen
+   * @return
+   *  Coordinate of the node in the vertex which has the lowest distance and is unseen.
+   */
   private static Coordinate shortestDistance (Vertex graph[][], boolean seen[][]) {
     Coordinate shortest = new Coordinate(0,0);
     int distance = 100000000;
+    // Iterate through the graph and find the right node.
     for(int x = 0; x < 10; x++) {
       for(int y = 0; y < 10; y++) {
         int newDistance = graph[x][y].getDistance();
