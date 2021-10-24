@@ -274,6 +274,13 @@ class Player extends Entity {
   }
 
   /***
+   * Function that simply restores all the players health back to full.
+   */
+  public void restoreHealth() {
+    health = maxhealth;
+  }
+
+  /***
    * Function to be called to see if the player was hit previously, must be called after every enemy attack.
    * @return
    */
