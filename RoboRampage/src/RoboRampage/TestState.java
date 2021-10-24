@@ -218,7 +218,7 @@ public class TestState extends BasicGameState {
     if(enemyList.isEmpty() && !levelComplete) {
       levelComplete = true;
       levelOverTimer = turnDuration * 8;
-      ResourceManager.getSound(RoboGame.SOUND_EXPLOSION_RSC);
+      ResourceManager.getSound(RoboGame.SOUND_EXPLOSION_RSC).play();
     }
     // If all the enemies are dead, the level is complete.
     if(levelComplete) {

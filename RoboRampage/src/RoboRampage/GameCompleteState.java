@@ -25,6 +25,7 @@ public class GameCompleteState extends BasicGameState {
     container.setSoundOn(true);
     Input input = container.getInput();
     input.clearKeyPressedRecord();
+    ResourceManager.getSound(RoboGame.SOUND_VICTORY_RSC).play();
   }
 
   @Override
