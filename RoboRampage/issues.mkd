@@ -24,12 +24,12 @@
 -- **[24]** Add Gameover Screen popup or screen.
 -- **[25]** Stop enemies from entering the same square and player from entering enemy squares
 -- **[26]** Add Level Complete conditions and transition.
+-- **[27]** Add game complete screen.
 
 ## Open Issues ##
 
 -- **[18]** Add game progression/levels
 -- **[19]** Complete how to play and level select screens
--- **[27]** Add game complete screen.
 
 ## High Bar Items ##
 -- **[30]** Add pick up items: Medkits/Armor

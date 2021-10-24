@@ -459,6 +459,8 @@ public class Enemy extends Entity {
         addAnimation(rightIdle);
         animationPaused = true;
       }
+      // Stop sound effect as well
+      ResourceManager.getSound(RoboGame.SOUND_MELEEMOVE_RSC).stop();
     }
   }
 
@@ -472,6 +474,7 @@ public class Enemy extends Entity {
       removeAnimation(leftIdle);
       addAnimation(activeAnimation);
       animationPaused = false;
+      ResourceManager.getSound(RoboGame.SOUND_MELEEMOVE_RSC).play();
     }
   }
 

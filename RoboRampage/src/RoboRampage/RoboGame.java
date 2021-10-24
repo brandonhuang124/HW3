@@ -31,6 +31,7 @@ public class RoboGame extends StateBasedGame {
   public static final int TESTSTATE = 1;
   public static final int HOWTOPLAYSTATE = 2;
   public static final int LEVELSELECTSTATE = 3;
+  public static final int GAMECOMPLETESTATE = 4;
 
   /*** ASSET PATHS ***/
 
@@ -67,6 +68,7 @@ public class RoboGame extends StateBasedGame {
   public static final String MENU_LEVELSELECTSPLASH_RSC = "RoboRampage/Assets/levelSelectSplash.png";
   public static final String MENU_GAMEOVER_RSC = "RoboRampage/Assets/menuGameover.png";
   public static final String MENU_LEVELCOMPLETE_RSC = "RoboRampage/Assets/menuLevelComplete.png";
+  public static final String MENU_GAMECOMPLETE_RSC = "RoboRampage/Assets/menuGameComplete.png";
 
   // Melee Enemy
   public static final String ENEMY_MELEEIMG_RSC = "RoboRampage/Assets/meleeEnemy.png";
@@ -156,6 +158,7 @@ public class RoboGame extends StateBasedGame {
     addState(new TestState());
     addState(new HowState());
     addState(new LevelState());
+    addState(new GameCompleteState());
 
     /*** RESOURCE LOADING ***/
     // Map Stuff
@@ -230,6 +233,7 @@ public class RoboGame extends StateBasedGame {
     ResourceManager.loadImage(MENU_HOWTOPLAYSPLASH_RSC);
     ResourceManager.loadImage(MENU_GAMEOVER_RSC);
     ResourceManager.loadImage(MENU_LEVELCOMPLETE_RSC);
+    ResourceManager.loadImage(MENU_GAMECOMPLETE_RSC);
     // Music and SFX
     ResourceManager.loadSound(SOUND_EXPLOSION_RSC);
     ResourceManager.loadSound(SOUND_FOOTSTEPS_RSC);
