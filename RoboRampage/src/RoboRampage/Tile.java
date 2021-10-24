@@ -7,6 +7,7 @@ import java.util.Random;
  * Current ids:
  *  0: Floor tile
  *  1: Wall tile
+ *  2: Acid tile
  */
 
 public class Tile {
@@ -39,6 +40,11 @@ public class Tile {
     /*** Wall tile ***/
     if(id == 1) {
       cost = 1000;
+      subid = 0;
+    }
+    /*** Acid tile ***/
+    if(id == 2) {
+      cost = 10;
       subid = 0;
     }
   }

@@ -26,6 +26,9 @@
 -- **[26]** Add Level Complete conditions and transition.
 -- **[27]** Add game complete screen.
 
+## Completed High Bar Items ##
+-- **[35]** Add Stage hazards such as slick tiles/acid tiles
+
 ## Open Issues ##
 
 -- **[18]** Add game progression/levels
@@ -37,7 +40,6 @@
 -- **[32]** Add Beam Weapon
 -- **[33]** Add Smart Weapon
 -- **[34]** Add Explosive Weapon
--- **[35]** Add Stage hazards such as slick tiles/acid tiles
 -- **[36]** Add traps that can be activated by different enemies
 -- **[37]** Add interaction system for doors, chests and levers
 -- **[38]** Diversify enemies
