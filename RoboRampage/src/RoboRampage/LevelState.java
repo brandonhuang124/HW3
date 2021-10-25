@@ -87,6 +87,26 @@ public class LevelState extends BasicGameState {
             ResourceManager.getMusic(RoboGame.MUSIC_MENU_RSC).stop();
             rg.enterState(RoboGame.TESTSTATE);
             break;
+          case 1:
+            ((TestState)game.getState(RoboGame.TESTSTATE)).setLevel(2);
+            ResourceManager.getMusic(RoboGame.MUSIC_MENU_RSC).stop();
+            rg.enterState(RoboGame.TESTSTATE);
+            break;
+          case 2:
+            ((TestState)game.getState(RoboGame.TESTSTATE)).setLevel(3);
+            ResourceManager.getMusic(RoboGame.MUSIC_MENU_RSC).stop();
+            rg.enterState(RoboGame.TESTSTATE);
+            break;
+          case 3:
+            ((TestState)game.getState(RoboGame.TESTSTATE)).setLevel(4);
+            ResourceManager.getMusic(RoboGame.MUSIC_MENU_RSC).stop();
+            rg.enterState(RoboGame.TESTSTATE);
+            break;
+          case 4:
+            ((TestState)game.getState(RoboGame.TESTSTATE)).setLevel(5);
+            ResourceManager.getMusic(RoboGame.MUSIC_MENU_RSC).stop();
+            rg.enterState(RoboGame.TESTSTATE);
+            break;
           default:
             ((StartState)game.getState(RoboGame.STARTUPSTATE)).restartMusic(false);
             rg.enterState(RoboGame.STARTUPSTATE);

@@ -53,6 +53,8 @@ public class RoboGame extends StateBasedGame {
   public static final String UTIL_BULLET_RSC = "RoboRampage/Assets/bullet.png";
   public static final String UTIL_BULLETGONE_RSC = "RoboRampage/Assets/bulletGone.png";
   public static final String UTIL_HUDIMG_RSC = "RoboRampage/Assets/hud.png";
+  public static final String UTIL_HUDREADY_RSC = "RoboRampage/Assets/hudReady.png";
+  public static final String UTIL_HUDWAIT_RSC = "RoboRampage/Assets/hudWait.png";
   public static final String UTIL_GUNDEFAULT_RSC = "RoboRampage/Assets/gunDefault.png";
   public static final String UTIL_GUNBEAM_RSC = "RoboRampage/Assets/gunBeam.png";
   public static final String UTIL_GUNLAUNCHER_RSC = "RoboRampage/Assets/gunLauncher.png";
@@ -231,6 +233,8 @@ public class RoboGame extends StateBasedGame {
     ResourceManager.loadImage(UTIL_RBARCAPLEFT_RSC);
     ResourceManager.loadImage(UTIL_RBARCAPRIGHT_RSC);
     ResourceManager.loadImage(UTIL_HUDIMG_RSC);
+    ResourceManager.loadImage(UTIL_HUDREADY_RSC);
+    ResourceManager.loadImage(UTIL_HUDWAIT_RSC);
     ResourceManager.loadImage(UTIL_GUNDEFAULT_RSC);
     ResourceManager.loadImage(UTIL_GUNBEAM_RSC);
     ResourceManager.loadImage(UTIL_GUNLAUNCHER_RSC);

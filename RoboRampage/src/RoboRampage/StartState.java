@@ -107,6 +107,7 @@ public class StartState extends BasicGameState {
           default:
             System.out.println("Game starting...");
             ResourceManager.getMusic(RoboGame.MUSIC_MENU_RSC).stop();
+            ((TestState)game.getState(RoboGame.TESTSTATE)).setLevel(1);
             rg.enterState(RoboGame.TESTSTATE);
             break;
         }
