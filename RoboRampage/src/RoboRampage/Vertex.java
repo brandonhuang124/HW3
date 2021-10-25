@@ -1,5 +1,14 @@
 package RoboRampage;
 
+/**
+ * Simple class for use in Robo Games pathfinding. Represents a node in a graph for use in dijkstras.
+ *
+ * Has 3 parameters:
+ *  Cost: The cost of moving into this tile
+ *  Distance: The shortest path distance in this node to the desired location (usually the player)
+ *  Direction: The direction an entity needs to move in to follow the shortest path to the desired location.
+ */
+
 public class Vertex {
   private int cost, distance, direction;
 

@@ -9,10 +9,7 @@
 -- **[7]** Add system for enemy actions when in range of player
 -- **[8]** Allow player to enter attack mode and aim
 -- **[9]** Add projectile fire to attack mode
-
-## Open Issues ##
-
--- **[10]** Add enemy defeat after firing
+-- **[10]** Add enemy defeat after firing and Player defeat animation.
 -- **[11]** Add ammo/reload mechanic
 -- **[12]** Add Health/Lives system
 -- **[13]** Add sound/music
@@ -21,16 +18,32 @@
 -- **[16]** Add Ranged enemies
 -- **[17]** Dijkstras for Ranged enemies
 -- **[18]** Add game progression/levels
--- **[19]** Add Enemy attacks
+-- **[19]** Complete how to play and level select screens
 -- **[20]** Fix bug where projectile collision doesn't hit enemy from 2 spaces away (by projectile pause)
+-- **[21]** Add Indicator for player getting hit
+-- **[22]** Cleanup sound and animation timing issues
+-- **[23]** Cleanup comments, organization, and descriptions throughout code.
+-- **[24]** Add Gameover Screen popup or screen.
+-- **[25]** Stop enemies from entering the same square and player from entering enemy squares
+-- **[26]** Add Level Complete conditions and transition.
+-- **[27]** Add game complete screen.
+
+## Completed High Bar Items ##
+-- **[30]** Add pick up items: Medkits/Armor
+-- **[32]** Add Beam Weapon
+-- **[35]** Add Stage hazards such as slick tiles/acid tiles
+
+## Open Issues ##
+
 
 ## High Bar Items ##
--- **[19]** Add pick up items: Medkits/Armor
--- **[20]** Improve ammo system, including ammo pickups
--- **[21]** Add Beam Weapon
--- **[22]** Add Smart Weapon
--- **[23]** Add Explosive Weapon
--- **[24]** Add Stage hazards such as slick tiles/acid tiles
--- **[25]** Add traps that can be activated by different enemies
--- **[26]** Add interaction system for doors, chests and levers
--- **[27]** Diversify enemies
+-- **[31]** Improve ammo system, including ammo pickups
+-- **[33]** Add Smart Weapon
+-- **[34]** Add Explosive Weapon
+-- **[36]** Add traps that can be activated by different enemies
+-- **[37]** Add interaction system for doors, chests and levers
+-- **[38]** Diversify enemies
+
+## Known Issues/Minor Bugs ##
+-- Animation for melee enemies play a single frame before stopping if a projectile is in mid air fired by a ranged enemy
+who was spawned before them. Currently avoiding this by ensuring melee enemies are later in the list then ranged ones.

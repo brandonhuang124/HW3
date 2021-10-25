@@ -3,31 +3,60 @@ package RoboRampage;
 import jig.Entity;
 import jig.ResourceManager;
 import jig.Vector;
+import org.newdawn.slick.Animation;
 
 import java.util.LinkedList;
 
 public class Projectile extends Entity {
   private float speed;
   private Vector velocity;
+  private Animation image;
+  int id;
 
-  public Projectile (Coordinate loc, int direction) {
+  public Projectile (Coordinate loc, int direction, int type) {
     float x = (loc.x * 75f) + 37;
     float y = (loc.y * 75f) + 37;
-    speed = 1f;
+    speed = .75f;
     this.setX(x);
     this.setY(y);
+    id = type;
+    // Player Projectile
+    if(id == 1) {
+      image = new Animation(ResourceManager.getSpriteSheet(
+          RoboGame.PLAYER_PROJECTILEDEFAULT_RSC, 25, 25), 0, 0, 3, 0,
+          true, 75, true);
+    }
+    // Enemy Projectile
+    else if(id == 2) {
+      image = new Animation(ResourceManager.getSpriteSheet(
+          RoboGame.ENEMY_PROJECTILE_RSC, 25, 25), 0, 0, 3, 0,
+          true, 75, true);
+    }
+    else if(id == 3) {
+      switch(direction) {
+        case 4:
+        case 6:
+          image = new Animation(ResourceManager.getSpriteSheet(
+              RoboGame.PLAYER_BEAMHORIZONTAL_RSC, 50, 50), 0, 0, 3, 0,
+              true, 75, true);
+          break;
+        default:
+          image = new Animation(ResourceManager.getSpriteSheet(
+              RoboGame.PLAYER_BEAMVERTICAL_RSC, 50, 50), 0, 0, 3, 0,
+              true, 75, true);
+          break;
+      }
+    }
+    addAnimation(image);
+    image.setLooping(true);
     switch(direction) {
       case 2: velocity = new Vector(0f, speed);
-              addImageWithBoundingBox(ResourceManager.getImage(RoboGame.PLAYER_PROJECTILEDOWN_RSC));
               break;
       case 4: velocity = new Vector(-speed, 0f);
-              addImageWithBoundingBox(ResourceManager.getImage(RoboGame.PLAYER_PROJECTILELEFT_RSC));
               break;
       case 6: velocity = new Vector(speed, 0f);
-              addImageWithBoundingBox(ResourceManager.getImage(RoboGame.PLAYER_PROJECTILERIGHT_RSC));
               break;
       default: velocity = new Vector(0f, -speed);
-              addImageWithBoundingBox(ResourceManager.getImage(RoboGame.PLAYER_PROJECTILEUP_RSC));
                break;
     }
   }
@@ -39,17 +68,16 @@ public class Projectile extends Entity {
   }
 
   // Returns (-1,-1) if no collision happened.
-  public Coordinate enemyCollision (LinkedList<Enemy> enemyList) {
-    Coordinate collisionLoc = new Coordinate(-1,-1);
+  public Enemy enemyCollision (LinkedList<Enemy> enemyList) {
+    Enemy enemyHit = null;
     Coordinate thisCoord = getCoord();
     for(Enemy enemy : enemyList) {
       if(thisCoord.x == enemy.getLocation().x && thisCoord.y == enemy.getLocation().y) {
-        collisionLoc.x = thisCoord.x;
-        collisionLoc.y = thisCoord.y;
+        enemyHit = enemy;
         break;
       }
     }
-    return collisionLoc;
+    return enemyHit;
   }
 
   public boolean wallCollision (Tile[][] tilemap) {
@@ -58,7 +86,19 @@ public class Projectile extends Entity {
     return false;
   }
 
+  public boolean playerCollision(Player player) {
+    Coordinate location = getCoord();
+    Coordinate playerLoc = player.getLocation();
+    if(location.x == playerLoc.x && location.y == playerLoc.y) {
+      player.modHealth(-1);
+      return true;
+    }
+    return false;
+  }
+
   public void update(final int delta) {
     translate(velocity.scale(delta));
   }
+
+  public int getID() { return id;}
 }
