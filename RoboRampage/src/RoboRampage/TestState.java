@@ -104,7 +104,12 @@ public class TestState extends BasicGameState {
     }
 
     // Current Gun x:410 y:765
-    g.drawImage(ResourceManager.getImage(RoboGame.UTIL_GUNDEFAULT_RSC), 410, 765);
+    if(player.getWeapon() == 1) {
+      g.drawImage(ResourceManager.getImage(RoboGame.UTIL_GUNDEFAULT_RSC), 410, 765);
+    }
+    else if (player.getWeapon() == 2) {
+      g.drawImage(ResourceManager.getImage(RoboGame.UTIL_GUNBEAM_RSC), 410, 775);
+    }
 
     // Ammo counter x: 520 y: 782 width:13
     int currentAmmo = player.getAmmo();
@@ -148,6 +153,10 @@ public class TestState extends BasicGameState {
       if(pickup.getId() == 1) {
         Coordinate loc = pickup.getLocation();
         g.drawImage(ResourceManager.getImage(RoboGame.UTIL_PICKUPARMOR_RSC), loc.x * 75, loc.y * 75);
+      }
+      else if(pickup.getId() ==2) {
+        Coordinate loc = pickup.getLocation();
+        g.drawImage(ResourceManager.getImage(RoboGame.UTIL_PICKUPBEAMGUN_RSC), loc.x * 75, loc.y * 75);
       }
     }
     // Render Entities
@@ -216,7 +225,9 @@ public class TestState extends BasicGameState {
     if(enemyList.isEmpty() && !levelComplete) {
       levelComplete = true;
       levelOverTimer = turnDuration * 8;
+      ResourceManager.getSound(RoboGame.SOUND_EXPLOSION_RSC).play();
     }
+
     // If all the enemies are dead, the level is complete.
     if(levelComplete) {
       System.out.println(levelOverTimer);
@@ -234,6 +245,7 @@ public class TestState extends BasicGameState {
       levelOverTimer -= delta;
       return;
     }
+
     // Check for projectiles, noone can take actions if projectiles are in the air.
     if (!projectileList.isEmpty()) {
       // Pause enemy move animations
@@ -257,6 +269,20 @@ public class TestState extends BasicGameState {
             System.out.println("Projectile hit enemy at: " + enemyHit.getCoordinate().x + ", " + enemyHit.getCoordinate().y);
             projectileList.remove(projectile);
             enemyDead = enemyHit.damage(5);
+            if(enemyDead) waitInputDeathAnimation();
+          }
+        }
+        // If a beam projectile collision,
+        else if(projectile.getID() == 3) {
+          if (projectile.wallCollision(tileMap)) {
+            System.out.println("Projectile hit wall");
+            projectileList.remove(projectile);
+          }
+          // Enemy collision
+          Enemy enemyHit = projectile.enemyCollision(enemyList);
+          if(enemyHit != null) {
+            System.out.println("Projectile hit enemy at: " + enemyHit.getCoordinate().x + ", " + enemyHit.getCoordinate().y);
+            enemyDead = enemyHit.damage(10);
             if(enemyDead) waitInputDeathAnimation();
           }
         }
@@ -318,8 +344,14 @@ public class TestState extends BasicGameState {
         }
         else {
           attackReady = false;
-          projectileList.add(new Projectile(playerLoc, aimDirection,1));
-          player.modAmmo(-1);
+          if(player.getWeapon() == 1) {
+            projectileList.add(new Projectile(playerLoc, aimDirection,1));
+            player.modAmmo(-1);
+          }
+          else if(player.getWeapon() == 2) {
+            projectileList.add(new Projectile(playerLoc, aimDirection, 3));
+            player.modAmmo(-1);
+          }
           waitInput();
           System.out.println("Pew Pew");
           player.shoot(aimDirection);
@@ -419,9 +451,12 @@ public class TestState extends BasicGameState {
           // If its a armor pickup
           if(item.getId() == 1) {
             player.restoreHealth();
-            // Play the sound
-            ResourceManager.getSound(RoboGame.SOUND_POWERUP_RSC).play();
           }
+          else if(item.getId() == 2) {
+            player.changeWeapon(2);
+          }
+          // Play the sound
+          ResourceManager.getSound(RoboGame.SOUND_POWERUP_RSC).play();
         }
       }
       // Clear any items that need clearing.
@@ -493,11 +528,12 @@ public class TestState extends BasicGameState {
   private void initLists() {
     enemyList = new LinkedList<Enemy>();
     enemyList.add(new Enemy(375,75,5,1,1));
-    enemyList.add(new Enemy(525,75,7 ,1,1));
+    enemyList.add(new Enemy(525,75,7 ,1,2));
     enemyList.add(new Enemy(600, 75, 8, 1, 2));
     projectileList = new LinkedList<Projectile>();
     pickupList = new LinkedList<PickupItem>();
     pickupList.add(new PickupItem(2,4,1));
+    pickupList.add(new PickupItem(2,5,2));
   }
 
   /***

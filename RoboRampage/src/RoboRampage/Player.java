@@ -4,6 +4,7 @@ import jig.Entity;
 import jig.ResourceManager;
 import jig.Vector;
 import org.newdawn.slick.Animation;
+import org.newdawn.slick.Sound;
 
 /***
  * Enitity class for reprsenting the player character. Tracks player statistics such as health and ammo.
@@ -12,6 +13,9 @@ import org.newdawn.slick.Animation;
  *  location: Coordinate in the tile map where the player is located.
  *  ammo/maxammo: Ammo tracking
  *  health/maxhealth: Health tracking
+ *  currentWeapon: Tracks which weapon is equipped. Possible ids:
+ *    1: default gun
+ *    2: beam weapon
  *
  *  Methods:
  *    moveUp()
@@ -34,8 +38,10 @@ class Player extends Entity {
   private Coordinate location;
   private int ammo, maxammo;
   private int health, maxhealth;
+  private int currentWeapon;
   private Animation moveLeft, moveRight, shootLeft, shootRight, reloadLeft, reloadRight, idleLeft, idleRight,
       defeatRight, defeatLeft, activeAnim, hitIndicator;
+  private Sound shootSound;
   private boolean faceRight, gotHit;
 
   /***
@@ -60,6 +66,7 @@ class Player extends Entity {
     maxhealth = 10;
     health = maxhealth;
     ammo = maxammo;
+    currentWeapon = 1;
     // get the animations.
     idleLeft = new Animation(ResourceManager.getSpriteSheet(
         RoboGame.PLAYER_PLAYERIDLELEFT_RSC, 75, 75), 0, 0, 0, 0,
@@ -94,6 +101,8 @@ class Player extends Entity {
     hitIndicator = new Animation(ResourceManager.getSpriteSheet(
         RoboGame.PLAYER_HITINDICATOR_RSC, 75, 75), 0, 0, 1, 0,
         true, 300, true);
+    // Set sounds
+    shootSound = ResourceManager.getSound(RoboGame.SOUND_LASER1_RSC);
     // Set animation params and start with a right idle animation
     activeAnim = idleRight;
     addAnimation(idleRight);
@@ -366,6 +375,18 @@ class Player extends Entity {
         }
         break;
     }
-    ResourceManager.getSound(RoboGame.SOUND_LASER1_RSC).play();
+    // Play the shooty shoot sound based on the current weapon.
+    if(currentWeapon == 1) {
+      ResourceManager.getSound(RoboGame.SOUND_LASER1_RSC).play();
+    }
+    else if(currentWeapon == 2) {
+      ResourceManager.getSound(RoboGame.SOUND_LASER3_RSC).play();
+    }
+  }
+
+  public int getWeapon() { return currentWeapon; }
+
+  public void changeWeapon(int newWeapon) {
+    currentWeapon = newWeapon;
   }
 }
