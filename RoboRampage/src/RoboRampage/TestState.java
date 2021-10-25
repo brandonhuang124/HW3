@@ -140,6 +140,14 @@ public class TestState extends BasicGameState {
     else
       g.drawImage(ResourceManager.getImage(RoboGame.UTIL_RBARCAPRIGHT_RSC), 94 + (25 * (maxHealth - 1)), 795);
 
+    // Hud ready indicator
+    if(inputReady) {
+      g.drawImage(ResourceManager.getImage(RoboGame.UTIL_HUDREADY_RSC), 600, 770);
+    }
+    else {
+      g.drawImage(ResourceManager.getImage(RoboGame.UTIL_HUDWAIT_RSC), 600, 770);
+    }
+
     // Render item pickups
     for(PickupItem pickup : pickupList) {
       // If its a armor pickup

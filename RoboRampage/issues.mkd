@@ -17,6 +17,7 @@
 -- **[15]** Add menu splash
 -- **[16]** Add Ranged enemies
 -- **[17]** Dijkstras for Ranged enemies
+-- **[18]** Add game progression/levels
 -- **[19]** Complete how to play and level select screens
 -- **[20]** Fix bug where projectile collision doesn't hit enemy from 2 spaces away (by projectile pause)
 -- **[21]** Add Indicator for player getting hit
@@ -34,7 +35,6 @@
 
 ## Open Issues ##
 
--- **[18]** Add game progression/levels
 
 ## High Bar Items ##
 -- **[31]** Improve ammo system, including ammo pickups
@@ -46,4 +46,4 @@
 
 ## Known Issues/Minor Bugs ##
 -- Animation for melee enemies play a single frame before stopping if a projectile is in mid air fired by a ranged enemy
-who was spawned before them.
+who was spawned before them. Currently avoiding this by ensuring melee enemies are later in the list then ranged ones.
