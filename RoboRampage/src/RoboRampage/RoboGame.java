@@ -9,17 +9,74 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
 /**
- * Robo Recall, a turn based robot shooter.
+ * Robo Rampage, a turn based robot shooter.
+ *
+ * Description:
+ * Robo Rampage is a turn based game where the play must defeat all the robots in the level while staying alive. The
+ * player can move, shoot, reload, or wait on their turn. After their turn all the enemies on the board can move or
+ * attack the player. The player has a limited amount of shots they can take before they must reload, defaulting to 5.
+ * The player can pickup powerups to heal or empower their attacks to help complete the level. To beat the level, the
+ * player must think a few steps ahead and think how the enemies will move on their turn. If the player defeats all the
+ * robots by shooting them, they progress to the next level. If their health drops to 0, a gameover occurs.
+ *
+ * Controls:
+ *  Menu:
+ *    wasd: to make a menu selection
+ *    space: to select the current selection
+ *  Game:
+ *    wasd: to move in a direction
+ *    r: to reload the weapon
+ *    q: to skip turn
+ *    space: Start an attack action
+ *      After starting attack action:
+ *        wasd: aim attack
+ *        q: cancel attack
+ *        space: confirm attack
+ *
+ * States:
+ * There are 5 states in the game:
+ *  Start State: What opens when the game starts. This is the main menu and title screen. The player can select one of
+ *  3 options on the menu: Start to enter the main game state, Level Select to enter the level select state, or How To
+ *  Play to enter the how to play state.
+ *
+ *  Level Select State: Another menu state where the player can select which level to start in, rather than starting at
+ *  the beginning of the game.
+ *
+ *  How To Play State: Another menu state where the player can see a brief list of controls and tips on playing the
+ *  game. The player can only return to the Start State menu from here.
+ *
+ *  Test State (Main Game State): This state is the main gameplay state. Here all the logic for how the game is played
+ *  is contained and the levels are created for the player to interact with. The player controls a character who can
+ *  move around and shoot projectiles which disappear when colliding with walls or enemies. The projectiles damaage
+ *  enemies and if the enemies take enough damage, are destroyed. There are two types of enemies, a melee one who can
+ *  attack the player if they are in an adjacent space, and a ranged one who can attack the player if they have a clear
+ *  line to them. Melee enemies path directly towards the player and ranged path to get line of sight on the player.
+ *  Both use Dijkstras Algorithm to find a path to the player. The player can also pickup powerups to help them.
+ *  Currently there are two powerups, an armor powerup which restores the player to full health and a beam weapon
+ *  powerup which improves the players weapon with increased damage and piercing projectiles for the rest of the level.
+ *  The player can only shoot 5 times before they must reload their weapon, costing their turn. The player has 10 hit
+ *  points which are shown in the HUD along with their ammo cound and current weapon. If they lose all their hitpoints,
+ *  gameover occurs. The player must either defeat all the robots in each level to enter the Game Complete State or
+ *  lose all their health in a level where a gameover message is displayed and the player is returned to the Start
+ *  State.
+ *
+ *  Game Complete State: After level 5 of the Test State is complete, the player is taken to this screen, where a
+ *  congratulations and thank you message is given. The player can press esc to exit the game, or space to reenter the
+ *  Start State and main menu.
  *
  *
- * STATE LIST HERE
+ * Graphical Asset Credits:
+ *  Enemy, character, and tile assets courtesy of Pupkin and modified by Brandon Huang:
+ *   https://trevor-pupkin.itch.io/tech-dungeon-roguelite
+ *  Armor/Weapon Icons courtesy of Jere Sikstus and modified by Brandon Huand:
+ *    https://jeresikstus.itch.io/cyberpunk-items-16x16?download
+ *  All Other graphical assets were made by Brandon Huang.
  *
- * GAME DESCRIPTION HERE
- *
- * GRAPHIC CREDITS HERE
- *
- * SOUND CREDITS HERE
- *
+ * Sound Credits:
+ *  Sound effects were obtained on zapsplat.com coutesy of the following uploaders:
+ *   zapsplat.com
+ *   PMSFX: https://www.zapsplat.com/author/pmsfx/
+ *   and Epic Stock Media: https://www.zapsplat.com/author/epic-stock-media/
  *
  * @author Brandon Huang,
  *
