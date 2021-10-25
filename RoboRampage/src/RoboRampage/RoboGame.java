@@ -58,6 +58,7 @@ public class RoboGame extends StateBasedGame {
   public static final String UTIL_GUNLAUNCHER_RSC = "RoboRampage/Assets/gunLauncher.png";
   public static final String UTIL_PICKUPARMOR_RSC = "RoboRampage/Assets/pickupArmor.png";
   public static final String UTIL_PICKUPAMMO_RSC = "RoboRampage/Assets/pickupAmmo.png";
+  public static final String UTIL_PICKUPBEAMGUN_RSC = "RoboRampage/Assets/pickupBeamGun.png";
 
   // Menu
   public static final String MENU_SPLASH_RSC = "RoboRampage/Assets/menuSplash.png";
@@ -112,6 +113,8 @@ public class RoboGame extends StateBasedGame {
   public static final String PLAYER_PROJECTILERIGHT_RSC = "RoboRampage/Assets/projectile_right.png";
   public static final String PLAYER_PROJECTILEUP_RSC = "RoboRampage/Assets/projectile_up.png";
   public static final String PLAYER_HITINDICATOR_RSC = "RoboRampage/Assets/playerHitIndicator.png";
+  public static final String PLAYER_BEAMHORIZONTAL_RSC = "RoboRampage/Assets/playerProjectileBeamHorizontal.png";
+  public static final String PLAYER_BEAMVERTICAL_RSC = "RoboRampage/Assets/playerProjectileBeamVertical.png";
 
   // Sounds
   public static final String SOUND_EXPLOSION_RSC = "RoboRampage/Assets/Sounds/explosion.wav";
@@ -188,6 +191,8 @@ public class RoboGame extends StateBasedGame {
     ResourceManager.loadImage(PLAYER_PROJECTILELEFT_RSC);
     ResourceManager.loadImage(PLAYER_PROJECTILERIGHT_RSC);
     ResourceManager.loadImage(PLAYER_PROJECTILEUP_RSC);
+    ResourceManager.loadImage(PLAYER_BEAMHORIZONTAL_RSC);
+    ResourceManager.loadImage(PLAYER_BEAMVERTICAL_RSC);
     ResourceManager.loadImage(PLAYER_HITINDICATOR_RSC);
     // Enemy Sheets
       // Melee
@@ -226,6 +231,7 @@ public class RoboGame extends StateBasedGame {
     ResourceManager.loadImage(UTIL_GUNLAUNCHER_RSC);
     ResourceManager.loadImage(UTIL_PICKUPARMOR_RSC);
     ResourceManager.loadImage(UTIL_PICKUPAMMO_RSC);
+    ResourceManager.loadImage(UTIL_PICKUPBEAMGUN_RSC);
     // Menu Stuff
     ResourceManager.loadImage(MENU_SPLASH_RSC);
     ResourceManager.loadImage(MENU_ARROW_RSC);

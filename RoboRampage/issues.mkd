@@ -28,6 +28,7 @@
 
 ## Completed High Bar Items ##
 -- **[30]** Add pick up items: Medkits/Armor
+-- **[32]** Add Beam Weapon
 -- **[35]** Add Stage hazards such as slick tiles/acid tiles
 
 ## Open Issues ##
@@ -37,7 +38,6 @@
 
 ## High Bar Items ##
 -- **[31]** Improve ammo system, including ammo pickups
--- **[32]** Add Beam Weapon
 -- **[33]** Add Smart Weapon
 -- **[34]** Add Explosive Weapon
 -- **[36]** Add traps that can be activated by different enemies

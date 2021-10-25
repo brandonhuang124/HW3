@@ -27,10 +27,25 @@ public class Projectile extends Entity {
           true, 75, true);
     }
     // Enemy Projectile
-    else if(id ==2) {
+    else if(id == 2) {
       image = new Animation(ResourceManager.getSpriteSheet(
           RoboGame.ENEMY_PROJECTILE_RSC, 25, 25), 0, 0, 3, 0,
           true, 75, true);
+    }
+    else if(id == 3) {
+      switch(direction) {
+        case 4:
+        case 6:
+          image = new Animation(ResourceManager.getSpriteSheet(
+              RoboGame.PLAYER_BEAMHORIZONTAL_RSC, 50, 50), 0, 0, 3, 0,
+              true, 75, true);
+          break;
+        default:
+          image = new Animation(ResourceManager.getSpriteSheet(
+              RoboGame.PLAYER_BEAMVERTICAL_RSC, 50, 50), 0, 0, 3, 0,
+              true, 75, true);
+          break;
+      }
     }
     addAnimation(image);
     image.setLooping(true);
