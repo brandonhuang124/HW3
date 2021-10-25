@@ -41,8 +41,28 @@ public class LevelState extends BasicGameState {
   public void render(GameContainer container, StateBasedGame stateBasedGame, Graphics g) throws SlickException {
     g.drawImage(ResourceManager.getImage(RoboGame.MENU_LEVELSELECTSPLASH_RSC), 0, 0);
     g.drawImage(ResourceManager.getImage(RoboGame.MENU_BACK_RSC), 30, 750);
+    g.drawImage(ResourceManager.getImage(RoboGame.MENU_LEVEL1_RSC), 246, 250);
+    g.drawImage(ResourceManager.getImage(RoboGame.MENU_LEVEL2_RSC), 246, 320);
+    g.drawImage(ResourceManager.getImage(RoboGame.MENU_LEVEL3_RSC), 246, 390);
+    g.drawImage(ResourceManager.getImage(RoboGame.MENU_LEVEL4_RSC), 246, 460);
+    g.drawImage(ResourceManager.getImage(RoboGame.MENU_LEVEL5_RSC), 246, 530);
     if(arrowBlink) {
       switch(select) {
+        case 0:
+          g.drawImage(ResourceManager.getImage(RoboGame.MENU_ARROW_RSC), 554, 260);
+          break;
+        case 1:
+          g.drawImage(ResourceManager.getImage(RoboGame.MENU_ARROW_RSC), 554, 330);
+          break;
+        case 2:
+          g.drawImage(ResourceManager.getImage(RoboGame.MENU_ARROW_RSC), 554, 400);
+          break;
+        case 3:
+          g.drawImage(ResourceManager.getImage(RoboGame.MENU_ARROW_RSC), 554, 470);
+          break;
+        case 4:
+          g.drawImage(ResourceManager.getImage(RoboGame.MENU_ARROW_RSC), 554, 540);
+          break;
         default:
           g.drawImage(ResourceManager.getImage(RoboGame.MENU_ARROW_RSC), 224, 760);
           break;
@@ -62,6 +82,11 @@ public class LevelState extends BasicGameState {
       // Once wait period is over
       if(timer <= 0) {
         switch(select) {
+          case 0:
+            ((TestState)game.getState(RoboGame.TESTSTATE)).setLevel(1);
+            ResourceManager.getMusic(RoboGame.MUSIC_MENU_RSC).stop();
+            rg.enterState(RoboGame.TESTSTATE);
+            break;
           default:
             ((StartState)game.getState(RoboGame.STARTUPSTATE)).restartMusic(false);
             rg.enterState(RoboGame.STARTUPSTATE);
@@ -88,8 +113,8 @@ public class LevelState extends BasicGameState {
       ResourceManager.getSound(RoboGame.SOUND_MENUACTIVATE_RSC).play();
     }
     // Mod select by 3 to snap back to top, set negatives to 2 to snap to the bottom when going up at the top.
-    select = select % 1;
-    if(select < 0) select = 0;
+    select = select % 6;
+    if(select < 0) select = 5;
 
   }
 }
