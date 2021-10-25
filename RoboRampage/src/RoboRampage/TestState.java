@@ -52,18 +52,11 @@ public class TestState extends BasicGameState {
   @Override
   public void enter(GameContainer container, StateBasedGame game) {
     turnDuration = 300;
-    path = null;
-    rangedPath = null;
-    inputReady = true;
-    enemyTurn = enemyMoveWait = attackReady = gameover = enemyDead = levelComplete = dijkstrasDisplay = rangedDijkstrasDisplay = false;
-    inputWaitTimer = levelOverTimer = 0;
+    container.setSoundOn(true);
     RoboGame rg = (RoboGame)game;
     player = new Player(75, 75, 1, 1);
-    container.setSoundOn(true);
     crosshair = new Crosshair(0,0);
-    initLists();
-    tileMap = RoboGame.getTileMap
-        ("1111111111102000000110111111011000000001100011000110001100011010000101101000010110100001011111111111");
+    nextLevel();
   }
 
   @Override
@@ -234,13 +227,11 @@ public class TestState extends BasicGameState {
       if(levelOverTimer <= 0) {
         // Check if the last level was completed.
         level++;
-        if(level == 2) {
+        if(level == 6) {
           rg.enterState(RoboGame.GAMECOMPLETESTATE);
           return;
         }
         nextLevel();
-        ((StartState)game.getState(RoboGame.STARTUPSTATE)).restartMusic(true);
-        rg.enterState(RoboGame.STARTUPSTATE);
       }
       levelOverTimer -= delta;
       return;
@@ -479,6 +470,7 @@ public class TestState extends BasicGameState {
     /*** IN BETWEEN TURNS SECTION ***/
     // Here the wait timer is countdown and entitys are snapped back into the grid if they strayed.
     else {
+      input.clearKeyPressedRecord();
       inputWaitTimer -= delta;
       // Offset position back into the grid when done moving
       if(inputWaitTimer <= 0) {
@@ -527,13 +519,8 @@ public class TestState extends BasicGameState {
    */
   private void initLists() {
     enemyList = new LinkedList<Enemy>();
-    enemyList.add(new Enemy(375,75,5,1,1));
-    enemyList.add(new Enemy(525,75,7 ,1,2));
-    enemyList.add(new Enemy(600, 75, 8, 1, 2));
     projectileList = new LinkedList<Projectile>();
     pickupList = new LinkedList<PickupItem>();
-    pickupList.add(new PickupItem(2,4,1));
-    pickupList.add(new PickupItem(2,5,2));
   }
 
   /***
@@ -564,8 +551,95 @@ public class TestState extends BasicGameState {
     level = newLevel;
   }
 
+  /***
+   * Internal function that builds the level based on the current level.
+   */
   private void nextLevel() {
-    // Reset player values and positions
+    // Reset various fields to restart the level.
+    path = null;
+    rangedPath = null;
+    inputReady = true;
+    enemyTurn = enemyMoveWait = attackReady = gameover = enemyDead = levelComplete = dijkstrasDisplay = rangedDijkstrasDisplay = false;
+    inputWaitTimer = levelOverTimer = 0;
+    player.changeWeapon(1);
+    initLists();
+    tileMap = RoboGame.getTileMap
+        ("1111111111102000000110111111011000000001100011000110001100011010000101101000010110100001011111111111");
+    // Builds for different levels.
+    if(level == 1) {
+      tileMap = RoboGame.getTileMap
+          ("1111111111100100011110010001111101000111100010111110000000011000110011111110000111111000011111111111");
+      player.resetPlayer(1,1);
+      enemyList.add(new Enemy(6,1,1));
+      enemyList.add(new Enemy(2,6,1));
+      enemyList.add(new Enemy(8,5,1));
+      enemyList.add(new Enemy(6,8,1));
+    }
+    else if (level == 2) {
+      tileMap = RoboGame.getTileMap
+          ("1111111111102000000110111111011000000001111100111110000000011011001101101100110110000000011111111111");
+      player.resetPlayer(1,1);
+      pickupList.add(new PickupItem(4,4,1));
+      enemyList.add(new Enemy(7,1,1));
+      enemyList.add(new Enemy(3,5,1));
+      enemyList.add(new Enemy(8,3,2));
+      enemyList.add(new Enemy(8,5,2));
+      enemyList.add(new Enemy(1,8,2));
+    }
+    else if (level == 3) {
+      tileMap = RoboGame.getTileMap
+          ("1111111111100000001110001000111111121111111110111110001011111000101001100010100110000000011111111111");
+      player.resetPlayer(1,1);
+      pickupList.add(new PickupItem(3,2,2));
+      pickupList.add(new PickupItem(7,1,1));
+      enemyList.add(new Enemy(2,8,1));
+      enemyList.add(new Enemy(3,8,1));
+      enemyList.add(new Enemy(7,8,1));
+      enemyList.add(new Enemy(8,8,1));
+      enemyList.add(new Enemy(1,6,2));
+      enemyList.add(new Enemy(2,7,2));
+      enemyList.add(new Enemy(6,2,2));
+    }
+    else if (level == 4) {
+      tileMap = RoboGame.getTileMap
+          ("1111111111100111000110010000011001010001110001000111011111111000110001100000000110001100011111111111");
+      player.resetPlayer(1,1);
+      pickupList.add(new PickupItem(6,2,2));
+      pickupList.add(new PickupItem(3,6,1));
+      enemyList.add(new Enemy(4,4,1));
+      enemyList.add(new Enemy(7,4,1));
+      enemyList.add(new Enemy(8,3,1));
+      enemyList.add(new Enemy(8,7,1));
+      enemyList.add(new Enemy(8,4,2));
+      enemyList.add(new Enemy(3,7,2));
+      enemyList.add(new Enemy(8,6,2));
+      enemyList.add(new Enemy(8,8,2));
+    }
+    else if (level == 5) {
+      tileMap = RoboGame.getTileMap
+          ("1111111111111000011111100000111011010001101000100110000020011010001001100101000111000000111111111111");
+      player.resetPlayer(4,5);
+      pickupList.add(new PickupItem(3,4,1));
+      pickupList.add(new PickupItem(2,8,2));
+      enemyList.add(new Enemy(4,7,1));
+      enemyList.add(new Enemy(2,7,1));
+      enemyList.add(new Enemy(4,2,1));
+      enemyList.add(new Enemy(8,5,1));
+      enemyList.add(new Enemy(1,4,2));
+      enemyList.add(new Enemy(7,8,2));
+      enemyList.add(new Enemy(4,1,2));
+      enemyList.add(new Enemy(7,3,2));
+    }
+    else {
+      tileMap = RoboGame.getTileMap
+          ("1111111111102000000110111111011000000001100011000110001100011010000101101000010110100001011111111111");
+      player.resetPlayer(1,1);
+      pickupList.add(new PickupItem(2,4,1));
+      pickupList.add(new PickupItem(2,5,2));
+      enemyList.add(new Enemy(5,1,1));
+      enemyList.add(new Enemy(7 ,1,2));
+      enemyList.add(new Enemy(8, 1, 2));
+    }
     // block the screen while new level is being built
   }
 }

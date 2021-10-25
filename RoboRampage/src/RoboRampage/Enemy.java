@@ -39,10 +39,6 @@ public class Enemy extends Entity {
 
   /***
    * Constructor.
-   * @param x
-   *  x coordinate in absolute coordinates to spawn the enemy in
-   * @param y
-   *  y coodrinate in absolute coordinate to spawn the enemy in
    * @param xcoord
    *  x coordinate in tilemap coordinates to spawn the enemy in
    * @param ycoord
@@ -52,9 +48,9 @@ public class Enemy extends Entity {
    *    1: Melee robot enemy type
    *    2: Ranged robot enemy type
    */
-  public Enemy(final float x, final float y, int xcoord, int ycoord, int newid) {
+  public Enemy(int xcoord, int ycoord, int newid) {
     // Set paramaters
-    super( x + 37, y + 37);
+    super( (xcoord * 75) + 37, (ycoord * 75) + 37);
     location = new Coordinate(xcoord, ycoord);
     speed = 0.25f;
     velocity = new Vector(0f, 0f);
@@ -174,9 +170,9 @@ public class Enemy extends Entity {
           moveDown();
         if(direction == 4 && spaceClear(this.location.x - 1, this.location.y, enemyList))
           moveLeft();
-        if(direction == 6 && spaceClear(this.location.x, this.location.y - 1, enemyList))
+        if(direction == 6 && spaceClear(this.location.x + 1, this.location.y, enemyList))
           moveRight();
-        if(direction == 8 && spaceClear(this.location.x + 1, this.location.y, enemyList))
+        if(direction == 8 && spaceClear(this.location.x, this.location.y - 1, enemyList))
           moveUp();
         moveSound.play();
       }
@@ -227,7 +223,7 @@ public class Enemy extends Entity {
         if(playerToTheLeft) {
           attackDirection = 4;
           // Travel through the tile map until we get to the player, checking if there is a wall on the way
-          for(int x = this.location.x; x > playerLoc.y; x--) {
+          for(int x = this.location.x; x > playerLoc.x; x--) {
             if(tileMap[x][this.location.y].getID() == 1) {
               lineOfSight = false;
               break;
@@ -256,9 +252,9 @@ public class Enemy extends Entity {
           moveDown();
         if(direction == 4 && spaceClear(this.location.x - 1, this.location.y, enemyList))
           moveLeft();
-        if(direction == 6 && spaceClear(this.location.x, this.location.y - 1, enemyList))
+        if(direction == 6 && spaceClear(this.location.x + 1, this.location.y, enemyList))
           moveRight();
-        if(direction == 8 && spaceClear(this.location.x + 1, this.location.y, enemyList))
+        if(direction == 8 && spaceClear(this.location.x, this.location.y - 1, enemyList))
           moveUp();
         moveSound.play();
       }
