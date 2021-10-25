@@ -1,0 +1,32 @@
+Robo Rampage, a game by Brandon Huang For WSU CS 447 Game Design.
+
+** Dijkstras algorithm used for pathfinding.
+
+Controls:
+  Menu:
+    wasd: to make a menu selection
+    space: to select the current selection
+  Game:
+    wasd: to move in a direction
+    r: to reload the weapon
+    q: to skip turn
+    space: Start an attack action
+      After starting attack action:
+        wasd: aim attack
+        q: cancel attack
+        space: confirm attack
+    9: Enable Dijkstras overlay for melee enemy paths.
+    0: Enable Dijkstras overlay for ranged enemy paths.
+
+    **note: For dijkstras overlay, the top number represents the direction that a unit should travel in to reach the
+    player along the shortest route and the bottom number represents the cost to reach there from the players space.
+    Top number directional code:
+      2: Down, 4: Left 6: Right 8: Up
+
+  Post Game Screen:
+    esc: Exits the game
+    space: Return to main menu.
+
+Tips:
+  Level 5 is beatable, its just very hard. Tested it myself and took several tries. Hint: Grab the beam weapon when you
+  can, it helps a lot.
