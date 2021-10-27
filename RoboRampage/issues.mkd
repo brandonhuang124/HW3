@@ -43,6 +43,7 @@
 -- **[36]** Add traps that can be activated by different enemies
 -- **[37]** Add interaction system for doors, chests and levers
 -- **[38]** Diversify enemies
+-- **[39]** Endless mode
 
 ## Known Issues/Minor Bugs ##
 -- Animation for melee enemies play a single frame before stopping if a projectile is in mid air fired by a ranged enemy

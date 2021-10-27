@@ -83,7 +83,7 @@ public class LevelState extends BasicGameState {
       if(timer <= 0) {
         switch(select) {
           case 0:
-            ((TestState)game.getState(RoboGame.TESTSTATE)).setLevel(1);
+            ((TestState)game.getState(RoboGame.TESTSTATE)).setLevel(10);
             ResourceManager.getMusic(RoboGame.MUSIC_MENU_RSC).stop();
             rg.enterState(RoboGame.TESTSTATE);
             break;

@@ -32,10 +32,11 @@ public class TestState extends BasicGameState {
   LinkedList<Enemy> enemyList;
   LinkedList<Projectile> projectileList;
   LinkedList<PickupItem> pickupList;
+  boolean endlessMode, playerTurnOver;
   boolean inputReady, enemyDead;
   boolean rangedDijkstrasDisplay, dijkstrasDisplay;
   boolean enemyTurn, enemyMoveWait, attackReady, gameover, levelComplete;
-  int inputWaitTimer, levelOverTimer, aimDirection, turnDuration, level;
+  int inputWaitTimer, levelOverTimer, aimDirection, turnDuration, level, turncount;
   Player player;
   Crosshair crosshair;
 
@@ -211,6 +212,34 @@ public class TestState extends BasicGameState {
     path = RoboGame.getDijkstras(playerLoc.x,playerLoc.y,tileMap);
     rangedPath = RoboGame.getRangedDijkstras(player, tileMap);
 
+    // Special updates if endless mode is going
+    if(level == 10 && playerTurnOver && inputReady) {
+      turncount++;
+      // Spawn enemies every 10 turns
+      if(turncount % 10 == 0) {
+        // Check if spawn zones are clear first
+        if(isSpaceClear(1,8)) {
+          if(new Random().nextInt(2) == 0)
+            enemyList.add(new Enemy(1,8,1));
+          else
+            enemyList.add(new Enemy(1,8,2));
+        }
+        if(isSpaceClear(8,1)) {
+          if(new Random().nextInt(2) == 0)
+            enemyList.add(new Enemy(8,1,1));
+          else
+            enemyList.add(new Enemy(8,1,2));
+        }
+        if(isSpaceClear(8,8)) {
+          if(new Random().nextInt(2) == 0)
+            enemyList.add(new Enemy(8,8,1));
+          else
+            enemyList.add(new Enemy(8,8,2));
+        }
+      }
+      playerTurnOver = false;
+    }
+
     // Check if gameover occured
     if(gameover) {
       // If so, countdown until transitioning.
@@ -223,7 +252,7 @@ public class TestState extends BasicGameState {
     }
 
     // Check if all the enemies have been defeated
-    if(enemyList.isEmpty() && !levelComplete) {
+    if(enemyList.isEmpty() && !levelComplete && !endlessMode) {
       levelComplete = true;
       levelOverTimer = turnDuration * 8;
       ResourceManager.getSound(RoboGame.SOUND_EXPLOSION_RSC).play();
@@ -473,7 +502,7 @@ public class TestState extends BasicGameState {
       }
       enemyTurn = false;
       enemyMoveWait = true;
-      waitInput();
+      enemyWaitInput();
     }
     /*** IN BETWEEN TURNS SECTION ***/
     // Here the wait timer is countdown and entitys are snapped back into the grid if they strayed.
@@ -510,6 +539,15 @@ public class TestState extends BasicGameState {
    * Internal method to be called when moves are being executed.
    */
   private void waitInput() {
+    inputReady = false;
+    inputWaitTimer = turnDuration;
+    playerTurnOver = true;
+  }
+
+  /***
+   * Internal method to be called after enemy turns are done
+   */
+  private void enemyWaitInput() {
     inputReady = false;
     inputWaitTimer = turnDuration;
   }
@@ -563,7 +601,13 @@ public class TestState extends BasicGameState {
    * Internal function that builds the level based on the current level.
    */
   private void nextLevel() {
+    // Check if were in endless mode
+    if(level == 10) {
+      endlessMode = true;
+    }
     // Reset various fields to restart the level.
+    turncount = 0;
+    playerTurnOver = false;
     path = null;
     rangedPath = null;
     inputReady = true;
@@ -637,6 +681,13 @@ public class TestState extends BasicGameState {
       enemyList.add(new Enemy(7,8,2));
       enemyList.add(new Enemy(4,1,2));
       enemyList.add(new Enemy(7,3,2));
+    }
+    else if (level == 10) {
+      tileMap = RoboGame.getTileMap
+          ("1111111111100002000110001110011110111001100011100110000000011011001111101100000110000000011111111111");
+      enemyList.add(new Enemy(8,1,1));
+      enemyList.add(new Enemy(8,8,2));
+      enemyList.add(new Enemy(1,8,1));
     }
     else {
       tileMap = RoboGame.getTileMap
