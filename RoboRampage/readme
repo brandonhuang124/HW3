@@ -1,32 +1,50 @@
-Robo Rampage, a game by Brandon Huang For WSU CS 447 Game Design.
+Robo Rampage: A game by Brandon Huang.
 
-** Dijkstras algorithm used for pathfinding.
+** Enemies use Dijkstras for pathfinding.
 
-Controls:
-  Menu:
-    wasd: to make a menu selection
-    space: to select the current selection
-  Game:
-    wasd: to move in a direction
-    r: to reload the weapon
+CONTROLS:
+  In Menu:
+    wasd: to navigate selections
+    space: to make a selection
+  In Game:
+    wasd: to move the player
+    r: to reload
     q: to skip turn
-    space: Start an attack action
-      After starting attack action:
-        wasd: aim attack
-        q: cancel attack
-        space: confirm attack
-    9: Enable Dijkstras overlay for melee enemy paths.
-    0: Enable Dijkstras overlay for ranged enemy paths.
+    space: to begin attacking
+      After beginning attack:
+        wasd: to aim attack
+        space: to confirm attack direction
+        q: to cancel attack
+    9: to enable melee enemy dijkstras overlay
+    0: to enable ranged enemy dijkstras overlay
+  In Post Game Screen:
+    space: to return to main menu
+    esc: to exit the game
 
-    **note: For dijkstras overlay, the top number represents the direction that a unit should travel in to reach the
-    player along the shortest route and the bottom number represents the cost to reach there from the players space.
-    Top number directional code:
-      2: Down, 4: Left 6: Right 8: Up
 
-  Post Game Screen:
-    esc: Exits the game
-    space: Return to main menu.
+ORIGINAL LOW BAR GOALS:
+- The player will be able to control a character which can move, attack, or reload. [COMPLETE]
+- The player and all enemies will not be able to move anywhere on the map, and are constrained to tiles which aren't
+walls [COMPLETE]
+- When the player begins an attack, an icon will appear showing the direction of the attack which the player can move to
+change the direction of the attack [COMPLETE]
+- A system will exist which tracks the players health and ammo count visibly on the screen. [COMPLETE]
+- Two enemies will be implemented both of which can move and attack. One will attack the player from adjacent tiles and
+one will be able to attack the player with a projectile as long as there is a direct line to the player [COMPLETE]
+- The enemies will use Dijkstra's algorithm to find the shortest route to the player, and will use this route whenever
+they move to the player [COMPLETE]
+- The game will consist of several levels which will progress in difficulty that the player will have to beat by
+defeating all the enemies on the board. [COMPLETE]
+
+OTHER GOALS ACCOMPLISHED:
+- Two powerup/pickups were added to the game, one which heals the player and one which gives them a new weapon that does
+increased damage and pierces through enemies.
+- One stage hazard that damages the player if they end their turn on it was implemented in the form of an acid pool.
+- Animated assets were implemented for the player and enemies for a more complete look.
+- An endless mode was added to the game, where enemies continually spawn from 3 spawn points and the player has to try
+to stay alive for as long as possible.
 
 Tips:
-  Level 5 is beatable, its just very hard. Tested it myself and took several tries. Hint: Grab the beam weapon when you
-  can, it helps a lot.
+  Level 5 is hard but beatable. If you need a hint, go for the beam weapon. :)
+
+This work is licensed under http://creativecommons.org/licenses/by/3.0/

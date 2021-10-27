@@ -32,6 +32,7 @@
 -- **[30]** Add pick up items: Medkits/Armor
 -- **[32]** Add Beam Weapon
 -- **[35]** Add Stage hazards such as slick tiles/acid tiles
+-- **[39]** Endless mode
 
 ## Open Issues ##
 

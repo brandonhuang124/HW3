@@ -32,10 +32,11 @@ public class TestState extends BasicGameState {
   LinkedList<Enemy> enemyList;
   LinkedList<Projectile> projectileList;
   LinkedList<PickupItem> pickupList;
+  boolean endlessMode, playerTurnOver, oneMoveMade;
   boolean inputReady, enemyDead;
   boolean rangedDijkstrasDisplay, dijkstrasDisplay;
   boolean enemyTurn, enemyMoveWait, attackReady, gameover, levelComplete;
-  int inputWaitTimer, levelOverTimer, aimDirection, turnDuration, level;
+  int inputWaitTimer, levelOverTimer, aimDirection, turnDuration, level, turncount;
   Player player;
   Crosshair crosshair;
 
@@ -148,6 +149,12 @@ public class TestState extends BasicGameState {
       g.drawImage(ResourceManager.getImage(RoboGame.UTIL_HUDWAIT_RSC), 600, 770);
     }
 
+    // Render spawnpoints for endless mode
+    if(endlessMode) {
+      g.drawImage(ResourceManager.getImage(RoboGame.ENEMY_SPAWNPOINT_RSC), 75, 75 * 8);
+      g.drawImage(ResourceManager.getImage(RoboGame.ENEMY_SPAWNPOINT_RSC), 75 * 8, 75 * 8);
+      g.drawImage(ResourceManager.getImage(RoboGame.ENEMY_SPAWNPOINT_RSC), 75 * 8, 75);
+    }
     // Render item pickups
     for(PickupItem pickup : pickupList) {
       // If its a armor pickup
@@ -198,8 +205,13 @@ public class TestState extends BasicGameState {
     }
 
     // Render the level complete message if needed.
-    if(levelComplete) {
+    else if(levelComplete) {
       g.drawImage(ResourceManager.getImage(RoboGame.MENU_LEVELCOMPLETE_RSC), 113,300);
+    }
+
+    // Render an out of ammo message if needed
+    else if(player.getAmmo() <= 0) {
+      g.drawImage(ResourceManager.getImage(RoboGame.MENU_OUTOFAMMO_RSC), 160, 300);
     }
   }
 
@@ -210,6 +222,34 @@ public class TestState extends BasicGameState {
     Coordinate playerLoc = player.getLocation();
     path = RoboGame.getDijkstras(playerLoc.x,playerLoc.y,tileMap);
     rangedPath = RoboGame.getRangedDijkstras(player, tileMap);
+
+    // Special updates if endless mode is going
+    if(level == 10 && playerTurnOver && inputReady) {
+      turncount++;
+      // Spawn enemies every 10 turns
+      if(turncount % 6 == 0) {
+        // Check if spawn zones are clear first
+        if(isSpaceClear(1,8)) {
+          if(new Random().nextInt(2) == 0)
+            enemyList.add(new Enemy(1,8,1));
+          else
+            enemyList.add(new Enemy(1,8,2));
+        }
+        if(isSpaceClear(8,1)) {
+          if(new Random().nextInt(2) == 0)
+            enemyList.add(new Enemy(8,1,1));
+          else
+            enemyList.add(new Enemy(8,1,2));
+        }
+        if(isSpaceClear(8,8)) {
+          if(new Random().nextInt(2) == 0)
+            enemyList.add(new Enemy(8,8,1));
+          else
+            enemyList.add(new Enemy(8,8,2));
+        }
+      }
+      playerTurnOver = false;
+    }
 
     // Check if gameover occured
     if(gameover) {
@@ -223,7 +263,7 @@ public class TestState extends BasicGameState {
     }
 
     // Check if all the enemies have been defeated
-    if(enemyList.isEmpty() && !levelComplete) {
+    if(enemyList.isEmpty() && !levelComplete && !endlessMode) {
       levelComplete = true;
       levelOverTimer = turnDuration * 8;
       ResourceManager.getSound(RoboGame.SOUND_EXPLOSION_RSC).play();
@@ -351,6 +391,7 @@ public class TestState extends BasicGameState {
             projectileList.add(new Projectile(playerLoc, aimDirection, 3));
             player.modAmmo(-1);
           }
+          oneMoveMade = true;
           waitInput();
           System.out.println("Pew Pew");
           player.shoot(aimDirection);
@@ -401,6 +442,7 @@ public class TestState extends BasicGameState {
 
       // Wait
       else if (input.isKeyPressed(Input.KEY_Q)) {
+        oneMoveMade = true;
         waitInput();
       }
 
@@ -424,6 +466,7 @@ public class TestState extends BasicGameState {
       else if (input.isKeyPressed(Input.KEY_R)) {
         System.out.println("Reloading...");
         player.reload();
+        oneMoveMade = true;
         waitInput();
       }
 
@@ -444,20 +487,6 @@ public class TestState extends BasicGameState {
 
     /*** ENEMY TURN SECTION ***/
     else if (enemyTurn) {
-      // Check if the player is on a pickup:
-      for (PickupItem item : pickupList) {
-        if(item.playerCollision(player)) {
-          // If its a armor pickup
-          if(item.getId() == 1) {
-            player.restoreHealth();
-          }
-          else if(item.getId() == 2) {
-            player.changeWeapon(2);
-          }
-          // Play the sound
-          ResourceManager.getSound(RoboGame.SOUND_POWERUP_RSC).play();
-        }
-      }
       // Clear any items that need clearing.
       pickupList.removeIf( (PickupItem pickup) -> pickup.getRemoveMe());
       for (Enemy enemy : enemyList) {
@@ -473,7 +502,7 @@ public class TestState extends BasicGameState {
       }
       enemyTurn = false;
       enemyMoveWait = true;
-      waitInput();
+      enemyWaitInput();
     }
     /*** IN BETWEEN TURNS SECTION ***/
     // Here the wait timer is countdown and entitys are snapped back into the grid if they strayed.
@@ -493,15 +522,34 @@ public class TestState extends BasicGameState {
         }
         // If the player needs to be reset
         else {
+          // Check if the player is on a pickup:
+          for (PickupItem item : pickupList) {
+            if(item.playerCollision(player)) {
+              // If its a armor pickup
+              if(item.getId() == 1) {
+                player.restoreHealth();
+              }
+              else if(item.getId() == 2) {
+                player.changeWeapon(2);
+              }
+              // Play the sound
+              ResourceManager.getSound(RoboGame.SOUND_POWERUP_RSC).play();
+            }
+          }
+          if(oneMoveMade) {
+            playerTurnOver = true;
+            enemyTurn = true;
+            oneMoveMade = false;
+          }
+          else {
+            inputReady = true;
+            oneMoveMade = true;
+          }
           player.update(inputWaitTimer);
-          enemyTurn = true;
           player.stop();
         }
         // Clear any dead enemies
         enemyList.removeIf( (Enemy enemy) -> enemy.getHealth() <= 0);
-        for(Enemy enemy : enemyList) {
-          if(enemy.getHealth() <= 0) enemyList.remove(enemy);
-        }
       }
     }
   }
@@ -510,6 +558,14 @@ public class TestState extends BasicGameState {
    * Internal method to be called when moves are being executed.
    */
   private void waitInput() {
+    inputReady = false;
+    inputWaitTimer = turnDuration;
+  }
+
+  /***
+   * Internal method to be called after enemy turns are done
+   */
+  private void enemyWaitInput() {
     inputReady = false;
     inputWaitTimer = turnDuration;
   }
@@ -563,7 +619,13 @@ public class TestState extends BasicGameState {
    * Internal function that builds the level based on the current level.
    */
   private void nextLevel() {
+    // Check if were in endless mode
+    if(level == 10) {
+      endlessMode = true;
+    }
     // Reset various fields to restart the level.
+    turncount = 0;
+    playerTurnOver = oneMoveMade = false;
     path = null;
     rangedPath = null;
     inputReady = true;
@@ -637,6 +699,13 @@ public class TestState extends BasicGameState {
       enemyList.add(new Enemy(7,8,2));
       enemyList.add(new Enemy(4,1,2));
       enemyList.add(new Enemy(7,3,2));
+    }
+    else if (level == 10) {
+      tileMap = RoboGame.getTileMap
+          ("1111111111100002000110001110011110111001100011100110000000011011001111101100000110000000011111111111");
+      enemyList.add(new Enemy(8,1,1));
+      enemyList.add(new Enemy(8,8,2));
+      enemyList.add(new Enemy(1,8,1));
     }
     else {
       tileMap = RoboGame.getTileMap
