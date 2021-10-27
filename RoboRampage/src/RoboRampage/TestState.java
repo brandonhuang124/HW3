@@ -149,6 +149,12 @@ public class TestState extends BasicGameState {
       g.drawImage(ResourceManager.getImage(RoboGame.UTIL_HUDWAIT_RSC), 600, 770);
     }
 
+    // Render spawnpoints for endless mode
+    if(endlessMode) {
+      g.drawImage(ResourceManager.getImage(RoboGame.ENEMY_SPAWNPOINT_RSC), 75, 75 * 8);
+      g.drawImage(ResourceManager.getImage(RoboGame.ENEMY_SPAWNPOINT_RSC), 75 * 8, 75 * 8);
+      g.drawImage(ResourceManager.getImage(RoboGame.ENEMY_SPAWNPOINT_RSC), 75 * 8, 75);
+    }
     // Render item pickups
     for(PickupItem pickup : pickupList) {
       // If its a armor pickup
@@ -199,8 +205,13 @@ public class TestState extends BasicGameState {
     }
 
     // Render the level complete message if needed.
-    if(levelComplete) {
+    else if(levelComplete) {
       g.drawImage(ResourceManager.getImage(RoboGame.MENU_LEVELCOMPLETE_RSC), 113,300);
+    }
+
+    // Render an out of ammo message if needed
+    else if(player.getAmmo() <= 0) {
+      g.drawImage(ResourceManager.getImage(RoboGame.MENU_OUTOFAMMO_RSC), 160, 300);
     }
   }
 
@@ -216,7 +227,7 @@ public class TestState extends BasicGameState {
     if(level == 10 && playerTurnOver && inputReady) {
       turncount++;
       // Spawn enemies every 10 turns
-      if(turncount % 10 == 0) {
+      if(turncount % 6 == 0) {
         // Check if spawn zones are clear first
         if(isSpaceClear(1,8)) {
           if(new Random().nextInt(2) == 0)
@@ -476,20 +487,6 @@ public class TestState extends BasicGameState {
 
     /*** ENEMY TURN SECTION ***/
     else if (enemyTurn) {
-      // Check if the player is on a pickup:
-      for (PickupItem item : pickupList) {
-        if(item.playerCollision(player)) {
-          // If its a armor pickup
-          if(item.getId() == 1) {
-            player.restoreHealth();
-          }
-          else if(item.getId() == 2) {
-            player.changeWeapon(2);
-          }
-          // Play the sound
-          ResourceManager.getSound(RoboGame.SOUND_POWERUP_RSC).play();
-        }
-      }
       // Clear any items that need clearing.
       pickupList.removeIf( (PickupItem pickup) -> pickup.getRemoveMe());
       for (Enemy enemy : enemyList) {
@@ -525,6 +522,20 @@ public class TestState extends BasicGameState {
         }
         // If the player needs to be reset
         else {
+          // Check if the player is on a pickup:
+          for (PickupItem item : pickupList) {
+            if(item.playerCollision(player)) {
+              // If its a armor pickup
+              if(item.getId() == 1) {
+                player.restoreHealth();
+              }
+              else if(item.getId() == 2) {
+                player.changeWeapon(2);
+              }
+              // Play the sound
+              ResourceManager.getSound(RoboGame.SOUND_POWERUP_RSC).play();
+            }
+          }
           if(oneMoveMade) {
             playerTurnOver = true;
             enemyTurn = true;
@@ -539,9 +550,6 @@ public class TestState extends BasicGameState {
         }
         // Clear any dead enemies
         enemyList.removeIf( (Enemy enemy) -> enemy.getHealth() <= 0);
-        for(Enemy enemy : enemyList) {
-          if(enemy.getHealth() <= 0) enemyList.remove(enemy);
-        }
       }
     }
   }

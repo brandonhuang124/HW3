@@ -46,6 +46,7 @@ public class LevelState extends BasicGameState {
     g.drawImage(ResourceManager.getImage(RoboGame.MENU_LEVEL3_RSC), 246, 390);
     g.drawImage(ResourceManager.getImage(RoboGame.MENU_LEVEL4_RSC), 246, 460);
     g.drawImage(ResourceManager.getImage(RoboGame.MENU_LEVEL5_RSC), 246, 530);
+    g.drawImage(ResourceManager.getImage(RoboGame.MENU_ENDLESS_RSC), 225, 600);
     if(arrowBlink) {
       switch(select) {
         case 0:
@@ -62,6 +63,9 @@ public class LevelState extends BasicGameState {
           break;
         case 4:
           g.drawImage(ResourceManager.getImage(RoboGame.MENU_ARROW_RSC), 554, 540);
+          break;
+        case 5:
+          g.drawImage(ResourceManager.getImage(RoboGame.MENU_ARROW_RSC), 575, 610);
           break;
         default:
           g.drawImage(ResourceManager.getImage(RoboGame.MENU_ARROW_RSC), 224, 760);
@@ -83,7 +87,7 @@ public class LevelState extends BasicGameState {
       if(timer <= 0) {
         switch(select) {
           case 0:
-            ((TestState)game.getState(RoboGame.TESTSTATE)).setLevel(10);
+            ((TestState)game.getState(RoboGame.TESTSTATE)).setLevel(1);
             ResourceManager.getMusic(RoboGame.MUSIC_MENU_RSC).stop();
             rg.enterState(RoboGame.TESTSTATE);
             break;
@@ -104,6 +108,11 @@ public class LevelState extends BasicGameState {
             break;
           case 4:
             ((TestState)game.getState(RoboGame.TESTSTATE)).setLevel(5);
+            ResourceManager.getMusic(RoboGame.MUSIC_MENU_RSC).stop();
+            rg.enterState(RoboGame.TESTSTATE);
+            break;
+          case 5:
+            ((TestState)game.getState(RoboGame.TESTSTATE)).setLevel(10);
             ResourceManager.getMusic(RoboGame.MUSIC_MENU_RSC).stop();
             rg.enterState(RoboGame.TESTSTATE);
             break;
@@ -133,8 +142,8 @@ public class LevelState extends BasicGameState {
       ResourceManager.getSound(RoboGame.SOUND_MENUACTIVATE_RSC).play();
     }
     // Mod select by 3 to snap back to top, set negatives to 2 to snap to the bottom when going up at the top.
-    select = select % 6;
-    if(select < 0) select = 5;
+    select = select % 7;
+    if(select < 0) select = 6;
 
   }
 }

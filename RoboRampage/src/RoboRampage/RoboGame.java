@@ -131,11 +131,13 @@ public class RoboGame extends StateBasedGame {
   public static final String MENU_GAMEOVER_RSC = "RoboRampage/Assets/menuGameover.png";
   public static final String MENU_LEVELCOMPLETE_RSC = "RoboRampage/Assets/menuLevelComplete.png";
   public static final String MENU_GAMECOMPLETE_RSC = "RoboRampage/Assets/menuGameComplete.png";
+  public static final String MENU_OUTOFAMMO_RSC = "RoboRampage/Assets/menuOutOfAmmo.png";
   public static final String MENU_LEVEL1_RSC = "RoboRampage/Assets/menuLevel1.png";
   public static final String MENU_LEVEL2_RSC = "RoboRampage/Assets/menuLevel2.png";
   public static final String MENU_LEVEL3_RSC = "RoboRampage/Assets/menuLevel3.png";
   public static final String MENU_LEVEL4_RSC = "RoboRampage/Assets/menuLevel4.png";
   public static final String MENU_LEVEL5_RSC = "RoboRampage/Assets/menuLevel5.png";
+  public static final String MENU_ENDLESS_RSC = "RoboRampage/Assets/menuEndless.png";
 
   // Melee Enemy
   public static final String ENEMY_MELEEIMG_RSC = "RoboRampage/Assets/meleeEnemy.png";
@@ -147,6 +149,7 @@ public class RoboGame extends StateBasedGame {
   public static final String ENEMY_MELEEATTACKRIGHT_RSC = "RoboRampage/Assets/enemyMeleeAttackRight.png";
   public static final String ENEMY_MELEEDEFEATLEFT_RSC = "RoboRampage/Assets/enemyMeleeDefeatLeft.png";
   public static final String ENEMY_MELEEDEFEATRIGHT_RSC = "RoboRampage/Assets/enemyMeleeDefeatRight.png";
+  public static final String ENEMY_SPAWNPOINT_RSC = "RoboRampage/Assets/spawnpoint.png";
 
   // Ranged Enemy
   public static final String ENEMY_RANGEDIDLERIGHT_RSC = "RoboRampage/Assets/enemyRangedIdleRight.png";
@@ -259,6 +262,7 @@ public class RoboGame extends StateBasedGame {
     ResourceManager.loadImage(PLAYER_BEAMVERTICAL_RSC);
     ResourceManager.loadImage(PLAYER_HITINDICATOR_RSC);
     // Enemy Sheets
+    ResourceManager.loadImage(ENEMY_SPAWNPOINT_RSC);
       // Melee
     ResourceManager.loadImage(ENEMY_MELEEIMG_RSC);
     ResourceManager.loadImage(ENEMY_MELEEIDLERIGHT_RSC);
@@ -310,11 +314,13 @@ public class RoboGame extends StateBasedGame {
     ResourceManager.loadImage(MENU_GAMEOVER_RSC);
     ResourceManager.loadImage(MENU_LEVELCOMPLETE_RSC);
     ResourceManager.loadImage(MENU_GAMECOMPLETE_RSC);
+    ResourceManager.loadImage(MENU_OUTOFAMMO_RSC);
     ResourceManager.loadImage(MENU_LEVEL1_RSC);
     ResourceManager.loadImage(MENU_LEVEL2_RSC);
     ResourceManager.loadImage(MENU_LEVEL3_RSC);
     ResourceManager.loadImage(MENU_LEVEL4_RSC);
     ResourceManager.loadImage(MENU_LEVEL5_RSC);
+    ResourceManager.loadImage(MENU_ENDLESS_RSC);
     // Music and SFX
     ResourceManager.loadSound(SOUND_EXPLOSION_RSC);
     ResourceManager.loadSound(SOUND_FOOTSTEPS_RSC);
