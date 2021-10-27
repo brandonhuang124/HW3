@@ -32,7 +32,7 @@ public class TestState extends BasicGameState {
   LinkedList<Enemy> enemyList;
   LinkedList<Projectile> projectileList;
   LinkedList<PickupItem> pickupList;
-  boolean endlessMode, playerTurnOver;
+  boolean endlessMode, playerTurnOver, oneMoveMade;
   boolean inputReady, enemyDead;
   boolean rangedDijkstrasDisplay, dijkstrasDisplay;
   boolean enemyTurn, enemyMoveWait, attackReady, gameover, levelComplete;
@@ -380,6 +380,7 @@ public class TestState extends BasicGameState {
             projectileList.add(new Projectile(playerLoc, aimDirection, 3));
             player.modAmmo(-1);
           }
+          oneMoveMade = true;
           waitInput();
           System.out.println("Pew Pew");
           player.shoot(aimDirection);
@@ -430,6 +431,7 @@ public class TestState extends BasicGameState {
 
       // Wait
       else if (input.isKeyPressed(Input.KEY_Q)) {
+        oneMoveMade = true;
         waitInput();
       }
 
@@ -453,6 +455,7 @@ public class TestState extends BasicGameState {
       else if (input.isKeyPressed(Input.KEY_R)) {
         System.out.println("Reloading...");
         player.reload();
+        oneMoveMade = true;
         waitInput();
       }
 
@@ -522,8 +525,16 @@ public class TestState extends BasicGameState {
         }
         // If the player needs to be reset
         else {
+          if(oneMoveMade) {
+            playerTurnOver = true;
+            enemyTurn = true;
+            oneMoveMade = false;
+          }
+          else {
+            inputReady = true;
+            oneMoveMade = true;
+          }
           player.update(inputWaitTimer);
-          enemyTurn = true;
           player.stop();
         }
         // Clear any dead enemies
@@ -541,7 +552,6 @@ public class TestState extends BasicGameState {
   private void waitInput() {
     inputReady = false;
     inputWaitTimer = turnDuration;
-    playerTurnOver = true;
   }
 
   /***
@@ -607,7 +617,7 @@ public class TestState extends BasicGameState {
     }
     // Reset various fields to restart the level.
     turncount = 0;
-    playerTurnOver = false;
+    playerTurnOver = oneMoveMade = false;
     path = null;
     rangedPath = null;
     inputReady = true;
