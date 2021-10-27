@@ -271,7 +271,7 @@ public class TestState extends BasicGameState {
 
     // If all the enemies are dead, the level is complete.
     if(levelComplete) {
-      System.out.println(levelOverTimer);
+      //System.out.println(levelOverTimer);
       if(levelOverTimer <= 0) {
         // Check if the last level was completed.
         level++;
@@ -377,7 +377,7 @@ public class TestState extends BasicGameState {
       else if (input.isKeyPressed(Input.KEY_SPACE)) {
         // Check if the player has enough ammo
         if(player.getAmmo() < 1) {
-          System.out.println("Not enough ammo!");
+          //System.out.println("Not enough ammo!");
           attackReady = false;
           inputReady = true;
         }
@@ -393,7 +393,7 @@ public class TestState extends BasicGameState {
           }
           oneMoveMade = true;
           waitInput();
-          System.out.println("Pew Pew");
+          //System.out.println("Pew Pew");
           player.shoot(aimDirection);
         }
       }
@@ -487,8 +487,6 @@ public class TestState extends BasicGameState {
 
     /*** ENEMY TURN SECTION ***/
     else if (enemyTurn) {
-      // Clear any items that need clearing.
-      pickupList.removeIf( (PickupItem pickup) -> pickup.getRemoveMe());
       for (Enemy enemy : enemyList) {
         if(enemy.getID() == 1)
           enemy.makeMove(path, player, tileMap, projectileList, enemyList);
@@ -535,6 +533,8 @@ public class TestState extends BasicGameState {
               // Play the sound
               ResourceManager.getSound(RoboGame.SOUND_POWERUP_RSC).play();
             }
+            // Clear any items that need clearing.
+            pickupList.removeIf( (PickupItem pickup) -> pickup.getRemoveMe());
           }
           if(oneMoveMade) {
             playerTurnOver = true;

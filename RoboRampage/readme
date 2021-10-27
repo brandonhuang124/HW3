@@ -1,5 +1,13 @@
 Robo Rampage: A game by Brandon Huang.
 
+Robo Rampage is a turn based game where the goal is to defeat all the enemies on the level. Each turn the player can
+move, attack, wait, or reload. After the player takes an action, all the enemies take a move or attack action. The
+player needs to think ahead to not corner themselves with their moves. The player can make one free move without ending
+their turn, after the second move or other action, their turn ends. If the players health drops to zero, they lose the
+game. There are two powerups, a full health restore and an improved weapon powerup, which are statically placed in the
+levels. The player has 5 shots before they must reload, which are replenished if the player picks up a new weapon or
+reloads. Currently there are 5 levels in the game and an endless mode where enemies continually spawn.
+
 ** Enemies use Dijkstras for pathfinding.
 
 CONTROLS:
@@ -46,5 +54,18 @@ to stay alive for as long as possible.
 
 Tips:
   Level 5 is hard but beatable. If you need a hint, go for the beam weapon. :)
+
+Graphical Asset Credits:
+  Enemy, character, and tile assets courtesy of Pupkin and modified by Brandon Huang:
+    https://trevor-pupkin.itch.io/tech-dungeon-roguelite
+  Armor/Weapon Icons courtesy of Jere Sikstus and modified by Brandon Huand:
+    https://jeresikstus.itch.io/cyberpunk-items-16x16?download
+  All Other graphical assets were made by Brandon Huang.
+
+Sound Credits:
+   Sound effects were obtained on zapsplat.com coutesy of the following uploaders:
+     zapsplat.com
+     PMSFX: https://www.zapsplat.com/author/pmsfx/
+     and Epic Stock Media: https://www.zapsplat.com/author/epic-stock-media/
 
 This work is licensed under http://creativecommons.org/licenses/by/3.0/
