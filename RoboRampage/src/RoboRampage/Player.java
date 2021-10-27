@@ -388,5 +388,6 @@ class Player extends Entity {
 
   public void changeWeapon(int newWeapon) {
     currentWeapon = newWeapon;
+    ammo = maxammo;
   }
 }
